@@ -6,14 +6,18 @@ from sqlalchemy.orm import Session
 from backend.db_handler.user_login_handler import user_login_db_handler
 from backend.models.user_login import UserLogin
 from backend.schemas.user_login import ResetPasswordSchema, SignUpSchema
-from backend.utils.utils import (create_access_token, generate_salt,
-                                 hash_password, verify_password)
+from backend.utils.utils import (
+    create_access_token,
+    generate_salt,
+    hash_password,
+    verify_password
+)
 
 
 class UserLoginService:
     @staticmethod
     def create_user(request_payload: SignUpSchema, db: Session) -> UserLogin:
-        user_data = request_payload.dict()
+        user_data = request_payload.model_dump()
         user_data["id"] = uuid.uuid4()
         salt = generate_salt()
         password_with_salt = user_data.pop("password") + salt
@@ -35,7 +39,7 @@ class UserLoginService:
     def update_password(
         request_payload: ResetPasswordSchema, user: UserLogin, db: Session
     ) -> None:
-        request_dict = request_payload.dict()
+        request_dict = request_payload.model_dump()
         password_with_salt = request_dict["new_password"] + user.password_salt
         new_password_hash = hash_password(password_with_salt)
         update_data = {"password_hash": new_password_hash}
