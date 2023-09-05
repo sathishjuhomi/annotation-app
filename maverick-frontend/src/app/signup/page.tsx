@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import RegisterForm from "../component/RegisterForm"
+import RegisterForm from "./component/RegisterForm"
 import { FormData } from "./interfaces";
 import registerSchema from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
