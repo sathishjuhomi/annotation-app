@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import RegisterForm from "./component/RegisterForm"
+import RegisterForm from "./component/RegisterForm";
 import { FormData } from "./interfaces";
 import registerSchema from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { POST } from "./api/route";
 
 const Register = () => {
   const {
@@ -15,9 +16,14 @@ const Register = () => {
     resolver: yupResolver(registerSchema),
   });
 
-  const submit = (data: FormData) => {
-    console.log("data: ", data);
-    // make an auth request and use setError to handle errors from there
+  const submit = async (data: FormData) => {
+    const response = await POST(data)
+      .then((data) => {
+        console.log("DATA CREATED");
+      })
+      .catch((error) => {
+        console.log("error: ",  error);
+      });
   };
 
   return (
