@@ -31,7 +31,7 @@ Postgresql DB used - Install and setup postgresql and pgadmin
 ### Environment Variable setup ###
 
 Now, before running the backend server, you need to set certain environment variables. 
-Add the following values to .env file in root folder.
+Add the following values to .env file in backend folder.
 
 ```bash
 DB_USER=
@@ -75,4 +75,4 @@ Once these environment variables are set, you can run FAST API server using foll
 ```
 
 ### Swagger Access ###
-Once the server is up, you can access the swagger docs at <BASE_URE>/docs or <BASE_URL>/redoc
+Once the server is up, you can access the swagger docs at <BASE_URL>/docs or <BASE_URL>/redoc
