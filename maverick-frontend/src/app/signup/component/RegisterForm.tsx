@@ -11,11 +11,16 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { SignUpData } from "../component/interfaces";
+import { SignUpData } from "../interfaces";
+import Snackbar from "../../component/Snackbar";
 
 const defaultTheme = createTheme();
 
 export default function SignUp({
+  open,
+  setOpen,
+  message,
+  messageColor,
   onSubmit,
   formHandleSubmit,
   register,
@@ -39,7 +44,7 @@ export default function SignUp({
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <br/>
+          <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -104,6 +109,12 @@ export default function SignUp({
               </Grid>
             </Grid>
           </form>
+          <Snackbar
+            open={open}
+            setOpen={setOpen}
+            message={message}
+            messageColor={messageColor}
+          />
         </Box>
       </Container>
     </ThemeProvider>

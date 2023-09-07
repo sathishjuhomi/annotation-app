@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 import { FormData } from "../interfaces";
 
-export async function POST(formData: FormData) {
-  console.log("data: ", formData);
+export async function signup(formData: FormData) {
   const body = { email: formData.email, password: formData.password };
-  const res = await fetch("http://localhost:3000/api/v1/user", {
+  const res = await fetch("http://127.0.0.1:8000/api/v1/user/sign-up", {
     method: "POST",
+    headers: { "Content-type": "application/json" },
     body: JSON.stringify(body),
   });
-
-  const data = await res.json();
-
-  return NextResponse.json(data);
+  return res;
 }
