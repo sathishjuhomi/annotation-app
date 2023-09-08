@@ -4,8 +4,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from backend.models.database import Base
 
 
-class UserLogin(Base):
-    __tablename__ = "user_login"
+class Users(Base):
+    __tablename__ = "users"
 
     id = Column(UUID(as_uuid=True), primary_key=True)
     email = Column(String, nullable=False)
@@ -22,4 +22,4 @@ class UserLogin(Base):
     )
     t_delete = Column(TIMESTAMP(timezone=True))
 
-    __table_args__ = (UniqueConstraint("email", name="user_login_email_key"),)
+    __table_args__ = (UniqueConstraint("email", name="users_email_key"),)

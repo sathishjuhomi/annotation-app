@@ -5,13 +5,21 @@ from sqlalchemy.orm import Session
 
 from backend.db_handler.user_login_handler import user_login_db_handler
 from backend.models.database import get_db
-from backend.schemas.user_login import (MsgSchema, ResetPasswordSchema,
-                                        SignInResponseSchema, SignInSchema,
-                                        SignUpResponseSchema, SignUpSchema)
+from backend.schemas.request.user_login import (
+    ResetPasswordSchema,
+    UserSchema
+)
+from backend.schemas.response.user_login import (
+    MsgSchema,
+    SignInResponseSchema,
+    SignUpResponseSchema
+)
 from backend.service.user_login import user_login_service
 from backend.utils.email_utils import send_reset_password_email
-from backend.utils.utils import (generate_password_reset_token,
-                                 verify_password_reset_token)
+from backend.utils.utils import (
+    generate_password_reset_token,
+    verify_password_reset_token
+)
 
 auth_router = APIRouter(prefix="/api/v1/user", tags=["Authentication"])
 
@@ -34,8 +42,8 @@ auth_router = APIRouter(prefix="/api/v1/user", tags=["Authentication"])
         }
     },
 )
-def sign_up(request_payload: SignUpSchema, db: Session = Depends(get_db)) -> Any:
-    existing_user = user_login_db_handler.get_by_column(
+def sign_up(request_payload: UserSchema, db: Session = Depends(get_db)) -> Any:
+    existing_user = user_login_db_handler.load_by_column(
         db=db, column_name="email", value=request_payload.email
     )
     if existing_user:
@@ -61,8 +69,8 @@ def sign_up(request_payload: SignUpSchema, db: Session = Depends(get_db)) -> Any
         }
     },
 )
-def sign_in(request_payload: SignInSchema, db: Session = Depends(get_db)) -> Any:
-    existing_user = user_login_db_handler.get_by_column(
+def sign_in(request_payload: UserSchema, db: Session = Depends(get_db)) -> Any:
+    existing_user = user_login_db_handler.load_by_column(
         db=db, column_name="email", value=request_payload.email
     )
     if not existing_user:
@@ -103,7 +111,7 @@ def sign_in(request_payload: SignInSchema, db: Session = Depends(get_db)) -> Any
     },
 )
 async def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
-    user = user_login_db_handler.get_by_column(db=db, column_name="email", value=email)
+    user = user_login_db_handler.load_by_column(db=db, column_name="email", value=email)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -141,14 +149,14 @@ async def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
     },
 )
 def reset_password(
-    token: str, request_payload: ResetPasswordSchema, db: Session = Depends(get_db)
+        token: str, request_payload: ResetPasswordSchema, db: Session = Depends(get_db)
 ) -> Any:
     email = verify_password_reset_token(token)
     if not email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token"
         )
-    user = user_login_db_handler.get_by_column(db=db, column_name="email", value=email)
+    user = user_login_db_handler.load_by_column(db=db, column_name="email", value=email)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
