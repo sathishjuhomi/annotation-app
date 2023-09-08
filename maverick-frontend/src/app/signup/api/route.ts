@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { FormData } from "../interfaces";
 
 export async function signup(formData: FormData) {
