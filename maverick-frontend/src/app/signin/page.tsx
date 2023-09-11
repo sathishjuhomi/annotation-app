@@ -1,0 +1,58 @@
+"use client";
+import React from "react";
+import { useForm } from "react-hook-form";
+import SignInForm from "./component/SignInForm";
+import { FormData } from "./interfaces";
+import registerSchema from "./validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signIn } from "./api/route";
+import * as Constants from "../utils/constant";
+
+const SignIn = () => {
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [messageColor, setMessageColor] = React.useState(Constants.INFO);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+  });
+
+  const submit = async (data: FormData) => {
+    setOpen(true);
+    console.log('sigin submit')
+    const response = await signIn(data)
+      .then(async (res) => {
+        const response = await res.json();
+        if (res.status === 200) {
+          setMessage(Constants.USER_SUCCESS);
+          setMessageColor(Constants.SUCCESS);
+        } else {
+          const data = response.detail;
+          setMessage(data);
+          setMessageColor(Constants.ERROR);
+        }
+      })
+      .catch((error) => {
+        setMessage(error);
+        setMessageColor(Constants.ERROR);
+      });
+  };
+
+  return (
+    <SignInForm
+      open={open}
+      setOpen={setOpen}
+      message={message}
+      messageColor={messageColor}
+      onSubmit={submit}
+      register={register}
+      formHandleSubmit={handleSubmit}
+      errors={errors}
+    />
+  );
+};
+
+export default SignIn;
