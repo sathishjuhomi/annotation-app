@@ -5,8 +5,9 @@
   }
   
   export interface SigninData {
-    open: boolean;
-    setOpen: any;
+    loading: boolean;
+    showMessage: boolean;
+    setShowMessage: any;
     message: string;
     messageColor: string;
     onSubmit: any;

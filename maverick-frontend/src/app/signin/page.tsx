@@ -9,7 +9,8 @@ import { signIn } from "./api/route";
 import * as Constants from "../utils/constant";
 
 const SignIn = () => {
-  const [open, setOpen] = React.useState(false);
+ const [loading, setLoading] = React.useState(false);
+ const [showMessage, setShowMessage] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [messageColor, setMessageColor] = React.useState(Constants.INFO);
   const {
@@ -21,13 +22,12 @@ const SignIn = () => {
   });
 
   const submit = async (data: FormData) => {
-    setOpen(true);
-    console.log('sigin submit')
-    const response = await signIn(data)
+    setShowMessage(true);
+    await signIn(data)
       .then(async (res) => {
         const response = await res.json();
         if (res.status === 200) {
-          setMessage(Constants.USER_SUCCESS);
+          setMessage(response.message);
           setMessageColor(Constants.SUCCESS);
         } else {
           const data = response.detail;
@@ -43,8 +43,9 @@ const SignIn = () => {
 
   return (
     <SignInForm
-      open={open}
-      setOpen={setOpen}
+      loading={loading}
+      showMessage={showMessage}
+      setShowMessage={setShowMessage}
       message={message}
       messageColor={messageColor}
       onSubmit={submit}

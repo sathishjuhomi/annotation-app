@@ -13,12 +13,14 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { SigninData } from "../interfaces";
 import Snackbar from "../../component/Snackbar";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const defaultTheme = createTheme();
 
 export default function Signin({
-  open,
-  setOpen,
+  loading,
+  showMessage,
+  setShowMessage,
   message,
   messageColor,
   onSubmit,
@@ -44,7 +46,7 @@ export default function Signin({
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <br/>
+          <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -74,7 +76,6 @@ export default function Signin({
                   helperText={errors?.password ? errors?.password.message : " "}
                 />
               </Grid>
-
             </Grid>
             <Button
               type="submit"
@@ -97,6 +98,19 @@ export default function Signin({
               </Grid>
             </Grid>
           </form>
+          {message !== "" ? (
+            <Snackbar
+              showMessage={showMessage}
+              setShowMessage={setShowMessage}
+              message={message}
+              messageColor={messageColor}
+            />
+          ) : null}
+          {loading ? (
+            <Box>
+              <CircularProgress />
+            </Box>
+          ) : null}
         </Box>
       </Container>
     </ThemeProvider>
