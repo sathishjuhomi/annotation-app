@@ -1,15 +1,13 @@
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 
 from backend.db_handler.user_handler import user_db_handler
 from backend.models.database import get_db
 from backend.schemas.request.user import (
     ResetPasswordSchema,
-    UserSchema,
-    OauthUserSchema
+    UserSchema
 )
 from backend.schemas.response.user import (
     DetailSchema,
@@ -23,44 +21,14 @@ from backend.utils.utils import (
     verify_password_reset_token
 )
 
-from starlette.requests import Request
-from authlib.integrations.starlette_client import OAuthError
-from .oauth_config import oauth
-
 auth_router = APIRouter(prefix="/api/v1/user", tags=["Authentication"])
 
+
 def check_existing_user(db, column_name, value):
-  existing_user = user_db_handler.load_by_column(
+    existing_user = user_db_handler.load_by_column(
         db=db, column_name=column_name, value=value)
-  return existing_user
+    return existing_user
 
-@auth_router.post(
-    "/oauth_sign-up",
-    description="This API endpoint allows users to register and create"
-                " an account by providing their registration details, "
-                "including email and password.",
-    status_code=status.HTTP_201_CREATED,
-    response_model=SignUpResponseSchema,
-    responses={
-        409: {
-            "description": "User with this email already exists",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "User with this email already exists"}
-                }
-            },
-        }
-    },
-)
-def oauth_sign_up(request_payload: OauthUserSchema, db: Session = Depends(get_db)) -> Any:
-    print('db ', db)
-    user = check_existing_user(db=db, column_name='email', value=request_payload['email'])
-
-    if not user:
-      user = user_service.create_user(request_payload=request_payload, db=db)
-
-    access_token = user_service.generate_access_token(user)
-    return {"message": "Login successful", "access_token": access_token}
 
 @auth_router.post(
     "/sign-up",
@@ -81,7 +49,6 @@ def oauth_sign_up(request_payload: OauthUserSchema, db: Session = Depends(get_db
     },
 )
 def sign_up(request_payload: UserSchema, db: Session = Depends(get_db)) -> Any:
-    print('db ', db)
     existing_user = check_existing_user(db=db, column_name='email', value=request_payload.email)
     if existing_user:
         raise HTTPException(
@@ -205,59 +172,3 @@ def reset_password(
         request_payload=request_payload, user=user, db=db
     )
     return {"detail": "Password updated successfully"}
-
-######################Google OAuth###################### 
-
-@auth_router.get('/oauth_login')
-async def oauth_login(request: Request):
-    redirect_uri = request.url_for('auth')
-    print('redirect_uri', redirect_uri)
-    return await oauth.google.authorize_redirect(request, redirect_uri)
-
-@auth_router.get("/auth/google/callback",
-    description="""We receive OAuth access code from the user and change that to access tokens
-      from that we get user info to do signup or signin """,
-    status_code=status.HTTP_200_OK,
-    response_model=DetailSchema,
-    responses={
-        401: {
-            "description": "Invalid token or user info does not exist",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "Invalid token or User info does not exist in the token"}
-                }
-            },
-        }
-    }
-)
-async def auth(request: Request):
-    print('Inside auth')
-    print('request ', request)
-    # try:
-    token = await oauth.google.authorize_access_token(request)
-    print('token ', token)
-    # except OAuthError as error:
-    #     # Return a plain text error message
-    #     return PlainTextResponse(f'Error: {error.error}', status_code=400)
-    print('token ', token)
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="OAuth token is not valid or has expired.",
-        )
-    
-    user = token.get('userinfo')
-    print('user ', user )
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User information is not available in the OAuth token.",
-        )    
-
-    user_data = {
-        "email": user.get("email")
-    }
-    print('user_data', user_data)
-    Session=Depends(get_db)
-    print('Session ', Session)    
-    return oauth_sign_up(request_payload=user_data, db=Session)

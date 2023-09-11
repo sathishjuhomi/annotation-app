@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from backend.db_handler.user_handler import user_db_handler
 from backend.models.user import Users
-from backend.schemas.request.user import ResetPasswordSchema, UserSchema
+from backend.schemas.request.user import ResetPasswordSchema, UserSchema, OauthUserSchema
 from backend.utils.utils import (
     create_access_token,
     generate_salt,
@@ -16,7 +16,7 @@ from backend.utils.utils import (
 
 class UserService:
     @staticmethod
-    def create_user(request_payload: UserSchema, db: Session) -> Users:
+    def create_user(request_payload: UserSchema | OauthUserSchema, db: Session) -> Users:
         user_data = request_payload.model_dump()
         user_data["id"] = uuid.uuid4()
         salt = generate_salt()

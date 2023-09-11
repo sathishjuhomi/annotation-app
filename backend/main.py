@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+
+from backend.routers.oauth import oauth_router
 from backend.routers.user import auth_router
 
 app = FastAPI()
@@ -14,3 +16,4 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(oauth_router)

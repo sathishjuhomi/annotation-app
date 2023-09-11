@@ -1,15 +1,16 @@
-import json
-#from fastapi import FastAPI
-from starlette.config import Config
-#from starlette.requests import Request
-#from starlette.middleware.sessions import SessionMiddleware
-#from starlette.responses import HTMLResponse, RedirectResponse
 from authlib.integrations.starlette_client import OAuth
+from starlette.config import Config
 
-# app = FastAPI()
-# app.add_middleware(SessionMiddleware, secret_key="!secret")
+from backend.config import get_settings
 
-config = Config('D://maverick//backend//routers//.env')
+settings = get_settings()
+
+config = Config(
+    environ={
+        'GOOGLE_CLIENT_ID': settings.GOOGLE_CLIENT_ID,
+        'GOOGLE_CLIENT_SECRET': settings.GOOGLE_CLIENT_SECRET
+    }
+)
 oauth = OAuth(config)
 
 CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'

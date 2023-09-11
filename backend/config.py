@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     MAIL_PASSWORD: str
     MAIL_PORT: int
     MAIL_SERVER: str
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_CLIENT_SECRET: str
 
     # store the values in .env file
     model_config = SettingsConfigDict(env_file=ENV_FILE_PATH)
