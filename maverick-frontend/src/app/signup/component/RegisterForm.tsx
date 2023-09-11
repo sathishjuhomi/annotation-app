@@ -13,12 +13,15 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { SignUpData } from "../interfaces";
 import Snackbar from "../../component/Snackbar";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const defaultTheme = createTheme();
 
 export default function SignUp({
-  open,
-  setOpen,
+  loading,
+  setLoading,
+  showMessage,
+  setShowMessage,
   message,
   messageColor,
   onSubmit,
@@ -109,12 +112,19 @@ export default function SignUp({
               </Grid>
             </Grid>
           </form>
-          <Snackbar
-            open={open}
-            setOpen={setOpen}
-            message={message}
-            messageColor={messageColor}
-          />
+          {message !== "" ? (
+            <Snackbar
+              showMessage={showMessage}
+              setShowMessage={setShowMessage}
+              message={message}
+              messageColor={messageColor}
+            />
+          ) : null}
+          {loading ? (
+            <Box>
+              <CircularProgress />
+            </Box>
+          ) : null}
         </Box>
       </Container>
     </ThemeProvider>

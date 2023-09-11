@@ -1,6 +1,6 @@
 export interface SnackbarProps {
-  open: boolean;
-  setOpen: any;
+  showMessage: boolean;
+  setShowMessage: any;
   message: string;
   messageColor: string;
 }

@@ -6,8 +6,8 @@ import { SnackbarProps } from "./interfaces";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 const SnackbarComponent = ({
-  open,
-  setOpen,
+  showMessage,
+  setShowMessage,
   message,
   messageColor,
 }: SnackbarProps) => {
@@ -24,7 +24,7 @@ const SnackbarComponent = ({
     if (reason === "clickaway") {
       return;
     }
-    setOpen(false);
+    setShowMessage(false);
   };
 
   const action = (
@@ -43,7 +43,7 @@ const SnackbarComponent = ({
   return (
     <div>
       <Snackbar
-        open={open}
+        open={showMessage}
         autoHideDuration={6000}
         onClose={handleClose}
         action={action}

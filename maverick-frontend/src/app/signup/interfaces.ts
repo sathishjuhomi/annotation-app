@@ -5,8 +5,10 @@ export interface FormData {
 }
 
 export interface SignUpData {
-  open: boolean;
-  setOpen: any;
+  loading: boolean,
+  setLoading: any,
+  showMessage: boolean;
+  setShowMessage: any;
   message: string;
   messageColor: string;
   onSubmit: any;

@@ -9,7 +9,8 @@ import { signup } from "./api/route";
 import * as Constants from "../utils/constant";
 
 const Register = () => {
-  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [showMessage, setShowMessage] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [messageColor, setMessageColor] = React.useState(Constants.INFO);
   const {
@@ -21,7 +22,8 @@ const Register = () => {
   });
 
   const submit = async (data: FormData) => {
-    setOpen(true);
+    setShowMessage(true);
+    setLoading(true);
     const response = await signup(data)
       .then(async (res) => {
         const response = await res.json();
@@ -33,17 +35,21 @@ const Register = () => {
           setMessage(data);
           setMessageColor(Constants.ERROR);
         }
+         setLoading(false);
       })
       .catch((error) => {
         setMessage(error);
+        setLoading(false);
         setMessageColor(Constants.ERROR);
       });
   };
 
   return (
     <RegisterForm
-      open={open}
-      setOpen={setOpen}
+      loading={loading}
+      setLoading={setLoading}
+      showMessage={showMessage}
+      setShowMessage={setShowMessage}
       message={message}
       messageColor={messageColor}
       onSubmit={submit}
