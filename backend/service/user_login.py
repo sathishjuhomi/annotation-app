@@ -4,8 +4,8 @@ from datetime import timedelta
 from sqlalchemy.orm import Session
 
 from backend.db_handler.user_login_handler import user_login_db_handler
-from backend.models.user_login import UserLogin
-from backend.schemas.user_login import ResetPasswordSchema, SignUpSchema
+from backend.models.user_login import Users
+from backend.schemas.request.user_login import ResetPasswordSchema, UserSchema
 from backend.utils.utils import (
     create_access_token,
     generate_salt,
@@ -16,18 +16,18 @@ from backend.utils.utils import (
 
 class UserLoginService:
     @staticmethod
-    def create_user(request_payload: SignUpSchema, db: Session) -> UserLogin:
+    def create_user(request_payload: UserSchema, db: Session) -> Users:
         user_data = request_payload.model_dump()
         user_data["id"] = uuid.uuid4()
         salt = generate_salt()
         password_with_salt = user_data.pop("password") + salt
         user_data["password_hash"] = hash_password(password_with_salt)
         user_data["password_salt"] = salt
-        return user_login_db_handler.create(db=db, obj_in=user_data)
+        return user_login_db_handler.create(db=db, input_object=user_data)
 
     @staticmethod
     def validate_password(
-        request_payload: SignUpSchema, existing_user: UserLogin
+        request_payload: UserSchema, existing_user: Users
     ) -> bool:
         input_password = request_payload.password
         salt = existing_user.password_salt
@@ -37,16 +37,16 @@ class UserLoginService:
 
     @staticmethod
     def update_password(
-        request_payload: ResetPasswordSchema, user: UserLogin, db: Session
+        request_payload: ResetPasswordSchema, user: Users, db: Session
     ) -> None:
         request_dict = request_payload.model_dump()
         password_with_salt = request_dict["new_password"] + user.password_salt
         new_password_hash = hash_password(password_with_salt)
         update_data = {"password_hash": new_password_hash}
-        user_login_db_handler.update(db=db, db_obj=user, obj_in=update_data)
+        user_login_db_handler.update(db=db, db_obj=user, input_object=update_data)
 
     @staticmethod
-    def generate_access_token(user: UserLogin) -> str:
+    def generate_access_token(user: Users) -> str:
         access_token_expires = timedelta(minutes=60)
         return create_access_token(
             data={"email": user.email, "id": str(user.id)},

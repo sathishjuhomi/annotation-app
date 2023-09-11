@@ -3,8 +3,8 @@ from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-project_root = os.path.dirname(os.path.abspath(__file__))
-env_file_path = os.path.join(project_root, ".env")
+PROJECT_ROOT: str = os.path.dirname(os.path.abspath(__file__))
+ENV_FILE_PATH: str = os.path.join(PROJECT_ROOT, ".env")
 
 
 class Settings(BaseSettings):
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     MAIL_SERVER: str
 
     # store the values in .env file
-    model_config = SettingsConfigDict(env_file=env_file_path)
+    model_config = SettingsConfigDict(env_file=ENV_FILE_PATH)
 
 
 @lru_cache()

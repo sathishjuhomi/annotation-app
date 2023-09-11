@@ -1,6 +1,6 @@
 import secrets
 from datetime import datetime, timedelta
-from typing import Final, Optional
+from typing import Final
 
 from jose import jwt
 from passlib.context import CryptContext
@@ -11,7 +11,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 EMAIL_RESET_TOKEN_EXPIRE_HOURS: Final[int] = 1
 PASSWORD_REST_TOKEN_EXPIRY: Final[int] = 60
 settings = get_settings()
-SECRET_KEY = settings.SECRET_KEY
+SECRET_KEY: Final[str] = settings.SECRET_KEY
 
 
 def hash_password(password: str) -> str:
@@ -45,7 +45,7 @@ def generate_password_reset_token(email: str) -> str:
     return encoded_jwt
 
 
-def verify_password_reset_token(token: str) -> Optional[str]:
+def verify_password_reset_token(token: str) -> str | None:
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         return decoded_token["email"]
