@@ -11,13 +11,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { SigninData } from "../interfaces";
+import { ForgotPasswordData } from "../interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const defaultTheme = createTheme();
 
-export default function Signin({
+export default function ForgotPassword({
   loading,
   showMessage,
   setShowMessage,
@@ -27,7 +27,7 @@ export default function Signin({
   formHandleSubmit,
   register,
   errors,
-}: SigninData) {
+}: ForgotPasswordData) {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -40,15 +40,12 @@ export default function Signin({
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Forgot Password
           </Typography>
           <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
-            <Grid container spacing={2}>
+          
               <Grid item xs={12}>
                 <TextField
                   required
@@ -62,38 +59,19 @@ export default function Signin({
                   helperText={errors?.email ? errors?.email.message : " "}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  {...register("password")}
-                  error={Boolean(errors?.password)}
-                  helperText={errors?.password ? errors?.password.message : " "}
-                />
-              </Grid>
-            </Grid>
+          
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign in
+              Forgot Password
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="/forgot-password" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/signin" variant="body2">
+                  {"Back to Sign In"}
                 </Link>
               </Grid>
             </Grid>
