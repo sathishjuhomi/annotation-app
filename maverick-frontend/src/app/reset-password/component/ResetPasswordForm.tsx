@@ -11,14 +11,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ForgotPasswordData } from "../interfaces";
+import { ResetPasswordData } from "../interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const defaultTheme = createTheme();
 
-export default function ForgotPassword({
+export default function ResetPassword({
   loading,
+  setLoading,
   showMessage,
   setShowMessage,
   message,
@@ -27,7 +28,7 @@ export default function ForgotPassword({
   formHandleSubmit,
   register,
   errors,
-}: ForgotPasswordData) {
+}: ResetPasswordData) {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -41,36 +42,56 @@ export default function ForgotPassword({
           }}
         >
           <Typography component="h1" variant="h5">
-            Forgot Password
+            Reset Password
           </Typography>
           <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
+            <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  {...register("email")}
-                  error={Boolean(errors?.email)}
-                  helperText={errors?.email ? errors?.email.message : " "}
+                  name="password"
+                  label="New Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  {...register("password")}
+                  error={Boolean(errors?.password)}
+                  helperText={errors?.password ? errors?.password.message : " "}
                 />
               </Grid>
-          
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="passwordConfirm"
+                  label="Confirm Password"
+                  type="password"
+                  id="passwordConfirm"
+                  autoComplete="new-password"
+                  {...register("passwordConfirm")}
+                  error={Boolean(errors?.passwordConfirm)}
+                  helperText={
+                    errors?.passwordConfirm
+                      ? errors?.passwordConfirm.message
+                      : " "
+                  }
+                />
+              </Grid>
+            </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Forgot Password
+              Reset Password
             </Button>
-            <Grid container>
+            <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/signin" variant="body2">
-                  {"Back to Sign In"}
+                  Sign in
                 </Link>
               </Grid>
             </Grid>
