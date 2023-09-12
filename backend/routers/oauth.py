@@ -7,7 +7,7 @@ from starlette.requests import Request
 
 from backend.models.database import get_db
 from backend.schemas.request.user import (
-    OauthUserSchema
+    UserSchema
 )
 from backend.schemas.response.user import (
     SignInResponseSchema
@@ -15,11 +15,12 @@ from backend.schemas.response.user import (
 from backend.service.user import user_service
 from .user import check_existing_user
 from ..oauth_config import oauth
+from backend.utils.utils import generate_random_oauth_password
 
 oauth_router = APIRouter(prefix="/api/v1/user", tags=["Oauth"])
 
 
-def oauth_sign_up(request_payload: OauthUserSchema, db) -> Any:
+def oauth_sign_up(request_payload: UserSchema, db) -> Any:
     user = check_existing_user(db=db, column_name='email', value=request_payload.email)
     if not user:
         user = user_service.create_user(request_payload=request_payload, db=db)
@@ -67,8 +68,10 @@ async def auth(request: Request):
             detail="User information is not available in the OAuth token.",
         )
     user_data = {
-        "email": user.get("email")
+        "email": user.get("email"),
+        "password": generate_random_oauth_password()
     }
+    print('user_data ', user_data)
     db = next(get_db())
-    request_payload = OauthUserSchema(**user_data)
+    request_payload = UserSchema(**user_data)
     return oauth_sign_up(request_payload=request_payload, db=db)

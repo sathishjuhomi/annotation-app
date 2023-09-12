@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from backend.db_handler.user_handler import user_db_handler
 from backend.models.user import Users
-from backend.schemas.request.user import ResetPasswordSchema, UserSchema, OauthUserSchema
+from backend.schemas.request.user import ResetPasswordSchema, UserSchema
 from backend.utils.utils import (
     create_access_token,
     generate_salt,
@@ -16,20 +16,13 @@ from backend.utils.utils import (
 
 class UserService:
     @staticmethod
-    def create_user(request_payload: UserSchema | OauthUserSchema, db: Session) -> Users:
+    def create_user(request_payload: UserSchema, db: Session) -> Users:
         user_data = request_payload.model_dump()
         user_data["id"] = uuid.uuid4()
-        if isinstance(request_payload, UserSchema) and hasattr(request_payload, "password"):
-            # Handle the case where password exists in the request_payload
-            salt = generate_salt()
-            password_with_salt = user_data.pop("password") + salt
-            user_data["password_hash"] = hash_password(password_with_salt)
-            user_data["password_salt"] = salt
-        else:
-            # Handle the case where password does not exist in the request_payload
-            user_data["password_hash"] = None
-            user_data["password_salt"] = None
-
+        salt = generate_salt()
+        password_with_salt = user_data.pop("password") + salt
+        user_data["password_hash"] = hash_password(password_with_salt)
+        user_data["password_salt"] = salt
         return user_db_handler.create(db=db, input_object=user_data)
 
     @staticmethod
