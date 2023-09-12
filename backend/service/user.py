@@ -19,10 +19,17 @@ class UserService:
     def create_user(request_payload: UserSchema | OauthUserSchema, db: Session) -> Users:
         user_data = request_payload.model_dump()
         user_data["id"] = uuid.uuid4()
-        salt = generate_salt()
-        password_with_salt = user_data.pop("password") + salt
-        user_data["password_hash"] = hash_password(password_with_salt)
-        user_data["password_salt"] = salt
+        if isinstance(request_payload, UserSchema) and hasattr(request_payload, "password"):
+            # Handle the case where password exists in the request_payload
+            salt = generate_salt()
+            password_with_salt = user_data.pop("password") + salt
+            user_data["password_hash"] = hash_password(password_with_salt)
+            user_data["password_salt"] = salt
+        else:
+            # Handle the case where password does not exist in the request_payload
+            user_data["password_hash"] = None
+            user_data["password_salt"] = None
+
         return user_db_handler.create(db=db, input_object=user_data)
 
     @staticmethod
