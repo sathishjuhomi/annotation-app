@@ -2,7 +2,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import ResetPasswordForm from "./component/ResetPasswordForm";
-import { FormData } from "./interfaces";
+import { FormData } from "../component/interfaces";
 import registerSchema from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { resetPassword } from "./api/route";
