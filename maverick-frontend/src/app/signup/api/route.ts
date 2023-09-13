@@ -1,4 +1,4 @@
-import { FormData } from "../interfaces";
+import { FormData } from "../../component/interfaces";
 
 export async function signup(formData: FormData) {
   const body = { email: formData.email, password: formData.password };
