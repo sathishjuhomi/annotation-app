@@ -6,7 +6,7 @@ const Page = () => {;
 const router = useRouter();
 
   useEffect(() => {
-    router.push('/sign-in');
+    router.push('/signin');
   }, []);
 
   return null

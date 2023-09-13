@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { SigninData } from "../interfaces";
+import { SignUpProps } from "../../component/interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -27,7 +27,7 @@ export default function Signin({
   formHandleSubmit,
   register,
   errors,
-}: SigninData) {
+}: SignUpProps) {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
