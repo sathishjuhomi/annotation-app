@@ -1,8 +1,5 @@
 # Maverick
 
-Backend Service [FAST API]
-========
-
 ### Repo ###
 
 Clone the repo: https://github.com/juhomi/maverick
@@ -10,6 +7,27 @@ Clone the repo: https://github.com/juhomi/maverick
 ```commandline
 git clone https://<<GIT_ACCESS_TOKEN>>@github.com/juhomi/maverick.git
 ```
+
+Frontend - Next.js
+
+## Getting Started
+
+npm install
+
+Run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+Backend Service [FAST API]
+========
 
 ### Local machine setup ###
 Usage of code in local machine:
