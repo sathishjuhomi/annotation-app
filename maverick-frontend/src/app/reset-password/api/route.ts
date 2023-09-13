@@ -1,4 +1,4 @@
-import { FormData } from "../interfaces";
+import { FormData } from "../../component/interfaces";
 
 export async function resetPassword(formData: FormData, token: any) {
   const body = {new_password : formData.password}
