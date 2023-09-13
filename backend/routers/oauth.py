@@ -71,7 +71,6 @@ async def auth(request: Request):
         "email": user.get("email"),
         "password": generate_random_oauth_password()
     }
-    print('user_data ', user_data)
     db = next(get_db())
     request_payload = UserSchema(**user_data)
     return oauth_sign_up(request_payload=request_payload, db=db)
