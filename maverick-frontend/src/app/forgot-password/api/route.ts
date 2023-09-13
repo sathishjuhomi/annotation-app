@@ -1,4 +1,4 @@
-import { FormData } from "../interfaces";
+import { FormData } from "../../component/interfaces";
 
 export async function forgotPassword(formData: FormData) {
   const email = formData.email;
