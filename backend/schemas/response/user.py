@@ -6,9 +6,10 @@ class SignUpResponseSchema(BaseModel):
     email: EmailStr
 
 
-class MsgSchema(BaseModel):
-    message: str
+class DetailSchema(BaseModel):
+    detail: str
 
 
-class SignInResponseSchema(MsgSchema):
+class SignInResponseSchema(DetailSchema):
     access_token: str
+

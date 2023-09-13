@@ -51,3 +51,9 @@ def verify_password_reset_token(token: str) -> str | None:
         return decoded_token["email"]
     except jwt.JWTError:
         return None
+
+def generate_random_oauth_password(length=20):
+    rlength = (length * 3) // 4
+    token = secrets.token_urlsafe(rlength)
+    translation = str.maketrans('lIO0', 'sxyz')
+    return token.translate(translation)

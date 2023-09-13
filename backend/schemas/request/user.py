@@ -6,5 +6,9 @@ class UserSchema(BaseModel):
     password: str
 
 
+class OauthUserSchema(BaseModel):
+    email: EmailStr
+    password: str
+
 class ResetPasswordSchema(BaseModel):
     new_password: str

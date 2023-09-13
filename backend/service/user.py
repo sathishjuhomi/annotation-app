@@ -3,9 +3,9 @@ from datetime import timedelta
 
 from sqlalchemy.orm import Session
 
-from backend.db_handler.user_login_handler import user_login_db_handler
-from backend.models.user_login import Users
-from backend.schemas.request.user_login import ResetPasswordSchema, UserSchema
+from backend.db_handler.user_handler import user_db_handler
+from backend.models.user import Users
+from backend.schemas.request.user import ResetPasswordSchema, UserSchema
 from backend.utils.utils import (
     create_access_token,
     generate_salt,
@@ -14,7 +14,7 @@ from backend.utils.utils import (
 )
 
 
-class UserLoginService:
+class UserService:
     @staticmethod
     def create_user(request_payload: UserSchema, db: Session) -> Users:
         user_data = request_payload.model_dump()
@@ -23,7 +23,7 @@ class UserLoginService:
         password_with_salt = user_data.pop("password") + salt
         user_data["password_hash"] = hash_password(password_with_salt)
         user_data["password_salt"] = salt
-        return user_login_db_handler.create(db=db, input_object=user_data)
+        return user_db_handler.create(db=db, input_object=user_data)
 
     @staticmethod
     def validate_password(
@@ -43,7 +43,7 @@ class UserLoginService:
         password_with_salt = request_dict["new_password"] + user.password_salt
         new_password_hash = hash_password(password_with_salt)
         update_data = {"password_hash": new_password_hash}
-        user_login_db_handler.update(db=db, db_obj=user, input_object=update_data)
+        user_db_handler.update(db=db, db_obj=user, input_object=update_data)
 
     @staticmethod
     def generate_access_token(user: Users) -> str:
@@ -54,4 +54,4 @@ class UserLoginService:
         )
 
 
-user_login_service = UserLoginService()
+user_service = UserService()

@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from backend.models.user_login import Users
-from backend.schemas.request.user_login import UserSchema, ResetPasswordSchema
-from backend.service.user_login import UserLoginService
+from backend.models.user import Users
+from backend.schemas.request.user import UserSchema, ResetPasswordSchema
+from backend.service.user import UserService
 
 
 class TestUserLoginService(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestUserLoginService(unittest.TestCase):
             email="test@example.com",
             password="password123",
         )
-        result = UserLoginService.create_user(request_payload, self.db)
+        result = UserService.create_user(request_payload, self.db)
         self.assertIsInstance(result, Users)
         self.assertEqual(result.id, "123e4567-e89b-12d3-a456-426655440000")
 
@@ -33,7 +33,7 @@ class TestUserLoginService(unittest.TestCase):
             password_salt="mock_salt",
             password_hash="mock_hash"
         )
-        result = UserLoginService.validate_password(request_payload, mock_user)
+        result = UserService.validate_password(request_payload, mock_user)
         self.assertTrue(result)
 
     @patch("backend.service.user_login.verify_password", return_value=False)
@@ -46,7 +46,7 @@ class TestUserLoginService(unittest.TestCase):
             password_salt="mock_salt",
             password_hash="mock_hash"
         )
-        result = UserLoginService.validate_password(request_payload, mock_user)
+        result = UserService.validate_password(request_payload, mock_user)
         self.assertFalse(result)
 
     @patch("backend.service.user_login.hash_password", return_value="mock_new_hash")
@@ -60,7 +60,7 @@ class TestUserLoginService(unittest.TestCase):
             password_salt="mock_salt"
         )
         self.assertIsNone(
-            UserLoginService.update_password(request_payload, mock_user, self.db)
+            UserService.update_password(request_payload, mock_user, self.db)
         )
 
     @patch("backend.service.user_login.create_access_token", return_value="mock_token")
@@ -69,5 +69,5 @@ class TestUserLoginService(unittest.TestCase):
             email="test@example.com",
             id="123e4567-e89b-12d3-a456-426655440000"
         )
-        result = UserLoginService.generate_access_token(mock_user)
+        result = UserService.generate_access_token(mock_user)
         self.assertEqual(result, "mock_token")

@@ -22,4 +22,4 @@ class Users(Base):
     )
     t_delete = Column(TIMESTAMP(timezone=True))
 
-    __table_args__ = (UniqueConstraint("email", name="users_email_key"),)
+    __table_args__ = (UniqueConstraint("email", name="user_login_email_key"),)
