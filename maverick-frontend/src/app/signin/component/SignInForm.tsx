@@ -47,7 +47,7 @@ export default function Signin({
             Sign in
           </Typography>
           <br />
-          <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
+          <form  noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -80,6 +80,7 @@ export default function Signin({
             <Button
               type="submit"
               fullWidth
+              onClick={formHandleSubmit(onSubmit)}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
@@ -97,6 +98,15 @@ export default function Signin({
                 </Link>
               </Grid>
             </Grid>
+            <Grid item>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2, backgroundColor: 'red'}}
+                > Sign in with Google
+                </Button>
+              </Grid>
           </form>
           {message !== "" ? (
             <Snackbar

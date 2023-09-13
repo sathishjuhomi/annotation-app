@@ -26,11 +26,11 @@ const SignIn = () => {
     await signIn(data)
       .then(async (res) => {
         const response = await res.json();
+        const data = response.detail;
         if (res.status === 200) {
-          setMessage(response.message);
+          setMessage(data);
           setMessageColor(Constants.SUCCESS);
         } else {
-          const data = response.detail;
           setMessage(data);
           setMessageColor(Constants.ERROR);
         }
