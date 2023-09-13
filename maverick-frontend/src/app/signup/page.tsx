@@ -47,7 +47,6 @@ const Register = () => {
   return (
     <RegisterForm
       loading={loading}
-      setLoading={setLoading}
       showMessage={showMessage}
       setShowMessage={setShowMessage}
       message={message}
