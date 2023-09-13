@@ -13,7 +13,6 @@ export interface FormData {
 
 export interface SignUpProps {
   loading: boolean;
-  setLoading: any;
   showMessage: boolean;
   setShowMessage: any;
   message: string;
