@@ -9,8 +9,8 @@ import { forgotPassword } from "./api/route";
 import * as Constants from "../utils/constant";
 
 const ForgotPassword = () => {
- const [loading, setLoading] = React.useState(false);
- const [showMessage, setShowMessage] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [showMessage, setShowMessage] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [messageColor, setMessageColor] = React.useState(Constants.INFO);
   const {
@@ -23,6 +23,7 @@ const ForgotPassword = () => {
 
   const submit = async (data: FormData) => {
     setShowMessage(true);
+    setLoading(true);
     await forgotPassword(data)
       .then(async (res) => {
         const response = await res.json();
@@ -34,9 +35,11 @@ const ForgotPassword = () => {
           setMessage(data);
           setMessageColor(Constants.ERROR);
         }
+        setLoading(false);
       })
       .catch((error) => {
         setMessage(error);
+        setLoading(false);
         setMessageColor(Constants.ERROR);
       });
   };
