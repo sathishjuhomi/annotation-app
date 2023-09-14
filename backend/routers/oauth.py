@@ -30,6 +30,7 @@ def oauth_sign_up(request_payload: UserSchema, db) -> Any:
 
 @oauth_router.get('/oauth-login')
 async def oauth_login(request: Request):
+    request.session.clear()
     redirect_uri = request.url_for('auth')
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
