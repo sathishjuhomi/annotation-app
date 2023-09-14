@@ -11,7 +11,7 @@ export async function signIn(formData: FormData) {
 }
 
 export async function signInOauth() {
-  const res = await fetch("http://127.0.0.1:8000/api/v1/user/oauth_login", {
+  const res = await fetch("http://127.0.0.1:8000/api/v1/user/oauth-login", {
     method: "GET",
     headers: {
       "Content-type": "application/json",
