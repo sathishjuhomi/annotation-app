@@ -9,3 +9,15 @@ export async function signIn(formData: FormData) {
   });
   return res;
 }
+
+export async function signInOauth() {
+  const res = await fetch("http://127.0.0.1:8000/api/v1/user/oauth_login", {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    mode: "no-cors",
+  });
+  return res;
+}

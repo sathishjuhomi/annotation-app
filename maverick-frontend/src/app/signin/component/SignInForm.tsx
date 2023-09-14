@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { SignUpProps } from "../../component/interfaces";
+import { SignInProps } from "../../component/interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -25,9 +25,10 @@ export default function Signin({
   messageColor,
   onSubmit,
   formHandleSubmit,
+  handleOauth,
   register,
   errors,
-}: SignUpProps) {
+}: SignInProps) {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -47,7 +48,7 @@ export default function Signin({
             Sign in
           </Typography>
           <br />
-          <form  noValidate>
+          <form noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -98,16 +99,18 @@ export default function Signin({
                 </Link>
               </Grid>
             </Grid>
-            <Grid item>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2, backgroundColor: 'red'}}
-                > Sign in with Google
-                </Button>
-              </Grid>
           </form>
+          <Grid item>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              onClick={handleOauth}
+              sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
+            >
+              Sign in with Google
+            </Button>
+          </Grid>
           {message !== "" ? (
             <Snackbar
               showMessage={showMessage}

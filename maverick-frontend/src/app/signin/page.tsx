@@ -5,7 +5,7 @@ import SignInForm from "./component/SignInForm";
 import { FormData } from "../component/interfaces";
 import registerSchema from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signIn } from "./api/route";
+import { signIn, signInOauth } from "./api/route";
 import * as Constants from "../utils/constant";
 
 const SignIn = () => {
@@ -44,6 +44,29 @@ const SignIn = () => {
       });
   };
 
+  const submitOauth = async () => {
+    setShowMessage(true);
+    setLoading(true);
+    await signInOauth()
+      .then(async (res) => {
+        const response = await res.json();
+        const data = response.detail;
+        if (res.status === 200) {
+          setMessage(data);
+          setMessageColor(Constants.SUCCESS);
+        } else {
+          setMessage(data);
+          setMessageColor(Constants.ERROR);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        setMessage(error);
+        setLoading(false);
+        setMessageColor(Constants.ERROR);
+      });
+  };
+
   return (
     <SignInForm
       loading={loading}
@@ -54,6 +77,7 @@ const SignIn = () => {
       onSubmit={submit}
       register={register}
       formHandleSubmit={handleSubmit}
+      handleOauth={submitOauth}
       errors={errors}
     />
   );

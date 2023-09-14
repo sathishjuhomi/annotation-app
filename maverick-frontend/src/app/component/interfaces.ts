@@ -22,3 +22,16 @@ export interface SignUpProps {
   register: any;
   errors: any;
 }
+
+export interface SignInProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+  handleOauth: any;
+  register: any;
+  errors: any;
+}
