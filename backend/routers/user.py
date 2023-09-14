@@ -1,5 +1,5 @@
 from typing import Any
-
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -21,12 +21,16 @@ from backend.utils.utils import (
     verify_password_reset_token
 )
 
+logger = logging.getLogger(__name__)
 auth_router = APIRouter(prefix="/api/v1/user", tags=["Authentication"])
 
 
 def check_existing_user(db, column_name, value):
-    existing_user = user_db_handler.load_by_column(
-        db=db, column_name=column_name, value=value)
+    try:
+        existing_user = user_db_handler.load_by_column(
+            db=db, column_name=column_name, value=value)
+    except Exception as e:
+        logger.error('Error retriving user: %s', e)
     return existing_user
 
 
