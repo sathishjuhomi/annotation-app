@@ -7,6 +7,7 @@ import registerSchema from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signIn, signInOauth } from "./api/route";
 import * as Constants from "../utils/constant";
+import { useRouter } from "next/navigation";
 
 const SignIn = () => {
   const [loading, setLoading] = React.useState(false);
@@ -20,6 +21,7 @@ const SignIn = () => {
   } = useForm({
     resolver: yupResolver(registerSchema),
   });
+  const router = useRouter();
 
   const submit = async (data: FormData) => {
     setShowMessage(true);
@@ -31,6 +33,7 @@ const SignIn = () => {
         if (res.status === 200) {
           setMessage(data);
           setMessageColor(Constants.SUCCESS);
+          router.push("/docs/installation");
         } else {
           setMessage(data);
           setMessageColor(Constants.ERROR);
@@ -54,6 +57,7 @@ const SignIn = () => {
         if (res.status === 200) {
           setMessage(data);
           setMessageColor(Constants.SUCCESS);
+          router.push("/docs/installation");
         } else {
           setMessage(data);
           setMessageColor(Constants.ERROR);
