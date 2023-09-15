@@ -1,15 +1,9 @@
-'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import Onboarding from '../app/onboarding/index'
 
 const Page = () => {;
-const router = useRouter();
-
-  useEffect(() => {
-    router.push('/signin');
-  }, []);
-
-  return null
+  return (
+    <Onboarding/>
+  )
 };
 
 export default Page;
