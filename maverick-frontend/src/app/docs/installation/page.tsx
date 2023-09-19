@@ -217,13 +217,6 @@ export default function ResponsiveDrawer(props: Props) {
               sx={{ color: "#ffffff", paddingLeft: "10px" }}
             >
               git remote add origin
-            </Typography>
-            <Typography
-              variant="caption"
-              display="block"
-              gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
-            >
               git@github.com:your-account/your-new-repo.git
             </Typography>
             <Typography
