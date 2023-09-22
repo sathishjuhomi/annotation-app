@@ -30,15 +30,8 @@ export default function ResetPassword({
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5">
+        <Box className="mt-8 flex flex-col items-center">
+          <Typography className="text-black font-bold" component="h1" variant="h5">
             Reset Password
           </Typography>
           <br />
@@ -81,7 +74,7 @@ export default function ResetPassword({
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              className="bg-primary mb-2 mt-3"
             >
               Reset Password
             </Button>

@@ -20,59 +20,61 @@ export default function Onboarding() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        backgroundColor: "#303030",
-      }}
-    >
+    <Box className="bg-grey display-flex">
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
+        <div className="flex-grow hidden sm:block">
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            className="text-white"
           >
             Maverick
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Button sx={{ color: "#fff" }} onClick={navigateToSignIn}>
+          </div>
+          <div className="hidden sm:block">
+          <Box>
+            <Button className="text-white" onClick={navigateToSignIn}>
               Login
             </Button>
-            <Button sx={{ color: "#fff" }} onClick={navigateToSignUp}>
+            <Button className="text-white" onClick={navigateToSignUp}>
               Sign Up
             </Button>
           </Box>
+          </div>
         </Toolbar>
       </AppBar>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box className="p-3" component="main">
         <Toolbar />
         <Typography
-          sx={{ color: "#fff", marginTop: "30px" }}
+          className="text-white font-bold mt-20"
           variant="h2"
           gutterBottom
         >
           Build products faster
         </Typography>
+        <div>
         <Typography
-          sx={{ color: "#fff", marginTop: "-30px" }}
+          sx={{ marginTop: "-20px" }}
+          className="text-white font-bold"
           variant="h2"
           gutterBottom
         >
           in Next.js and Python
         </Typography>
+        </div>
         <Typography
           variant="h5"
           gutterBottom
-          sx={{ color: "#fff", marginTop: "20px" }}
+          className="text-white mt-10"
         >
           Maverick is the best Next.js and Python SaaS template out there. Focus
           on your business, not on the boilerplate.
         </Typography>
         <br />
         <br />
-        <Button variant="contained">Maverick your next app</Button>
+        <Button className="bg-primary text-white" variant="contained">Maverick your next app</Button>
         <br />
         <br />
       </Box>

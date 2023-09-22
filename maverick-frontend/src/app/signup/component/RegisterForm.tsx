@@ -32,18 +32,11 @@ export default function SignUp({
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Box className="mt-8 flex flex-col items-center">
+          <Avatar className="bg-tertiary m-1">
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography className="text-black font-bold" component="h1" variant="h5">
             Sign up
           </Typography>
           <br />
@@ -99,7 +92,7 @@ export default function SignUp({
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              className="bg-primary mb-2 mt-3"
             >
               Sign Up
             </Button>
