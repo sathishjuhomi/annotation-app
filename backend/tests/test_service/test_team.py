@@ -17,7 +17,7 @@ class TestTeamService(unittest.TestCase):
     @patch('backend.service.team.get_user_id')
     @patch('uuid.uuid4')
     @patch('backend.db_handler.team_handler.team_db_handler.create')
-    def test_create_team(self, mock_create, mock_uuid4, mock_get_user_id):
+    def test_create_team(self, mock_uuid4, mock_get_user_id):
         mock_db = MagicMock()
         mock_request_payload = TeamSchema(team_name="Test Team", token=token)
         mock_uuid4.return_value = team_id
@@ -29,4 +29,18 @@ class TestTeamService(unittest.TestCase):
         self.assertEqual(result['team_name'], "Test Team")
         self.assertEqual(result['created_by'], user_id)
 
+
+    @patch("backend.service.user.create_access_token", return_value="mock_token")
+    @patch('backend.service.team.get_user_id')
+    @patch('backend.db_handler.team_handler.team_db_handler.update')
+    def test_update_team(self, mock_get_user_id):
+        mock_db = MagicMock()
+        mock_request_payload = TeamSchema(team_name="Test Team", token=token)
+        mock_get_user_id.return_value = user_id
+
+        result = self.team_service.update_team(mock_request_payload, mock_db)
+
+        self.assertEqual(result['id'], team_id)
+        self.assertEqual(result['team_name'], "Test Team")
+        self.assertEqual(result['created_by'], user_id)
         
