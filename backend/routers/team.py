@@ -67,3 +67,27 @@ def update_team(
 ):
     team = get_team_or_raise_404(db, id)
     return team_service.update_team(request_payload, team, db)
+
+
+@team_router.get(
+    "/teams/{id}",
+    description="Get a team by ID",
+    response_model=TeamResponseSchema
+)
+def get_team_by_id(
+    id: UUID4,
+    db: Session = Depends(get_db)
+):
+    return get_team_or_raise_404(db, id)
+
+
+@team_router.get(
+    "/teams",
+    description="Get a list of all teams",
+    response_model=List[TeamResponseSchema]
+)
+def get_teams(db: Session = Depends(get_db)):
+    team = team_db_handler.load_all(db=db)
+    if not team:
+        return {"message": "No Teams Found"}
+    return team
