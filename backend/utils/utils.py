@@ -2,7 +2,7 @@ import secrets
 from datetime import datetime, timedelta
 from typing import Final
 from backend.db_handler.user_handler import user_db_handler
-from jose import jwt, CustomAuthenticationError
+from jose import jwt
 from passlib.context import CryptContext
 
 from backend.config import get_settings

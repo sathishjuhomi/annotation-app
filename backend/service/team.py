@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from backend.db_handler.team_handler import team_db_handler
 from backend.utils.utils import get_user_id
 from backend.schemas.request.team import TeamSchema
+from backend.models.team import Teams
 
 
 def preprocess_team_data(request_payload, db):
@@ -20,6 +21,11 @@ class TeamService:
         team = preprocess_team_data(request_payload, db)
         team["id"] = uuid.uuid4()
         return team_db_handler.create(db, input_object=team)
+    
+    @staticmethod
+    def update_team(request_payload: TeamSchema, team:Teams, db: Session):
+        team = preprocess_team_data(request_payload, db)
+        return team_db_handler.update(db=db, db_obj=team, input_object=team)
 
 
 team_service = TeamService
