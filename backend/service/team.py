@@ -21,9 +21,9 @@ class TeamService:
         team = preprocess_team_data(request_payload, db)
         team["id"] = uuid.uuid4()
         return team_db_handler.create(db, input_object=team)
-    
+
     @staticmethod
-    def update_team(request_payload: TeamSchema, team:Teams, db: Session):
+    def update_team(request_payload: TeamSchema, team: Teams, db: Session):
         team_data = preprocess_team_data(request_payload, db)
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 

@@ -24,8 +24,6 @@ def get_team_or_raise_404(db: Session, id: UUID4):
     return team
 
 
-
-
 @team_router.post(
     "/teams",
     description="This API endpoint allows users to create Team",

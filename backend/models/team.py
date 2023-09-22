@@ -10,7 +10,8 @@ class Teams(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True)
     team_name = Column(String, nullable=False)
-    created_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    created_by = Column(UUID(as_uuid=True), ForeignKey(
+        "users.id", ondelete="CASCADE"), nullable=False)
     t_create = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
@@ -20,10 +21,8 @@ class Teams(Base):
         server_default=text("now()"),
         onupdate=text("now()"),
     )
-    t_delete = Column(TIMESTAMP(timezone=True))    
+    t_delete = Column(TIMESTAMP(timezone=True))
 
     user = relationship("Users")
 
     __table_args__ = (UniqueConstraint("team_name", name="team_name_key"),)
-
-    

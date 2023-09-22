@@ -29,7 +29,6 @@ class TestTeamService(unittest.TestCase):
         self.assertEqual(result['team_name'], "Test Team")
         self.assertEqual(result['created_by'], user_id)
 
-
     @patch("backend.service.user.create_access_token", return_value="mock_token")
     @patch('backend.service.team.get_user_id')
     @patch('backend.db_handler.team_handler.team_db_handler.update')
@@ -43,4 +42,3 @@ class TestTeamService(unittest.TestCase):
         self.assertEqual(result['id'], team_id)
         self.assertEqual(result['team_name'], "Test Team")
         self.assertEqual(result['created_by'], user_id)
-        
