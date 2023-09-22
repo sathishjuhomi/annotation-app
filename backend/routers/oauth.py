@@ -38,6 +38,7 @@ def oauth_sign_up(request_payload: UserSchema, db) -> Any:
 @oauth_router.get('/oauth-login')
 async def oauth_login(request: Request):
     try:
+        request.session.clear()
         redirect_uri = request.url_for('auth')
     except Exception as e:
         logger.error("Error generating redirect_uri: %s", str(e))
