@@ -25,3 +25,5 @@ class Teams(Base):
     user = relationship("Users")
 
     __table_args__ = (UniqueConstraint("team_name", name="team_name_key"),)
+
+    
