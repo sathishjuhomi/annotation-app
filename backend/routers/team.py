@@ -91,3 +91,20 @@ def get_teams(db: Session = Depends(get_db)):
     if not team:
         return {"message": "No Teams Found"}
     return team
+
+
+@team_router.delete(
+    "/teams/{id}",
+    description="Delete a team by ID",
+    response_model=DeleteTeamResponseSchema
+)
+def delete_team(
+    id: UUID4,
+    db: Session = Depends(get_db)
+):
+    _ = get_team_or_raise_404(db, id)
+    deleted_team = team_db_handler.delete(db=db, id=id)
+    return {
+        "detail": "Team deleted successfully",
+        "deleted_team": deleted_team
+    }
