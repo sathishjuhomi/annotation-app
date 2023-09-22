@@ -24,8 +24,8 @@ class TeamService:
     
     @staticmethod
     def update_team(request_payload: TeamSchema, team:Teams, db: Session):
-        team = preprocess_team_data(request_payload, db)
-        return team_db_handler.update(db=db, db_obj=team, input_object=team)
+        team_data = preprocess_team_data(request_payload, db)
+        return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 
 
 team_service = TeamService
