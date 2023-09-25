@@ -125,7 +125,6 @@ export default function ResponsiveDrawer(props: Props) {
               width: drawerWidth,
             },
           }}
-          // className="hidden sm:block box-border w-240"
           open
         >
           {drawer}
@@ -137,7 +136,6 @@ export default function ResponsiveDrawer(props: Props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
-        // className="flex-grow p-3 w-full sm:w-auto sm:w-[calc(100% - {drawerWidth}px)]"
       >
         <Toolbar />
         <Typography paragraph className="text-black text-canter">
