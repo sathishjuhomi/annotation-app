@@ -15,6 +15,12 @@ const config: Config = {
       grey: '#303030',
       white: '#FFFFFF'
     },
+    screens: {
+      sm: '320px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px'
+    },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

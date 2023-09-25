@@ -65,8 +65,10 @@ export default function ResponsiveDrawer(props: Props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <div className="flex ml-2 mr-2">
+    <Box className="sm-sm md-md lg-lg xl-xl">
       <CssBaseline />
+      <div>
       <AppBar
         position="fixed"
         sx={{
@@ -84,14 +86,15 @@ export default function ResponsiveDrawer(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className="text-white" noWrap component="div">
+          <Typography variant="h6" className="text-white flex sm-sm md-md lg-lg xl-xl" noWrap component="div">
             Welcome to Maverick
           </Typography>
         </Toolbar>
       </AppBar>
+      </div>
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        className="w-full sm-sm flex-shrink-0"
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
@@ -110,7 +113,6 @@ export default function ResponsiveDrawer(props: Props) {
               width: drawerWidth,
             },
           }}
-          // className="block xs:hidden box-border w-240"
         >
           {drawer}
         </Drawer>
@@ -131,10 +133,14 @@ export default function ResponsiveDrawer(props: Props) {
       </Box>
       <Box
         component="main"
-        className="flex-grow p-3 w-full sm:w-auto sm:w-[calc(100% - {drawerWidth}px)]"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+        }}
+        // className="flex-grow p-3 w-full sm:w-auto sm:w-[calc(100% - {drawerWidth}px)]"
       >
         <Toolbar />
-        <Typography paragraph className="text-black">
+        <Typography paragraph className="text-black text-canter">
           You can clone Maverick from our Git repository and merge updates at
           any time.
         </Typography>
@@ -260,5 +266,6 @@ export default function ResponsiveDrawer(props: Props) {
         <br></br>
       </Box>
     </Box>
+    </div>
   );
 }

@@ -28,7 +28,7 @@ export default function Onboarding() {
           <Typography
             variant="h6"
             component="div"
-            className="text-white"
+            className="text-white sm-sm md-md lg-lg xl-xl"
           >
             Maverick
           </Typography>
