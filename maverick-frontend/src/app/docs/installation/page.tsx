@@ -51,7 +51,7 @@ export default function ResponsiveDrawer(props: Props) {
         </ListItemButton>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
+            <ListItemButton className="pl-4">
               <ListItemText primary="Installation" />
             </ListItemButton>
           </List>
@@ -80,11 +80,11 @@ export default function ResponsiveDrawer(props: Props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            className="mr-2 hidden sm:block"
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" className="text-white" noWrap component="div">
             Welcome to Maverick
           </Typography>
         </Toolbar>
@@ -110,6 +110,7 @@ export default function ResponsiveDrawer(props: Props) {
               width: drawerWidth,
             },
           }}
+          // className="block xs:hidden box-border w-240"
         >
           {drawer}
         </Drawer>
@@ -122,6 +123,7 @@ export default function ResponsiveDrawer(props: Props) {
               width: drawerWidth,
             },
           }}
+          // className="hidden sm:block box-border w-240"
           open
         >
           {drawer}
@@ -129,44 +131,40 @@ export default function ResponsiveDrawer(props: Props) {
       </Box>
       <Box
         component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
+        className="flex-grow p-3 w-full sm:w-auto sm:w-[calc(100% - {drawerWidth}px)]"
       >
         <Toolbar />
-        <Typography paragraph>
+        <Typography paragraph className="text-black">
           You can clone Maverick from our Git repository and merge updates at
           any time.
         </Typography>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" className="text-black" gutterBottom>
           Using Maverick with Git
         </Typography>
         <br></br>
-        <Typography>
+        <Typography className="text-black">
           Git provides an easy way to merge changes from Maverick into your
           application. This is handy when new features or improvements are added
           to Maverick and you'd like to merge them into your application.
         </Typography>
         <br></br>
-        <Typography variant="h5" gutterBottom>
+        <Typography className="text-black" variant="h5" gutterBottom>
           Clone The Repository
         </Typography>
         <br></br>
-        <Typography paragraph>
+        <Typography paragraph className="text-black">
           First, you'll need to clone Maverick from GitHub when you create your
           application. We'll call our application my-app, but you should change
           it to your application name.
         </Typography>
         <br></br>
         <Box>
-          <Paper sx={{ backgroundColor: "#000000" }} elevation={3}>
+          <Paper className="bg-black" elevation={3}>
             <Typography
               variant="caption"
               display="block"
               gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
+              className="text-white pl-10"
             >
               git clone git@github.com:juhomi/maverick.git my-app
             </Typography>
@@ -174,7 +172,7 @@ export default function ResponsiveDrawer(props: Props) {
               variant="caption"
               display="block"
               gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
+              className="text-white pl-10"
             >
               cd my-app
             </Typography>
@@ -182,7 +180,7 @@ export default function ResponsiveDrawer(props: Props) {
               variant="caption"
               display="block"
               gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
+              className="text-white pl-10"
             >
               git remote rename origin maverick
             </Typography>
@@ -190,7 +188,7 @@ export default function ResponsiveDrawer(props: Props) {
         </Box>
 
         <br></br>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" className="text-black" gutterBottom>
           Create Your Git Repository
         </Typography>
         <br></br>
@@ -198,23 +196,24 @@ export default function ResponsiveDrawer(props: Props) {
           variant="outlined"
           target="_blank"
           href="https://github.com/new"
+          className="text-primary"
         >
           Github
         </Button>
         <br></br>
         <br></br>
-        <Typography>
+        <Typography className="text-black">
           We can then set origin to point to our new repository and push the
           code up to it.
         </Typography>
         <br></br>
         <Box>
-          <Paper sx={{ backgroundColor: "#000000" }} elevation={3}>
+          <Paper className="bg-black" elevation={3}>
             <Typography
               variant="caption"
               display="block"
               gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
+              className="text-white pl-10"
             >
               git remote add origin
               git@github.com:your-account/your-new-repo.git
@@ -223,28 +222,28 @@ export default function ResponsiveDrawer(props: Props) {
               variant="caption"
               display="block"
               gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
+              className="text-white pl-10"
             >
               git push -u origin main
             </Typography>
           </Paper>
         </Box>
         <br></br>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" className="text-black" gutterBottom>
           Merging updates from Maverick
         </Typography>
         <br></br>
-        <Typography>
+        <Typography className="text-black">
           Then We can use git to fetch and merge updates into your application.
         </Typography>
         <br></br>
         <Box>
-          <Paper sx={{ backgroundColor: "#000000" }} elevation={3}>
+          <Paper className="bg-black" elevation={3}>
             <Typography
               variant="caption"
               display="block"
               gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
+              className="text-white pl-10"
             >
               git fetch maverick
             </Typography>
@@ -252,7 +251,7 @@ export default function ResponsiveDrawer(props: Props) {
               variant="caption"
               display="block"
               gutterBottom
-              sx={{ color: "#ffffff", paddingLeft: "10px" }}
+              className="text-white pl-10"
             >
               git merge maverick/main
             </Typography>
