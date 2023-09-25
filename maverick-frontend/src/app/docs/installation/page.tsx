@@ -54,6 +54,9 @@ export default function ResponsiveDrawer(props: Props) {
             <ListItemButton className="pl-4">
               <ListItemText primary="Installation" />
             </ListItemButton>
+            <ListItemButton className="pl-4">
+              <ListItemText primary="Teams" />
+            </ListItemButton>
           </List>
         </Collapse>
       </List>
