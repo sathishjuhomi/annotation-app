@@ -11,12 +11,12 @@ class TeamMembers(Base):
     team_id = Column(UUID(as_uuid=True), ForeignKey(
         "teams.id", ondelete="CASCADE"), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey(
-        "users.id", ondelete="CASCADE"), nullable=False)
+        "users.id", ondelete="CASCADE"), nullable=True)
     invited_by_id = Column(UUID(as_uuid=True), ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=True)
-    # You can use a JSON column for roles as described earlier.
     roles = Column(JSON, nullable=False)
     activated = Column(Boolean, default=False)
+    declined = Column(Boolean, default=False)
     t_create = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
