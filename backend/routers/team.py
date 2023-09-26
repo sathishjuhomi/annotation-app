@@ -1,7 +1,7 @@
 from typing import Any, List
 import logging
 from pydantic import UUID4
-
+import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.schemas.request.team import TeamSchema
@@ -11,7 +11,7 @@ from backend.schemas.response.team import TeamResponseSchema, DeleteTeamResponse
 from backend.models.database import get_db
 from backend.service.team import team_service
 from backend.db_handler.team_handler import team_db_handler
-
+from backend.db_handler.team_member_handler import team_member_db_handler
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 
@@ -42,7 +42,22 @@ def create_team(
     db: Session = Depends(get_db)
 ):
     try:
-        return team_service.create_team(request_payload, db)
+        created_team = team_service.create_team(
+            request_payload=request_payload, db=db)
+        print('Team Created Successfully')
+        team_member_data = {
+            "id": uuid.uuid4(),
+            "team_id": created_team.id,
+            "user_id": created_team.created_by,
+            "roles": {
+                "owner": True,
+                "admin": True,
+                "member": False},
+            "activated": True,
+            "declined": False
+        }
+        _ = team_member_db_handler.create(db=db, input_object=team_member_data)
+        return created_team
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
