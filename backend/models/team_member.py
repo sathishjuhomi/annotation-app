@@ -1,4 +1,4 @@
-from sqlalchemy import Column, TIMESTAMP, text, ForeignKey
+from sqlalchemy import Column, TIMESTAMP, text, ForeignKey, Boolean
 from sqlalchemy.dialects.postgresql import UUID, JSON
 from sqlalchemy.orm import relationship
 from backend.models.database import Base
@@ -16,6 +16,7 @@ class TeamMembers(Base):
         "users.id", ondelete="CASCADE"), nullable=True)
     # You can use a JSON column for roles as described earlier.
     roles = Column(JSON, nullable=False)
+    activated = Column(Boolean, default=False)
     t_create = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )

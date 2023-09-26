@@ -32,6 +32,7 @@ def upgrade():
                               sa.ForeignKey('users.id', ondelete='CASCADE'),
                               nullable=True),
                     sa.Column('roles', sa.JSON, nullable=False),
+                    sa.Column('activated', sa.Boolean, default=False),
                     sa.Column('t_create', sa.TIMESTAMP(timezone=True),
                               nullable=False,
                               server_default=sa.text("now()")),

@@ -5,6 +5,8 @@ from pydantic import UUID4
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.schemas.request.team import TeamSchema
+from backend.schemas.response.user import (
+    DetailSchema)
 from backend.schemas.response.team import TeamResponseSchema, DeleteTeamResponseSchema
 from backend.models.database import get_db
 from backend.service.team import team_service
@@ -82,12 +84,12 @@ def get_team_by_id(
 @team_router.get(
     "/teams",
     description="Get a list of all teams",
-    response_model=List[TeamResponseSchema]
+    response_model=List[TeamResponseSchema] | DetailSchema
 )
 def get_teams(db: Session = Depends(get_db)):
     team = team_db_handler.load_all(db=db)
     if not team:
-        return {"message": "No Teams Found"}
+        return {"detail": "No Teams Found"}
     return team
 
 
