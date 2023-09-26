@@ -26,6 +26,21 @@ def get_team_or_raise_404(db: Session, id: UUID4):
     return team
 
 
+def add_team_creater_as_team_member(created_team: Any, db: Session):
+    team_member_data = {
+        "id": uuid.uuid4(),
+        "team_id": created_team.id,
+        "user_id": created_team.created_by,
+        "roles": {
+            "owner": True,
+            "admin": True,
+            "member": False},
+        "activated": True,
+        "declined": False
+    }
+    return team_member_db_handler.create(db=db, input_object=team_member_data)
+
+
 @team_router.post(
     "/teams",
     description="This API endpoint allows users to create Team",
@@ -44,19 +59,7 @@ def create_team(
     try:
         created_team = team_service.create_team(
             request_payload=request_payload, db=db)
-        print('Team Created Successfully')
-        team_member_data = {
-            "id": uuid.uuid4(),
-            "team_id": created_team.id,
-            "user_id": created_team.created_by,
-            "roles": {
-                "owner": True,
-                "admin": True,
-                "member": False},
-            "activated": True,
-            "declined": False
-        }
-        _ = team_member_db_handler.create(db=db, input_object=team_member_data)
+        _ = add_team_creater_as_team_member(created_team, db)
         return created_team
     except Exception as e:
         raise HTTPException(
