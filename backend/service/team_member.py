@@ -60,10 +60,6 @@ class TeamMemberService():
             # Create an access token for the invitation
             token = create_access_token(member_detail)
 
-            # Get the email from the request payload and send an invitation email
-            email = request_payload.email
-            await send_invitation_email(email_to=email, token=token)
-
             # Create team member data for database insertion
             team_member_data = self.team_member_data(
                 member_detail, invited_by_id, member_detail["role"])
@@ -71,6 +67,10 @@ class TeamMemberService():
             # Insert the team member data into the database
             _ = team_member_db_handler.create(
                 db=db, input_object=team_member_data)
+            
+            # Get the email from the request payload and send an invitation email
+            email = request_payload.email
+            await send_invitation_email(email_to=email, token=token)
 
             return {"detail": f"{email} invited successfully"}
 
