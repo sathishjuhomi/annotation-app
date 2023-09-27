@@ -11,8 +11,7 @@ class TeamMembers(Base):
     team_id = Column(UUID(as_uuid=True), ForeignKey(
         "teams.id", ondelete="CASCADE"), nullable=False)
     email = Column(String, nullable=False)
-    invited_by_id = Column(UUID(as_uuid=True), ForeignKey(
-        "users.id", ondelete="CASCADE"), nullable=True)
+    invited_by_id = Column(UUID(as_uuid=True), nullable=True)
     roles = Column(JSON, nullable=False)
     activated = Column(Boolean, default=False)
     declined = Column(Boolean, default=False)
@@ -26,10 +25,9 @@ class TeamMembers(Base):
         onupdate=text("now()"),
     )
     t_delete = Column(TIMESTAMP(timezone=True))
+
     # Define relationships to Users and Teams with foreign keys
-    user = relationship("Users", foreign_keys=[email])
     team = relationship("Teams", foreign_keys=[team_id])
-    invited_by = relationship("Users", foreign_keys=[invited_by_id])
 
     # Define a unique constraint for team_id and email
     __table_args__ = (
