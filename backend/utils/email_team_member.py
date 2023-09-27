@@ -27,7 +27,7 @@ async def send_invitation_email(email_to: str, token: str) -> None:
     link = f"{SERVER_HOST}/api/v1/accept-invitation?token={token}"
     print(link)
     env = Environment(loader=FileSystemLoader(EMAIL_TEMPLATES_DIR))
-    template = env.get_template("reset_password.html")
+    template = env.get_template("accept_team_invitation.html")
     formatted_template = template.render(
         email=email_to, link=link, valid_hours=valid_hours
     )

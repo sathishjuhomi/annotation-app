@@ -26,9 +26,9 @@ async def invite_team_member(request_payload: TeamMemberSchema, db: Session = De
 def accept_invitation(
     token: str, db: Session = Depends(get_db)
 ) -> Any:
-    print('inside accept-invitation')
     decoded_token = verify_password_reset_token(token=token)
     user = user_db_handler.load_by_column(
         db=db, column_name="email", value=decoded_token)
     if not user:
         return RedirectResponse(url="/api/v1/user/sign-up")
+    

@@ -11,7 +11,8 @@ from backend.schemas.response.team import TeamResponseSchema, DeleteTeamResponse
 from backend.models.database import get_db
 from backend.service.team import team_service
 from backend.db_handler.team_handler import team_db_handler
-from backend.db_handler.team_member_handler import team_member_db_handler
+from backend.service.team_member import team_member_service
+
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 
@@ -24,21 +25,6 @@ def get_team_or_raise_404(db: Session, id: UUID4):
             detail="team not found"
         )
     return team
-
-
-def add_team_creater_as_team_member(created_team: Any, db: Session):
-    team_member_data = {
-        "id": uuid.uuid4(),
-        "team_id": created_team.id,
-        "user_id": created_team.created_by,
-        "roles": {
-            "owner": True,
-            "admin": True,
-            "member": False},
-        "activated": True,
-        "declined": False
-    }
-    return team_member_db_handler.create(db=db, input_object=team_member_data)
 
 
 @team_router.post(
@@ -59,7 +45,7 @@ def create_team(
     try:
         created_team = team_service.create_team(
             request_payload=request_payload, db=db)
-        _ = add_team_creater_as_team_member(created_team, db)
+        _ = team_member_service.add_team_creater_as_team_member(created_team, db)
         return created_team
     except Exception as e:
         raise HTTPException(
