@@ -68,7 +68,7 @@ def generate_random_oauth_password(length=20):
     return token.translate(translation)
 
 
-def get_user_id(token: str, db) -> int:
+def get_user_detail(token: str, db) -> int:
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     except jwt.JWTError as e:
@@ -78,4 +78,4 @@ def get_user_id(token: str, db) -> int:
     email = decoded_token["email"]
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)
-    return user_detail.id
+    return user_detail

@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Optional
 import logging
 from pydantic import UUID4
 import uuid
@@ -17,21 +17,30 @@ logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 
 
-def get_team_or_raise_404(db: Session, id: UUID4):
-    team = team_db_handler.load_by_id(db=db, id=id)
-    if not team:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="team not found"
-        )
-    return team
+def get_team_or_raise_404(db: Session, id: Optional[UUID4] = None, name: Optional[str] = None):
+    if id is not None:
+        team = team_db_handler.load_by_id(db=db, id=id)
+        if not team:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="team not found"
+            )
+        return team
+    if name is not None:
+        team = team_db_handler.load_by_column(
+            db=db, column_name="team_name", value=name)
+        if team:
+            raise HTTPException(
+                detail="Team name already exist"
+            )
+        return team
 
 
 @team_router.post(
     "/teams",
     description="This API endpoint allows users to create Team",
     status_code=status.HTTP_201_CREATED,
-    response_model=TeamResponseSchema,
+    response_model=TeamResponseSchema | DetailSchema,
     responses={
         status.HTTP_500_INTERNAL_SERVER_ERROR: {
             "description": "Internal Server Error"
@@ -42,16 +51,21 @@ def create_team(
     request_payload: TeamSchema,
     db: Session = Depends(get_db)
 ):
-    try:
-        created_team = team_service.create_team(
-            request_payload=request_payload, db=db)
-        _ = team_member_service.add_team_creater_as_team_member(created_team, db)
-        return created_team
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e)
-        )
+    team = get_team_or_raise_404(db, name=request_payload.team_name)
+    if not team:
+        try:
+            created_team = team_service.create_team(
+                request_payload=request_payload, db=db)
+            # Add the creator as a team member if the team was successfully created
+            _ = team_member_service.add_team_creator_as_team_member(
+                created_team, db)
+
+            return created_team
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=str(e)
+            )
 
 
 @team_router.patch(
@@ -69,7 +83,7 @@ def update_team(
     request_payload: TeamSchema,
     db: Session = Depends(get_db)
 ):
-    team = get_team_or_raise_404(db, id)
+    team = get_team_or_raise_404(db, id=id)
     return team_service.update_team(request_payload, team, db)
 
 
@@ -82,7 +96,7 @@ def get_team_by_id(
     id: UUID4,
     db: Session = Depends(get_db)
 ):
-    return get_team_or_raise_404(db, id)
+    return get_team_or_raise_404(db, id=id)
 
 
 @team_router.get(
@@ -106,7 +120,7 @@ def delete_team(
     id: UUID4,
     db: Session = Depends(get_db)
 ):
-    _ = get_team_or_raise_404(db, id)
+    _ = get_team_or_raise_404(db, id=id)
     deleted_team = team_db_handler.delete(db=db, id=id)
     return {
         "detail": "Team deleted successfully",

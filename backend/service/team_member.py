@@ -6,17 +6,17 @@ from sqlalchemy.orm import Session
 from backend.utils.utils import create_access_token
 from backend.utils.email_team_member import send_invitation_email
 from backend.utils.email_team_member import send_invitation_email
-from backend.utils.utils import get_user_id
+from backend.utils.utils import get_user_detail
 from backend.db_handler.team_member_handler import team_member_db_handler
 
 
 class TeamMemberService():
     @staticmethod
-    def add_team_creater_as_team_member(created_team: TeamSchema, db: Session):
+    def add_team_creator_as_team_member(created_team: TeamSchema, db: Session):
         team_member_data = {
             "id": uuid.uuid4(),
             "team_id": created_team.id,
-            "user_id": created_team.created_by,
+            "email": created_team.created_by,
             "roles": {
                 "owner": True,
                 "admin": True,
@@ -27,12 +27,13 @@ class TeamMemberService():
         return team_member_db_handler.create(db=db, input_object=team_member_data)
 
     @staticmethod
-    def team_member_data(member_detail: dict, invited_by_id: UUID4, roles_dict: dict) -> dict:
+    def team_member_data(member_detail: dict, invited_by_id: UUID4) -> dict:
         team_member_data = {
             "id": uuid.uuid4(),
             "team_id": member_detail['team_id'],
+            "email": member_detail["email"],
             "invited_by_id": invited_by_id,
-            "roles": roles_dict,
+            "roles": member_detail["role"],
             "activated": False,
             "declined": False
         }
@@ -43,11 +44,7 @@ class TeamMemberService():
             member_detail = request_payload.model_dump()
 
             # Get the user ID of the inviter from the token
-            invited_by_id = get_user_id(member_detail["token"], db)
-
-            # Load inviter details from the database
-            invitor_detail = team_member_db_handler.load_by_column(
-                db=db, column_name="user_id", value=invited_by_id)
+            invitor_detail = get_user_detail(member_detail["token"], db)
 
             # Check if the inviter has 'owner' or 'admin' roles
             if not (invitor_detail.roles['owner'] or invitor_detail.roles['admin']):
@@ -62,14 +59,14 @@ class TeamMemberService():
 
             # Create team member data for database insertion
             team_member_data = self.team_member_data(
-                member_detail, invited_by_id, member_detail["role"])
+                member_detail, invitor_detail.id)
 
             # Insert the team member data into the database
             _ = team_member_db_handler.create(
                 db=db, input_object=team_member_data)
             
             # Get the email from the request payload and send an invitation email
-            email = request_payload.email
+            email = member_detail["email"]
             await send_invitation_email(email_to=email, token=token)
 
             return {"detail": f"{email} invited successfully"}
