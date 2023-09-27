@@ -5,18 +5,17 @@ from pydantic import UUID4
 from sqlalchemy.orm import Session
 from backend.utils.utils import create_access_token
 from backend.utils.email_team_member import send_invitation_email
-from backend.utils.email_team_member import send_invitation_email
 from backend.utils.utils import get_user_detail
 from backend.db_handler.team_member_handler import team_member_db_handler
 
 
 class TeamMemberService():
     @staticmethod
-    def add_team_creator_as_team_member(created_team: TeamSchema, db: Session):
+    def add_team_creator_as_team_member(created_team: TeamSchema, creator_email: str, db: Session):
         team_member_data = {
             "id": uuid.uuid4(),
             "team_id": created_team.id,
-            "email": created_team.created_by,
+            "email": creator_email,
             "roles": {
                 "owner": True,
                 "admin": True,

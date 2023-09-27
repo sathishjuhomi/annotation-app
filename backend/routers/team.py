@@ -31,6 +31,7 @@ def get_team_or_raise_404(db: Session, id: Optional[UUID4] = None, name: Optiona
             db=db, column_name="team_name", value=name)
         if team:
             raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail="Team name already exist"
             )
         return team
@@ -54,11 +55,11 @@ def create_team(
     team = get_team_or_raise_404(db, name=request_payload.team_name)
     if not team:
         try:
-            created_team = team_service.create_team(
+            created_team, creator_email = team_service.create_team(
                 request_payload=request_payload, db=db)
             # Add the creator as a team member if the team was successfully created
             _ = team_member_service.add_team_creator_as_team_member(
-                created_team, db)
+                created_team, creator_email, db)
 
             return created_team
         except Exception as e:
