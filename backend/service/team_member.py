@@ -43,7 +43,9 @@ class TeamMemberService():
             member_detail = request_payload.model_dump()
 
             # Get the user ID of the inviter from the token
-            invitor_detail = get_user_detail(member_detail["token"], db)
+            invitor = get_user_detail(member_detail["token"], db)
+            invitor_detail = team_member_db_handler.load_by_column(
+                db=db, column_name="email", value=invitor.email)
 
             # Check if the inviter has 'owner' or 'admin' roles
             if not (invitor_detail.roles['owner'] or invitor_detail.roles['admin']):
