@@ -10,8 +10,9 @@ class TeamMembers(Base):
     id = Column(UUID(as_uuid=True), primary_key=True)
     team_id = Column(UUID(as_uuid=True), ForeignKey(
         "teams.id", ondelete="CASCADE"), nullable=False)
-    email = Column(ForeignKey(String,
-        "users.email", ondelete="CASCADE"), nullable=False)
+    email = Column(String,
+                   ForeignKey("users.email", ondelete="CASCADE"),
+                   nullable=False)
     invited_by_id = Column(UUID(as_uuid=True), ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=True)
     roles = Column(JSON, nullable=False)
