@@ -1,19 +1,18 @@
 "use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import Layout from "../../component/NavBar";
+import NavBar from "../../component/NavBar";
 
 export default function Install() {
 
   return (
-    <div className="flex m-1 ml-16">
-    <Box className="ms-19 ml-24 sm-sm md-md lg-lg xl-xl">
-      <CssBaseline />
-      <Layout></Layout>
+    <Box className="flex">
+      <NavBar></NavBar>
+      <Box component="main" className="mt-10"
+        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - 240px)` } }}>
         <Typography paragraph className="text-black">
           You can clone Maverick from our Git repository and merge updates at
           any time.
@@ -138,7 +137,7 @@ export default function Install() {
           </Paper>
         </Box>
         <br></br>
+      </Box>
     </Box>
-    </div>
   );
 }
