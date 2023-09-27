@@ -15,6 +15,7 @@ down_revision = 'b940f5448880'
 branch_labels = None
 depends_on = None
 table_name = "team_members"
+unique_constraint_name = "team_id_user_id_key"
 
 
 def upgrade():
@@ -27,13 +28,15 @@ def upgrade():
                               nullable=False),
                     sa.Column('user_id', sa.dialects.postgresql.UUID(as_uuid=True),
                               sa.ForeignKey('users.id', ondelete='CASCADE'),
-                              nullable=True),
+                              nullable=False),
                     sa.Column('invited_by_id', sa.dialects.postgresql.UUID(as_uuid=True),
                               sa.ForeignKey('users.id', ondelete='CASCADE'),
                               nullable=True),
                     sa.Column('roles', sa.JSON, nullable=False),
-                    sa.Column('activated', sa.Boolean, nullable=False, server_default='false'),
-                    sa.Column('declined', sa.Boolean, nullable=False, server_default='false'),
+                    sa.Column('activated', sa.Boolean,
+                              nullable=False, server_default='false'),
+                    sa.Column('declined', sa.Boolean, nullable=False,
+                              server_default='false'),
                     sa.Column('t_create', sa.TIMESTAMP(timezone=True),
                               nullable=False,
                               server_default=sa.text("now()")),
@@ -44,6 +47,13 @@ def upgrade():
                     sa.Column('t_delete', sa.TIMESTAMP(
                         timezone=True), nullable=True)
                     )
+
+    # Create the unique constraint
+    op.create_unique_constraint(
+        unique_constraint_name,
+        table_name,
+        ['team_id', 'user_id']
+    )
 
 
 def downgrade():

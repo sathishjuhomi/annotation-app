@@ -1,4 +1,4 @@
-from sqlalchemy import Column, TIMESTAMP, text, ForeignKey, Boolean
+from sqlalchemy import Column, TIMESTAMP, text, ForeignKey, Boolean, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSON
 from sqlalchemy.orm import relationship
 from backend.models.database import Base
@@ -11,7 +11,7 @@ class TeamMembers(Base):
     team_id = Column(UUID(as_uuid=True), ForeignKey(
         "teams.id", ondelete="CASCADE"), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey(
-        "users.id", ondelete="CASCADE"), nullable=True)
+        "users.id", ondelete="CASCADE"), nullable=False)
     invited_by_id = Column(UUID(as_uuid=True), ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=True)
     roles = Column(JSON, nullable=False)
@@ -31,3 +31,8 @@ class TeamMembers(Base):
     user = relationship("Users", foreign_keys=[user_id])
     team = relationship("Teams", foreign_keys=[team_id])
     invited_by = relationship("Users", foreign_keys=[invited_by_id])
+
+    # Define a unique constraint for team_id and user_id
+    __table_args__ = (
+        UniqueConstraint('team_id', 'user_id', name='team_id_user_id_key'),
+    )
