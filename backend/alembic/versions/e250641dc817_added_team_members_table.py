@@ -15,7 +15,7 @@ down_revision = 'b940f5448880'
 branch_labels = None
 depends_on = None
 table_name = "team_members"
-unique_constraint_name = "team_id_user_id_key"
+unique_constraint_name = "team_id_email_key"
 
 
 def upgrade():
@@ -26,8 +26,8 @@ def upgrade():
                     sa.Column('team_id', sa.dialects.postgresql.UUID(as_uuid=True),
                               sa.ForeignKey('teams.id', ondelete='CASCADE'),
                               nullable=False),
-                    sa.Column('user_id', sa.dialects.postgresql.UUID(as_uuid=True),
-                              sa.ForeignKey('users.id', ondelete='CASCADE'),
+                    sa.Column('email', sa.String(),
+                              sa.ForeignKey('users.email', ondelete='CASCADE'),
                               nullable=False),
                     sa.Column('invited_by_id', sa.dialects.postgresql.UUID(as_uuid=True),
                               sa.ForeignKey('users.id', ondelete='CASCADE'),
@@ -52,7 +52,7 @@ def upgrade():
     op.create_unique_constraint(
         unique_constraint_name,
         table_name,
-        ['team_id', 'user_id']
+        ['team_id', 'email']
     )
 
 
