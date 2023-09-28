@@ -46,3 +46,6 @@ class BaseDBHandler:
         db.delete(obj)
         db.commit()
         return obj
+
+    def get_by_team_id_and_email(self, db: Session, team_id: str, email: str):
+        return db.query(self.model).filter_by(team_id=team_id, email=email).first()

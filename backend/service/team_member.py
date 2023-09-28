@@ -7,7 +7,7 @@ from backend.utils.utils import create_access_token
 from backend.utils.email_team_member import send_invitation_email
 from backend.utils.utils import get_user_detail
 from backend.db_handler.team_member_handler import team_member_db_handler
-
+from backend.models.team_member import TeamMembers
 
 class TeamMemberService():
     @staticmethod
@@ -43,7 +43,7 @@ class TeamMemberService():
             member_detail = request_payload.model_dump()
 
             # Get the user ID of the inviter from the token
-            invitor = get_user_detail(member_detail["token"], db)
+            invitor, _ = get_user_detail(member_detail["token"], db)
             invitor_detail = team_member_db_handler.load_by_column(
                 db=db, column_name="email", value=invitor.email)
 
@@ -53,6 +53,7 @@ class TeamMemberService():
                     'Only Admin or Owner of the team can invite a team member')
 
             member_detail['team_id'] = str(member_detail['team_id'])
+            member_detail['activated'] = False
             member_detail.pop("token", None)
 
             # Create an access token for the invitation
@@ -74,6 +75,21 @@ class TeamMemberService():
 
         except Exception as e:
             return {"error": str(e)}
+        
+    def update_team_member_as_active(self, token: str, team_member: TeamMembers, db: Session):
+        user, decoded_token = get_user_detail(token=token, db=db)
+        # print('decoded_token', decoded_token)
+        # # user = user_db_handler.load_by_column(
+        # #     db=db, column_name="email", value=decoded_token['email'])
+        # if not user:
+        #     raise Exception("User not exist")
 
+        # team_member_detail = team_member_db_handler.get_by_team_id_and_email(db=db,
+        #                                                 email=decoded_token['email'],
+        #                                                 team_id=decoded_token['team_id'])
+        print('team_member_detail ', decoded_token)
+        decoded_token["activated"] = True
+        print('team_member_detail ', decoded_token)
+        return team_member_db_handler.update(db=db, db_obj=team_member, input_object=decoded_token)
 
 team_member_service = TeamMemberService()
