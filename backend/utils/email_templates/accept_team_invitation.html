@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Team Invitation</title>
+</head>
+<body style="background-color: #fff; font-family: helvetica; margin: 0; padding: 0;">
+
+    <table style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <tr>
+            <td>
+                <hr style="border-color: #555;">
+                <h1 style="font-size: 20px; color: #555;">Team Invitation</h1>
+                <p style="font-size: 16px; color: #555;">We invite you to join our team with email {{ email }}</p>
+                <p style="font-size: 16px; color: #555;">Accept the invitation by clicking the button below:</p>
+                <a href="{{ link }}" style="display: inline-block; padding: 15px 30px; background-color: #007BFF; color: #fff; text-decoration: none; font-size: 16px; border-radius: 5px;">Accept Invitation</a>
+                <p style="font-size: 16px; color: #555;">Or open the following link:</p>
+                <p style="font-size: 16px; color: #555;"><a href="{{ link }}">{{ link }}</a></p>
+                <hr style="border-color: #555; border-width: 2px;">
+                <p style="font-size: 14px; color: #555;">The Invite token will expire in {{ valid_hours }} hour(s).</p>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
