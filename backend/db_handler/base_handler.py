@@ -47,5 +47,10 @@ class BaseDBHandler:
         db.commit()
         return obj
 
+    def load_all_by_column(self, db: Session, column_name: str, value: Any):
+        # Dynamically access the column attribute using getattr
+        column = getattr(self.model, column_name)
+        return db.query(self.model).filter(column == value).all()
+
     def get_by_team_id_and_email(self, db: Session, team_id: str, email: str):
         return db.query(self.model).filter_by(team_id=team_id, email=email).first()

@@ -9,9 +9,12 @@ from backend.utils.utils import get_user_detail
 from backend.db_handler.team_member_handler import team_member_db_handler
 from backend.models.team_member import TeamMembers
 
+
 class TeamMemberService():
     @staticmethod
-    def add_team_creator_as_team_member(created_team: TeamSchema, creator_email: str, db: Session):
+    def add_team_creator_as_team_member(created_team: TeamSchema,
+                                        creator_email: str,
+                                        db: Session):
         team_member_data = {
             "id": uuid.uuid4(),
             "team_id": created_team.id,
@@ -66,7 +69,7 @@ class TeamMemberService():
             # Insert the team member data into the database
             _ = team_member_db_handler.create(
                 db=db, input_object=team_member_data)
-            
+
             # Get the email from the request payload and send an invitation email
             email = member_detail["email"]
             await send_invitation_email(email_to=email, token=token)
@@ -75,21 +78,16 @@ class TeamMemberService():
 
         except Exception as e:
             return {"error": str(e)}
-        
-    def update_team_member_as_active(self, token: str, team_member: TeamMembers, db: Session):
-        user, decoded_token = get_user_detail(token=token, db=db)
-        # print('decoded_token', decoded_token)
-        # # user = user_db_handler.load_by_column(
-        # #     db=db, column_name="email", value=decoded_token['email'])
-        # if not user:
-        #     raise Exception("User not exist")
 
-        # team_member_detail = team_member_db_handler.get_by_team_id_and_email(db=db,
-        #                                                 email=decoded_token['email'],
-        #                                                 team_id=decoded_token['team_id'])
-        print('team_member_detail ', decoded_token)
+    def update_team_member_as_active(self, token: str,
+                                     team_member: TeamMembers,
+                                     db: Session):
+        user, decoded_token = get_user_detail(token=token, db=db)
         decoded_token["activated"] = True
-        print('team_member_detail ', decoded_token)
-        return team_member_db_handler.update(db=db, db_obj=team_member, input_object=decoded_token)
+
+        return team_member_db_handler.update(db=db,
+                                             db_obj=team_member,
+                                             input_object=decoded_token)
+
 
 team_member_service = TeamMemberService()
