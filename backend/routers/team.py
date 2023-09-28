@@ -1,13 +1,16 @@
-from typing import Any, List, Optional
+from typing import List
 import logging
 from pydantic import UUID4
-import uuid
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.schemas.request.team import TeamSchema
 from backend.schemas.response.user import (
     DetailSchema)
-from backend.schemas.response.team import TeamResponseSchema, DeleteTeamResponseSchema
+from backend.schemas.response.team import (TeamResponseSchema,
+                                           DeleteTeamResponseSchema,
+                                           GetTeamsResponseSchema,
+                                           GetTeamMembersByTeamIdResponseSchema)
 from backend.models.database import get_db
 from backend.service.team import team_service
 from backend.db_handler.team_handler import team_db_handler
@@ -15,26 +18,6 @@ from backend.service.team_member import team_member_service
 
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
-
-
-def get_team_or_raise_404(db: Session, id: Optional[UUID4] = None, name: Optional[str] = None):
-    if id is not None:
-        team = team_db_handler.load_by_id(db=db, id=id)
-        if not team:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="team not found"
-            )
-        return team
-    if name is not None:
-        team = team_db_handler.load_by_column(
-            db=db, column_name="team_name", value=name)
-        if team:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="Team name already exist"
-            )
-        return team
 
 
 @team_router.post(
@@ -52,7 +35,8 @@ def create_team(
     request_payload: TeamSchema,
     db: Session = Depends(get_db)
 ):
-    team = get_team_or_raise_404(db, name=request_payload.team_name)
+    team = team_service.get_team_or_raise_404(
+        db, name=request_payload.team_name)
     if not team:
         try:
             created_team, creator_email = team_service.create_team(
@@ -84,32 +68,29 @@ def update_team(
     request_payload: TeamSchema,
     db: Session = Depends(get_db)
 ):
-    team = get_team_or_raise_404(db, id=id)
+    team = team_service.get_team_or_raise_404(db, id=id)
     return team_service.update_team(request_payload, team, db)
 
 
 @team_router.get(
     "/teams/{id}",
     description="Get a team by ID",
-    response_model=TeamResponseSchema
+    response_model=GetTeamMembersByTeamIdResponseSchema
 )
 def get_team_by_id(
     id: UUID4,
     db: Session = Depends(get_db)
 ):
-    return get_team_or_raise_404(db, id=id)
+    return team_service.get_team_members_detail_with_team_id(db, id)
 
 
 @team_router.get(
     "/teams",
-    description="Get a list of all teams",
-    response_model=List[TeamResponseSchema] | DetailSchema
+    description="Get a list of all teams of logged in user",
+    response_model=List[GetTeamsResponseSchema] | DetailSchema
 )
-def get_teams(db: Session = Depends(get_db)):
-    team = team_db_handler.load_all(db=db)
-    if not team:
-        return {"detail": "No Teams Found"}
-    return team
+def get_teams(token: str, db: Session = Depends(get_db)):
+    return team_service.get_teams_for_logged_in_user(token=token, db=db)
 
 
 @team_router.delete(
@@ -121,7 +102,7 @@ def delete_team(
     id: UUID4,
     db: Session = Depends(get_db)
 ):
-    _ = get_team_or_raise_404(db, id=id)
+    _ = team_service.get_team_or_raise_404(db, id=id)
     deleted_team = team_db_handler.delete(db=db, id=id)
     return {
         "detail": "Team deleted successfully",

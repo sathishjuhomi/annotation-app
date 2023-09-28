@@ -1,7 +1,7 @@
 import secrets
 from datetime import datetime, timedelta
 from typing import Final
-
+from backend.db_handler.user_handler import user_db_handler
 from jose import jwt
 from passlib.context import CryptContext
 
@@ -48,12 +48,34 @@ def generate_password_reset_token(email: str) -> str:
 def verify_password_reset_token(token: str) -> str | None:
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        return decoded_token["email"]
-    except jwt.JWTError:
-        return None
+        print('decoded_token ', decoded_token)
+        expiration_time = decoded_token.get("exp")
+        if expiration_time:
+            current_time = datetime.utcnow().timestamp()
+        if not (current_time >= expiration_time):
+            return decoded_token["email"]
+
+    except jwt.ExpiredSignatureError:
+        print("Token has expired")
+    except jwt.DecodeError:
+        print("Token is invalid")
+
 
 def generate_random_oauth_password(length=20):
     rlength = (length * 3) // 4
     token = secrets.token_urlsafe(rlength)
     translation = str.maketrans('lIO0', 'sxyz')
     return token.translate(translation)
+
+
+def get_user_detail(token: str, db) -> int:
+    try:
+        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    except jwt.JWTError as e:
+        error_message = str(e)
+        raise Exception(f"Authentication error: {error_message}")
+
+    email = decoded_token["email"]
+    user_detail = user_db_handler.load_by_column(
+        db=db, column_name='email', value=email)
+    return user_detail
