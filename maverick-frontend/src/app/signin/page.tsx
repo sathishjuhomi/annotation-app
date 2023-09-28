@@ -55,6 +55,8 @@ const SignIn = () => {
         const response = await res.json();
         const data = response.detail;
         if (res.status === 200) {
+          const accessToken = response.access_token;
+          sessionStorage.setItem('access_token', accessToken);
           setMessage(data);
           setMessageColor(Constants.SUCCESS);
           router.push("/docs/installation");

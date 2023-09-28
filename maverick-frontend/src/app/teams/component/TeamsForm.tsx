@@ -19,10 +19,25 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import DialogContentText from '@mui/material/DialogContentText/DialogContentText';
 import FolderIcon from '@mui/icons-material/Folder';
+import { SignUpProps, TeamsProps } from '@/app/component/interfaces';
+import Snackbar from '@mui/material/Snackbar';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const defaultTheme = createTheme();
 
-export default function TeamList() {
+export default function TeamList(
+  {
+    loading,
+    showMessage,
+    setShowMessage,
+    message,
+    messageColor,
+    onSubmit,
+    formHandleSubmit,
+    register,
+    errors,
+  }: SignUpProps
+) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,6 +79,9 @@ export default function TeamList() {
                   label="Team Name"
                   type="text"
                   fullWidth
+                  {...register("teamname")}
+                  error={Boolean(errors?.teamname)}
+                  helperText={errors?.teamname ? errors?.teamname.message : " "}
                 />
                 <Button className="mr-1 text-black">
                   <FolderIcon className="mr-1 text-black" />
@@ -71,12 +89,35 @@ export default function TeamList() {
                 </Button>
               </Grid>
             </form>
+            {message !== "" ? (
+              <Snackbar
+                showMessage={showMessage}
+                setShowMessage={setShowMessage}
+                message={message}
+                messageColor={messageColor}
+              />
+            ) : null}
+            {loading ? (
+              <Box>
+                <CircularProgress />
+              </Box>
+            ) : null}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Create</Button>
+            {/* <Button onClick={handleClose}>Create</Button> */}
+            <Button
+              type="submit"
+              onClick={() => {
+                formHandleSubmit(onSubmit)();
+                handleClose();
+              }}
+            >
+              Create
+            </Button>
           </DialogActions>
         </Dialog>
+        {/* {teams.map((team: any) => (  // To map the teams list*/}
         <List>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
@@ -121,6 +162,7 @@ export default function TeamList() {
           </ListItem>
           <Divider variant="inset" component="li" />
         </List>
+        {/* ))} //closing the teams list*/}
       </Paper>
     </Box>
   );
