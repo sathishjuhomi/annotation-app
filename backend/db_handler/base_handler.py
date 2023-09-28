@@ -46,3 +46,8 @@ class BaseDBHandler:
         db.delete(obj)
         db.commit()
         return obj
+
+    def load_all_by_column(self, db: Session, column_name: str, value: Any):
+        # Dynamically access the column attribute using getattr
+        column = getattr(self.model, column_name)
+        return db.query(self.model).filter(column == value).all()
