@@ -34,22 +34,18 @@ export default function TeamList() {
   return (
     <Box className="mt-4 w-full mr-4">
       <Paper elevation={3} className="ml-2">
-        <div className="ml-4 mt-10">
-          <Typography sx={{ marginTop: "10px" }} variant="h5">
-            Teams
-          </Typography>
-        </div>
-        <div className="flex justify-end items-end ml-16">
+        <br></br>
+        <div className="flex justify-between">
+          <Typography className="mt-0 ml-4 text-left font-bold text-xl">Teams</Typography>
           <Button
             size="small"
             variant="contained"
-            className="text-white bg-primary mr-4"
+            className="text-white bg-primary mr-5"
             onClick={handleClickOpen}
           >
             Create Team
           </Button>
         </div>
-
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Create New Team</DialogTitle>
           <DialogContent>
