@@ -19,6 +19,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import DialogContentText from '@mui/material/DialogContentText/DialogContentText';
 import FolderIcon from '@mui/icons-material/Folder';
+import Link from '@mui/material/Link';
 
 const defaultTheme = createTheme();
 
@@ -108,7 +109,10 @@ export default function TeamList() {
               <Avatar className="bg-tertiary">M</Avatar>
             </ListItemAvatar>
             <ListItemText className="mt-5 font-bold text-black">
+            <Link href="/view"  className="text-black">
               Maverick
+            </Link>
+              {/* Maverick */}
             </ListItemText>
             <Button
               className="ml-24 mt-1 mb-1 mr-2 text-black"
@@ -120,7 +124,9 @@ export default function TeamList() {
               className="ml-2 mt-1 mb-1 text-black"
               variant="outlined"
             >
-              View
+              <Link href="/view"  className="text-black">
+                View
+              </Link>
             </Button>
           </ListItem>
           <Divider variant="inset" component="li" />
