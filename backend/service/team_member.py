@@ -1,5 +1,5 @@
 import uuid
-from backend.schemas.request.team import TeamSchema
+from backend.schemas.response.team import TeamResponseSchema
 
 from pydantic import UUID4
 from sqlalchemy.orm import Session
@@ -11,7 +11,7 @@ from backend.db_handler.team_member_handler import team_member_db_handler
 
 class TeamMemberService():
     @staticmethod
-    def add_team_creator_as_team_member(created_team: TeamSchema, creator_email: str, db: Session):
+    def add_team_creator_as_team_member(created_team: TeamResponseSchema, creator_email: str, db: Session):
         team_member_data = {
             "id": uuid.uuid4(),
             "team_id": created_team.id,
@@ -65,7 +65,7 @@ class TeamMemberService():
             # Insert the team member data into the database
             _ = team_member_db_handler.create(
                 db=db, input_object=team_member_data)
-            
+
             # Get the email from the request payload and send an invitation email
             email = member_detail["email"]
             await send_invitation_email(email_to=email, token=token)
