@@ -15,7 +15,7 @@ class TeamService():
     def preprocess_team_data(token, request_payload, db):
         team = request_payload.model_dump()
         creater_detail = get_user_detail(token, db)
-        team["created_by"] = creater_detail.id
+        team["created_by_id"] = creater_detail.id
         team["creator_email"] = creater_detail.email
         # team.pop("token", None)
         return team
@@ -48,7 +48,7 @@ class TeamService():
             team_detail = {
                 "team_id": team.id,
                 "team_name": team.team_name,
-                "activated": team_member.activated,
+                "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             }
             team_details.append(team_detail)
@@ -82,7 +82,7 @@ class TeamService():
             team_members_details.append({
                 "team_member_id": team_member.id,
                 "email": team_member.email,
-                "activated": team_member.activated,
+                "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             })
         return {"team": team, "team_members": team_members_details}

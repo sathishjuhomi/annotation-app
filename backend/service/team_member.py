@@ -20,8 +20,8 @@ class TeamMemberService():
                 "owner": True,
                 "admin": True,
                 "member": False},
-            "activated": True,
-            "declined": False
+            "is_activated": True,
+            "is_declined": False
         }
         return team_member_db_handler.create(db=db, input_object=team_member_data)
 
@@ -33,8 +33,8 @@ class TeamMemberService():
             "email": member_detail["email"],
             "invited_by_id": invited_by_id,
             "roles": member_detail["role"],
-            "activated": False,
-            "declined": False
+            "is_activated": False,
+            "is_declined": False
         }
         return team_member_data
 
