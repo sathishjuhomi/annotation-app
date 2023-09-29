@@ -41,12 +41,12 @@ class TeamMemberService():
         }
         return team_member_data
 
-    async def email_invitation(self, request_payload, db: Session):
+    async def email_invitation(self, team_id, token, request_payload, db: Session):
         try:
             member_detail = request_payload.model_dump()
 
             # Get the user ID of the inviter from the token
-            invitor, _ = get_user_detail(member_detail["token"], db)
+            invitor, _ = get_user_detail(token, db)
             invitor_detail = team_member_db_handler.load_by_column(
                 db=db, column_name="email", value=invitor.email)
 
@@ -55,12 +55,12 @@ class TeamMemberService():
                 raise Exception(
                     'Only Admin or Owner of the team can invite a team member')
 
-            member_detail['team_id'] = str(member_detail['team_id'])
+            member_detail['team_id'] = str(team_id)
             member_detail['activated'] = False
             member_detail.pop("token", None)
 
             # Create an access token for the invitation
-            token = create_access_token(member_detail)
+            invitation_token = create_access_token(member_detail)
 
             # Create team member data for database insertion
             team_member_data = self.team_member_data(
@@ -72,7 +72,7 @@ class TeamMemberService():
 
             # Get the email from the request payload and send an invitation email
             email = member_detail["email"]
-            await send_invitation_email(email_to=email, token=token)
+            await send_invitation_email(email_to=email, token=invitation_token)
 
             return {"detail": f"{email} invited successfully"}
 

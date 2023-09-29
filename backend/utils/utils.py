@@ -72,10 +72,12 @@ def get_user_detail(token: str, db) -> int:
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     except jwt.JWTError as e:
-        error_message = str(e)
-        raise Exception(f"Authentication error: {error_message}")
+        return {"detail": "Authentication error: Your Invitation got expired, ask admin to resend invitation"}
 
     email = decoded_token["email"]
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)
+    print('user_detail ', user_detail)
+    print()
+    print('decoded_token ', decoded_token)
     return user_detail, decoded_token
