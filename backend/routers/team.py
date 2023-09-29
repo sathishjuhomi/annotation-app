@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Annotated
 import logging
 from pydantic import UUID4
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from backend.schemas.request.team import TeamSchema
 from backend.schemas.response.user import (
@@ -21,7 +21,7 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 
 
 @team_router.post(
-    "/teams/create-team/{token}",
+    "/teams",
     description="This API endpoint allows users to create Team",
     status_code=status.HTTP_201_CREATED,
     response_model=TeamResponseSchema | DetailSchema,
@@ -32,8 +32,8 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
     }
 )
 def create_team(
-    token: str,
     request_payload: TeamSchema,
+    token: Annotated[str | None, Header()] = None,
     db: Session = Depends(get_db)
 ):
     team = team_service.get_team_or_raise_404(
@@ -55,7 +55,7 @@ def create_team(
 
 
 @team_router.patch(
-    "/teams/{id}/update-team-name/{token}",
+    "/teams/{id}",
     description="This API endpoint allows users to update team",
     response_model=TeamResponseSchema,
     responses={
@@ -66,8 +66,8 @@ def create_team(
 )
 def update_team(
     id: UUID4,
-    token: str,
     request_payload: TeamSchema,
+    token: Annotated[str | None, Header()] = None,
     db: Session = Depends(get_db)
 ):
     team = team_service.get_team_or_raise_404(db, id=id)
@@ -87,11 +87,14 @@ def get_team_by_id(
 
 
 @team_router.get(
-    "/teams/{token}",
+    "/teams",
     description="Get a list of all teams of logged in user",
     response_model=List[GetTeamsResponseSchema] | DetailSchema
 )
-def get_teams(token: str, db: Session = Depends(get_db)):
+def get_teams(
+    token: Annotated[str | None, Header()] = None,
+    db: Session = Depends(get_db)
+):
     return team_service.get_teams_for_logged_in_user(token, db)
 
 
