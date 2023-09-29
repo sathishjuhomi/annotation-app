@@ -8,4 +8,4 @@ class TeamMemberResponseSchema(BaseModel):
         "admin": False,
         "member": False
     })
-    activated: bool
+    is_activated: bool

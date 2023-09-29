@@ -12,23 +12,23 @@ from backend.models.team import Teams
 
 class TeamService():
     @staticmethod
-    def preprocess_team_data(request_payload, db):
+    def preprocess_team_data(token, request_payload, db):
         team = request_payload.model_dump()
-        creater_detail, decoded_token = get_user_detail(team["token"], db)
-        team["created_by"] = creater_detail.id
+        creater_detail, decoded_token = get_user_detail(token, db)
+        team["created_by_id"] = creater_detail.id
         team["creator_email"] = creater_detail.email
-        team.pop("token", None)
+        # team.pop("token", None)
         return team
 
-    def create_team(self, request_payload: TeamSchema, db: Session):
-        team_data = self.preprocess_team_data(request_payload, db)
+    def create_team(self, token, request_payload: TeamSchema, db: Session):
+        team_data = self.preprocess_team_data(token, request_payload, db)
         team_data["id"] = uuid.uuid4()
         creator_email = team_data["creator_email"]
         team_data.pop("creator_email", None)
         return team_db_handler.create(db, input_object=team_data), creator_email
 
-    def update_team(self, request_payload: TeamSchema, team: Teams, db: Session):
-        team_data = self.preprocess_team_data(request_payload, db)
+    def update_team(self, token, request_payload: TeamSchema, team: Teams, db: Session):
+        team_data = self.preprocess_team_data(token, request_payload, db)
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 
     def get_teams_for_logged_in_user(self, token: str, db: Session):
@@ -48,11 +48,10 @@ class TeamService():
             team_detail = {
                 "team_id": team.id,
                 "team_name": team.team_name,
-                "activated": team_member.activated,
+                "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             }
             team_details.append(team_detail)
-
         return team_details
 
     def get_team_or_raise_404(self, db: Session, id: Optional[UUID4] = None, name: Optional[str] = None):
@@ -83,7 +82,7 @@ class TeamService():
             team_members_details.append({
                 "team_member_id": team_member.id,
                 "email": team_member.email,
-                "activated": team_member.activated,
+                "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             })
         return {"team": team, "team_members": team_members_details}

@@ -21,7 +21,7 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 
 
 @team_router.post(
-    "/teams",
+    "/teams/create-team/{token}",
     description="This API endpoint allows users to create Team",
     status_code=status.HTTP_201_CREATED,
     response_model=TeamResponseSchema | DetailSchema,
@@ -32,6 +32,7 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
     }
 )
 def create_team(
+    token: str,
     request_payload: TeamSchema,
     db: Session = Depends(get_db)
 ):
@@ -40,7 +41,7 @@ def create_team(
     if not team:
         try:
             created_team, creator_email = team_service.create_team(
-                request_payload=request_payload, db=db)
+                token, request_payload=request_payload, db=db)
             # Add the creator as a team member if the team was successfully created
             _ = team_member_service.add_team_creator_as_team_member(
                 created_team, creator_email, db)
@@ -54,7 +55,7 @@ def create_team(
 
 
 @team_router.patch(
-    "/teams/{id}",
+    "/teams/update-team-name/{id}/{token}",
     description="This API endpoint allows users to update team",
     response_model=TeamResponseSchema,
     responses={
@@ -64,16 +65,17 @@ def create_team(
     }
 )
 def update_team(
+    token: str,
     id: UUID4,
     request_payload: TeamSchema,
     db: Session = Depends(get_db)
 ):
     team = team_service.get_team_or_raise_404(db, id=id)
-    return team_service.update_team(request_payload, team, db)
+    return team_service.update_team(token, request_payload, team, db)
 
 
 @team_router.get(
-    "/teams/{id}",
+    "/team/{id}",
     description="Get a team by ID",
     response_model=GetTeamMembersByTeamIdResponseSchema
 )
@@ -85,12 +87,12 @@ def get_team_by_id(
 
 
 @team_router.get(
-    "/teams",
+    "/teams/{token}",
     description="Get a list of all teams of logged in user",
     response_model=List[GetTeamsResponseSchema] | DetailSchema
 )
 def get_teams(token: str, db: Session = Depends(get_db)):
-    return team_service.get_teams_for_logged_in_user(token=token, db=db)
+    return team_service.get_teams_for_logged_in_user(token, db)
 
 
 @team_router.delete(

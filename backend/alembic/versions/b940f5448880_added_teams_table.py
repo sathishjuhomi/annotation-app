@@ -24,7 +24,7 @@ def upgrade():
             as_uuid=True), nullable=False),
         sa.Column("team_name", sa.String(), nullable=False),
         sa.Column(
-            "created_by",
+            "created_by_id",
             sa.dialects.postgresql.UUID(as_uuid=True),
             sa.ForeignKey("users.id", ondelete="CASCADE"),
             nullable=True,
