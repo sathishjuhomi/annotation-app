@@ -10,7 +10,7 @@ class Teams(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True)
     team_name = Column(String, nullable=False)
-    created_by = Column(UUID(as_uuid=True), ForeignKey(
+    created_by_id = Column(UUID(as_uuid=True), ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
     t_create = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
