@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Annotated
 from pydantic import UUID4
 import logging
 from backend.db_handler.team_member_handler import team_member_db_handler
@@ -6,7 +6,7 @@ from backend.schemas.response.team_member import TeamMemberResponseSchema
 from backend.schemas.response.user import DetailSchema
 
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 
 from backend.utils.utils import get_user_detail
@@ -18,18 +18,21 @@ logger = logging.getLogger(__name__)
 team_member_router = APIRouter(prefix="/api/v1", tags=["Team_Members"])
 
 
-@team_member_router.post("/teams/{team_id}/team_members/invite/{token}")
-async def invite_team_member(team_id: UUID4, token: str, request_payload: TeamMemberSchema, db: Session = Depends(get_db)):
+@team_member_router.post("/teams/{team_id}/team_members/invite")
+async def invite_team_member(team_id: UUID4,
+                             request_payload: TeamMemberSchema,
+                             db: Session = Depends(get_db),
+                             token: Annotated[str, Header()] = None) -> dict:
     response = await team_member_service.email_invitation(team_id, token, request_payload=request_payload, db=db)
     return response
 
 
-@team_member_router.get("/teams/accept-invitation/{token}",
+@team_member_router.get("/teams/team_members/accept-invitation",
                         response_model=TeamMemberResponseSchema | DetailSchema)
 def accept_invitation(
-    token: str,
+    token: Annotated[str, Header()] = None,
     db: Session = Depends(get_db)
-) -> Any:
+) -> dict:
     user, decoded_token = get_user_detail(token=token, db=db)
 
     if not user:
