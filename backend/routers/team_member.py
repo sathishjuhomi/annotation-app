@@ -27,11 +27,11 @@ async def invite_team_member(team_id: UUID4,
     return response
 
 
-@team_member_router.get("/teams/team_members/accept-invitation",
+@team_member_router.patch("/teams/team_members/accept-invitation",
                         response_model=TeamMemberResponseSchema | DetailSchema)
 def accept_invitation(
-    token: Annotated[str, Header()] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    token: Annotated[str, Header()] = None
 ) -> dict:
     user, decoded_token = get_user_detail(token=token, db=db)
 
