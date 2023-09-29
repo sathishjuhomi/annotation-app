@@ -55,7 +55,7 @@ def create_team(
 
 
 @team_router.patch(
-    "/teams/update-team-name/{id}/{token}",
+    "/teams/{id}/update-team-name/{token}",
     description="This API endpoint allows users to update team",
     response_model=TeamResponseSchema,
     responses={
@@ -65,8 +65,8 @@ def create_team(
     }
 )
 def update_team(
-    token: str,
     id: UUID4,
+    token: str,
     request_payload: TeamSchema,
     db: Session = Depends(get_db)
 ):
