@@ -31,7 +31,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.utcnow() + timedelta(minutes=60)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
     return encoded_jwt
@@ -72,10 +72,12 @@ def get_user_detail(token: str, db) -> int:
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     except jwt.JWTError as e:
-        error_message = str(e)
-        raise Exception(f"Authentication error: {error_message}")
+        return {"detail": "Authentication error: Your Invitation got expired, ask admin to resend invitation"}
 
     email = decoded_token["email"]
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)
-    return user_detail
+    print('user_detail ', user_detail)
+    print()
+    print('decoded_token ', decoded_token)
+    return user_detail, decoded_token

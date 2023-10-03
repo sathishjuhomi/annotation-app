@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Annotated
 import logging
 from pydantic import UUID4
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from backend.schemas.request.team import TeamSchema
 from backend.schemas.response.user import (
@@ -33,6 +33,7 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 )
 def create_team(
     request_payload: TeamSchema,
+    token: Annotated[str | None, Header()] = None,
     db: Session = Depends(get_db)
 ):
     team = team_service.get_team_or_raise_404(
@@ -40,7 +41,7 @@ def create_team(
     if not team:
         try:
             created_team, creator_email = team_service.create_team(
-                request_payload=request_payload, db=db)
+                token, request_payload=request_payload, db=db)
             # Add the creator as a team member if the team was successfully created
             _ = team_member_service.add_team_creator_as_team_member(
                 created_team, creator_email, db)
@@ -66,14 +67,15 @@ def create_team(
 def update_team(
     id: UUID4,
     request_payload: TeamSchema,
+    token: Annotated[str | None, Header()] = None,
     db: Session = Depends(get_db)
 ):
     team = team_service.get_team_or_raise_404(db, id=id)
-    return team_service.update_team(request_payload, team, db)
+    return team_service.update_team(token, request_payload, team, db)
 
 
 @team_router.get(
-    "/teams/{id}",
+    "/team/{id}",
     description="Get a team by ID",
     response_model=GetTeamMembersByTeamIdResponseSchema
 )
@@ -89,8 +91,11 @@ def get_team_by_id(
     description="Get a list of all teams of logged in user",
     response_model=List[GetTeamsResponseSchema] | DetailSchema
 )
-def get_teams(token: str, db: Session = Depends(get_db)):
-    return team_service.get_teams_for_logged_in_user(token=token, db=db)
+def get_teams(
+    token: Annotated[str | None, Header()] = None,
+    db: Session = Depends(get_db)
+):
+    return team_service.get_teams_for_logged_in_user(token, db)
 
 
 @team_router.delete(

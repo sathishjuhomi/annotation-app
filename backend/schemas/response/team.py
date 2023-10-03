@@ -6,7 +6,7 @@ from backend.schemas.response.user import DetailSchema
 class TeamResponseSchema(BaseModel):
     id: UUID4
     team_name: str
-    created_by: UUID4
+    created_by_id: UUID4
 
 
 class DeleteTeamResponseSchema(DetailSchema):
@@ -16,14 +16,14 @@ class DeleteTeamResponseSchema(DetailSchema):
 class GetTeamsResponseSchema(BaseModel):
     team_id: UUID4
     team_name: str
-    activated: bool
+    is_activated: bool
     roles: dict
 
 
 class GetTeamMembersByTeamId(BaseModel):
     team_member_id: UUID4
     email: str
-    activated: bool
+    is_activated: bool
     roles: dict
 
 class GetTeamMembersByTeamIdResponseSchema(BaseModel):

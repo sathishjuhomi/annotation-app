@@ -13,8 +13,8 @@ class TeamMembers(Base):
     email = Column(String, nullable=False)
     invited_by_id = Column(UUID(as_uuid=True), nullable=True)
     roles = Column(JSON, nullable=False)
-    activated = Column(Boolean, default=False)
-    declined = Column(Boolean, default=False)
+    is_activated = Column(Boolean, default=False)
+    is_declined = Column(Boolean, default=False)
     t_create = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
