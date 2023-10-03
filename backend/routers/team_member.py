@@ -22,7 +22,7 @@ team_member_router = APIRouter(prefix="/api/v1", tags=["Team_Members"])
 async def invite_team_member(team_id: UUID4,
                              request_payload: TeamMemberSchema,
                              db: Session = Depends(get_db),
-                             token: Annotated[str, Header()] = None) -> dict:
+                             token: str = Header()) -> dict:
     response = await team_member_service.email_invitation(team_id, token, request_payload=request_payload, db=db)
     return response
 
@@ -31,7 +31,7 @@ async def invite_team_member(team_id: UUID4,
                         response_model=TeamMemberResponseSchema | DetailSchema)
 def accept_invitation(
     db: Session = Depends(get_db),
-    token: Annotated[str, Header()] = None
+    token: str = Header(),
 ) -> dict:
     user, decoded_token = get_user_detail(token=token, db=db)
 

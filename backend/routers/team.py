@@ -33,7 +33,7 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 )
 def create_team(
     request_payload: TeamSchema,
-    token: Annotated[str | None, Header()] = None,
+    token: str = Header(),
     db: Session = Depends(get_db)
 ):
     team = team_service.get_team_or_raise_404(
@@ -67,7 +67,7 @@ def create_team(
 def update_team(
     id: UUID4,
     request_payload: TeamSchema,
-    token: Annotated[str | None, Header()] = None,
+    token: str = Header(),
     db: Session = Depends(get_db)
 ):
     team = team_service.get_team_or_raise_404(db, id=id)
@@ -92,7 +92,7 @@ def get_team_by_id(
     response_model=List[GetTeamsResponseSchema] | DetailSchema
 )
 def get_teams(
-    token: Annotated[str | None, Header()] = None,
+    token: str = Header(),
     db: Session = Depends(get_db)
 ):
     return team_service.get_teams_for_logged_in_user(token, db)
