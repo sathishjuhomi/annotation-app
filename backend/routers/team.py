@@ -15,6 +15,7 @@ from backend.models.database import get_db
 from backend.service.team import team_service
 from backend.db_handler.team_handler import team_db_handler
 from backend.service.team_member import team_member_service
+from backend.utils.utils import decode_token
 
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
@@ -36,22 +37,24 @@ def create_team(
     token: str = Header(),
     db: Session = Depends(get_db)
 ):
-    team = team_service.get_team_or_raise_404(
-        db, name=request_payload.team_name)
-    if not team:
-        try:
-            created_team, creator_email = team_service.create_team(
-                token, request_payload=request_payload, db=db)
-            # Add the creator as a team member if the team was successfully created
-            _ = team_member_service.add_team_creator_as_team_member(
-                created_team, creator_email, db)
+    decoded_token = decode_token(token=token)
+    if decoded_token:
+        team = team_service.get_team_or_raise_404(
+            db, name=request_payload.team_name)
+        if not team:
+            try:
+                created_team, creator_email = team_service.create_team(
+                    token, request_payload=request_payload, db=db)
+                # Add the creator as a team member if the team was successfully created
+                team_member_service.add_team_creator_as_team_member(
+                    created_team, creator_email, db)
 
-            return created_team
-        except Exception as e:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=str(e)
-            )
+                return created_team
+            except Exception as e:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=str(e)
+                )
 
 
 @team_router.patch(
@@ -70,8 +73,10 @@ def update_team(
     token: str = Header(),
     db: Session = Depends(get_db)
 ):
-    team = team_service.get_team_or_raise_404(db, id=id)
-    return team_service.update_team(token, request_payload, team, db)
+    decoded_token = decode_token(token=token)
+    if decoded_token:
+        team = team_service.get_team_or_raise_404(db, id=id)
+        return team_service.update_team(token, request_payload, team, db)
 
 
 @team_router.get(
@@ -81,9 +86,12 @@ def update_team(
 )
 def get_team_by_id(
     id: UUID4,
+    token: str = Header(),
     db: Session = Depends(get_db)
 ):
-    return team_service.get_team_members_detail_with_team_id(db, id)
+    decoded_token = decode_token(token=token)
+    if decoded_token:
+        return team_service.get_team_members_detail_with_team_id(db, id)
 
 
 @team_router.get(
@@ -95,7 +103,9 @@ def get_teams(
     token: str = Header(),
     db: Session = Depends(get_db)
 ):
-    return team_service.get_teams_for_logged_in_user(token, db)
+    decoded_token = decode_token(token=token)
+    if decoded_token:
+        return team_service.get_teams_for_logged_in_user(token, db)
 
 
 @team_router.delete(
@@ -105,11 +115,14 @@ def get_teams(
 )
 def delete_team(
     id: UUID4,
+    token: str = Header(),
     db: Session = Depends(get_db)
 ):
-    _ = team_service.get_team_or_raise_404(db, id=id)
-    deleted_team = team_db_handler.delete(db=db, id=id)
-    return {
-        "detail": "Team deleted successfully",
-        "deleted_team": deleted_team
-    }
+    decoded_token = decode_token(token=token)
+    if decoded_token:
+        _ = team_service.get_team_or_raise_404(db, id=id)
+        deleted_team = team_db_handler.delete(db=db, id=id)
+        return {
+            "detail": "Team deleted successfully",
+            "deleted_team": deleted_team
+        }
