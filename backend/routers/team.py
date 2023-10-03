@@ -75,7 +75,7 @@ def update_team(
 
 
 @team_router.get(
-    "/team/{id}",
+    "/teams/{id}",
     description="Get a team by ID",
     response_model=GetTeamMembersByTeamIdResponseSchema
 )
