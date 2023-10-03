@@ -68,6 +68,7 @@ def generate_random_oauth_password(length=20):
     translation = str.maketrans('lIO0', 'sxyz')
     return token.translate(translation)
 
+
 def decode_token(token: str):
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
@@ -77,17 +78,9 @@ def decode_token(token: str):
     except jwt.DecodeError:
         raise HTTPException(status_code=401, detail="Token is invalid")
 
-def get_user_detail(token: str, db) -> int:
-    decoded_token = decode_token(token=token) 
-    # try:
-    #     decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    # except jwt.JWTError as e:
-    #     raise HTTPException(status_code=401, detail="Authentication error")
 
+def get_user_detail(decoded_token: str, db) -> int:
     email = decoded_token["email"]
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)
-    print('user_detail ', user_detail)
-    print()
-    print('decoded_token ', decoded_token)
-    return user_detail, decoded_token
+    return user_detail
