@@ -48,14 +48,14 @@ export default function TeamList(
   };
   return (
     <Box className="mt-4 w-full mr-4">
-      <Paper elevation={3} className="ml-2">
+      <Paper elevation={3} className="ml-2 mr-2">
         <br></br>
         <div className="flex justify-between">
           <Typography className="mt-0 ml-4 text-left font-bold text-xl">Teams</Typography>
           <Button
             size="small"
             variant="contained"
-            className="text-white bg-primary mr-5"
+            className="text-white bg-primary mr-4"
             onClick={handleClickOpen}
           >
             Create Team
@@ -89,23 +89,9 @@ export default function TeamList(
                 </Button>
               </Grid>
             </form>
-            {message !== "" ? (
-              <Snackbar
-                showMessage={showMessage}
-                setShowMessage={setShowMessage}
-                message={message}
-                messageColor={messageColor}
-              />
-            ) : null}
-            {loading ? (
-              <Box>
-                <CircularProgress />
-              </Box>
-            ) : null}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            {/* <Button onClick={handleClose}>Create</Button> */}
             <Button
               type="submit"
               onClick={() => {
@@ -164,6 +150,19 @@ export default function TeamList(
         </List>
         {/* ))} //closing the teams list*/}
       </Paper>
+      {message !== "" ? (
+        <Snackbar
+          showMessage={showMessage}
+          setShowMessage={setShowMessage}
+          message={message}
+          messageColor={messageColor}
+        />
+      ) : null}
+      {loading ? (
+        <Box>
+          <CircularProgress />
+        </Box>
+      ) : null}
     </Box>
   );
 }

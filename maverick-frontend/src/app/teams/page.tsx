@@ -15,8 +15,8 @@ import { createTeam, teamList } from "./api/route";
 
 const defaultTheme = createTheme();
 
-const Teams = () =>{
-    const [loading, setLoading] = React.useState(false);
+const Teams = () => {
+  const [loading, setLoading] = React.useState(false);
   const [showMessage, setShowMessage] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [messageColor, setMessageColor] = React.useState(Constants.INFO);
@@ -39,7 +39,7 @@ const Teams = () =>{
         if (res.status === 201) {
           setTeams(response);
         }
-         setLoading(false);
+        setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
@@ -53,6 +53,7 @@ const Teams = () =>{
       .then(async (res) => {
         const response = await res.json();
         if (res.status === 201) {
+          console.log("Create team res", response);
           setMessage(Constants.TEAM_CREATED_SUCCESSFULLY);
           setMessageColor(Constants.SUCCESS);
         } else {
@@ -60,7 +61,7 @@ const Teams = () =>{
           setMessage(data);
           setMessageColor(Constants.ERROR);
         }
-         setLoading(false);
+        setLoading(false);
       })
       .catch((error) => {
         setMessage(error);
@@ -68,24 +69,24 @@ const Teams = () =>{
         setMessageColor(Constants.ERROR);
       });
   };
-    return (
-        <Box className="flex">
-        <NavBar></NavBar>
-        <Box component="main" className="mt-10"
+  return (
+    <Box className="flex">
+      <NavBar></NavBar>
+      <Box component="main" className="mt-10"
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - 240px)` } }}>
         <TeamsForm
-        loading={loading}
-        showMessage={showMessage}
-        setShowMessage={setShowMessage}
-        message={message}
-        messageColor={messageColor}
-        onSubmit={submit}
-        formHandleSubmit={handleSubmit}
-        register={register}
-        errors={errors}/>
-        </Box>
-        </Box>
-    );  
+          loading={loading}
+          showMessage={showMessage}
+          setShowMessage={setShowMessage}
+          message={message}
+          messageColor={messageColor}
+          onSubmit={submit}
+          formHandleSubmit={handleSubmit}
+          register={register}
+          errors={errors} />
+      </Box>
+    </Box>
+  );
 
 };
 export default Teams;

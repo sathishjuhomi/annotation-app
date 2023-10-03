@@ -22,6 +22,11 @@ const SignIn = () => {
     resolver: yupResolver(registerSchema),
   });
   const router = useRouter();
+  
+  const setAccessToken = (response:any) => {
+    const accessToken = response.access_token;
+    sessionStorage.setItem('access_token', accessToken);
+  };
 
   const submit = async (data: FormData) => {
     setShowMessage(true);
@@ -31,6 +36,7 @@ const SignIn = () => {
         const response = await res.json();
         const data = response.detail;
         if (res.status === 200) {
+          setAccessToken(response);
           setMessage(data);
           setMessageColor(Constants.SUCCESS);
           router.push("/docs/installation");
@@ -55,8 +61,7 @@ const SignIn = () => {
         const response = await res.json();
         const data = response.detail;
         if (res.status === 200) {
-          const accessToken = response.access_token;
-          sessionStorage.setItem('access_token', accessToken);
+          setAccessToken(response);
           setMessage(data);
           setMessageColor(Constants.SUCCESS);
           router.push("/docs/installation");
