@@ -1,4 +1,4 @@
-from typing import List, Annotated
+from typing import List
 import logging
 from pydantic import UUID4
 
@@ -44,7 +44,7 @@ def create_team(
         if not team:
             try:
                 created_team, creator_email = team_service.create_team(
-                    token, request_payload=request_payload, db=db)
+                    decoded_token, request_payload=request_payload, db=db)
                 # Add the creator as a team member if the team was successfully created
                 team_member_service.add_team_creator_as_team_member(
                     created_team, creator_email, db)
@@ -76,7 +76,7 @@ def update_team(
     decoded_token = decode_token(token=token)
     if decoded_token:
         team = team_service.get_team_or_raise_404(db, id=id)
-        return team_service.update_team(token, request_payload, team, db)
+        return team_service.update_team(decoded_token, request_payload, team, db)
 
 
 @team_router.get(
@@ -96,7 +96,7 @@ def get_team_by_id(
 
 @team_router.get(
     "/teams",
-    description="Get a list of all teams of logged in user",
+    description="Get a list of all the teams of the current user",
     response_model=List[GetTeamsResponseSchema] | DetailSchema
 )
 def get_teams(
@@ -105,7 +105,7 @@ def get_teams(
 ):
     decoded_token = decode_token(token=token)
     if decoded_token:
-        return team_service.get_teams_for_logged_in_user(token, db)
+        return team_service.get_teams_for_current_user(decoded_token, db)
 
 
 @team_router.delete(

@@ -78,13 +78,7 @@ def decode_token(token: str):
         raise HTTPException(status_code=401, detail="Token is invalid")
 
 def get_user_detail(token: str, db) -> int:
-    decoded_token = decode_token(token=token) 
-    # try:
-    #     decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    # except jwt.JWTError as e:
-    #     raise HTTPException(status_code=401, detail="Authentication error")
-
-    email = decoded_token["email"]
+    email = token["email"]
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)
     return user_detail
