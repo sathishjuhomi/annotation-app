@@ -23,7 +23,7 @@ class TeamMemberService():
             "is_activated": True,
             "is_declined": False
         }
-        return team_member_db_handler.create(db=db, input_object=team_member_data)
+        team_member_db_handler.create(db=db, input_object=team_member_data)
 
     @staticmethod
     def team_member_data(member_detail: dict, invited_by_id: UUID4) -> dict:
