@@ -27,7 +27,7 @@ async def invite_team_member(team_id: UUID4,
     return response
 
 
-@team_member_router.patch("/teams/team_members/accept-invitation",
+@team_member_router.patch("/teams/team-members/accept-invitation",
                         response_model=TeamMemberResponseSchema | DetailSchema)
 def accept_invitation(
     db: Session = Depends(get_db),
