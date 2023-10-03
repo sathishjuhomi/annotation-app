@@ -19,8 +19,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import DialogContentText from '@mui/material/DialogContentText/DialogContentText';
 import FolderIcon from '@mui/icons-material/Folder';
-import { SignUpProps, TeamsProps } from '@/app/component/interfaces';
-import Snackbar from '@mui/material/Snackbar';
+import { TeamsProps } from '@/app/component/interfaces';
+import Snackbar from "../../component/Snackbar";
 import CircularProgress from '@mui/material/CircularProgress';
 
 const defaultTheme = createTheme();
@@ -36,7 +36,8 @@ export default function TeamList(
     formHandleSubmit,
     register,
     errors,
-  }: SignUpProps
+    teams,
+  }: TeamsProps
 ) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -94,44 +95,20 @@ export default function TeamList(
             <Button onClick={handleClose}>Cancel</Button>
             <Button
               type="submit"
-              onClick={() => {
-                formHandleSubmit(onSubmit)();
-                handleClose();
-              }}
+              onClick={formHandleSubmit(onSubmit)}
             >
               Create
             </Button>
           </DialogActions>
         </Dialog>
-        {/* {teams.map((team: any) => (  // To map the teams list*/}
+        {teams.map((team: any) => (
         <List>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
-              <Avatar className="bg-tertiary">J</Avatar>
+              <Avatar className="bg-tertiary">{team.team_name[0]}</Avatar>
             </ListItemAvatar>
             <ListItemText className="mt-5 font-bold text-black">
-              Jayabharathi
-            </ListItemText>
-            <Button
-              className="ml-24 mt-1 mb-1 mr-2 text-black"
-              variant="outlined"
-            >
-              Switch
-            </Button>
-            <Button
-              className="ml-2 mt-1 mb-1 text-black"
-              variant="outlined"
-            >
-              View
-            </Button>
-          </ListItem>
-          <Divider variant="inset" component="li" />
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar className="bg-tertiary">M</Avatar>
-            </ListItemAvatar>
-            <ListItemText className="mt-5 font-bold text-black">
-              Maverick
+              {team.team_name}
             </ListItemText>
             <Button
               className="ml-24 mt-1 mb-1 mr-2 text-black"
@@ -148,7 +125,7 @@ export default function TeamList(
           </ListItem>
           <Divider variant="inset" component="li" />
         </List>
-        {/* ))} //closing the teams list*/}
+        ))}
       </Paper>
       {message !== "" ? (
         <Snackbar

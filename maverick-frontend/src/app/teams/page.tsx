@@ -36,7 +36,7 @@ const Teams = () => {
       .then(async (res) => {
         const response = await res.json();
         console.log("response", response)
-        if (res.status === 201) {
+        if (res.status === 200) {
           setTeams(response);
         }
         setLoading(false);
@@ -56,6 +56,7 @@ const Teams = () => {
           console.log("Create team res", response);
           setMessage(Constants.TEAM_CREATED_SUCCESSFULLY);
           setMessageColor(Constants.SUCCESS);
+          location.reload()
         } else {
           const data = response.detail;
           setMessage(data);
@@ -83,7 +84,8 @@ const Teams = () => {
           onSubmit={submit}
           formHandleSubmit={handleSubmit}
           register={register}
-          errors={errors} />
+          errors={errors}
+          teams={teams} />
       </Box>
     </Box>
   );

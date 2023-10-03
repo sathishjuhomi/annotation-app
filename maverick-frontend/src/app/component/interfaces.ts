@@ -40,17 +40,15 @@ export interface TeamsFormData {
   teamname: string;
 }
 
-// To Do for show all team for testing I have a static data to show
-// temporary  I am using SinUpProps to test the create team
-// export interface TeamsProps {
-//   loading: boolean;
-//   showMessage: boolean;
-//   setShowMessage: any;
-//   message: string;
-//   messageColor: string;
-//   onSubmit: any;
-//   formHandleSubmit: any;
-//   register: any;
-//   errors: any;
-//   teams: string;
-// }
+export interface TeamsProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+  register: any;
+  errors: any;
+  teams: any;
+}
