@@ -7,7 +7,7 @@ export async function createTeam(formData: TeamsFormData) {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "token": `${storedAccessToken}`, // Include the access token in the Authorization header
+        "token": `${storedAccessToken}`,
       },
       body: JSON.stringify(body),
     });
