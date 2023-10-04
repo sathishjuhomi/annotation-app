@@ -39,6 +39,10 @@ class TeamMemberService():
         }
         return team_member_data
 
+    @staticmethod
+    def get_by_team_id_and_email(db: Session, team_id: str, email: str):
+        return db.query(TeamMembers).filter_by(team_id=team_id, email=email).first()
+
     async def email_invitation(self, team_id, decoded_token, request_payload, db: Session):
         try:
             member_detail = request_payload.model_dump()

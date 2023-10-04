@@ -12,4 +12,3 @@ class DetailSchema(BaseModel):
 
 class SignInResponseSchema(DetailSchema):
     access_token: str
-

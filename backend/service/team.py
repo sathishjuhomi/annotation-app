@@ -20,14 +20,16 @@ class TeamService():
         return team
 
     def create_team(self, decoded_token, request_payload: TeamSchema, db: Session):
-        team_data = self.preprocess_team_data(decoded_token, request_payload, db)
+        team_data = self.preprocess_team_data(
+            decoded_token, request_payload, db)
         team_data["id"] = uuid.uuid4()
         creator_email = team_data["creator_email"]
         team_data.pop("creator_email", None)
         return team_db_handler.create(db, input_object=team_data), creator_email
 
     def update_team(self, decoded_token, request_payload: TeamSchema, team: Teams, db: Session):
-        team_data = self.preprocess_team_data(decoded_token, request_payload, db)
+        team_data = self.preprocess_team_data(
+            decoded_token, request_payload, db)
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 
     def get_teams_for_current_user(self, token: str, db: Session):

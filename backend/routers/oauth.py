@@ -22,10 +22,12 @@ oauth_router = APIRouter(prefix="/api/v1/user", tags=["Oauth"])
 
 
 def oauth_sign_up(request_payload: UserSchema, db) -> Any:
-    user = check_existing_user(db=db, column_name='email', value=request_payload.email)
+    user = check_existing_user(
+        db=db, column_name='email', value=request_payload.email)
     if not user:
         try:
-            user = user_service.create_user(request_payload=request_payload, db=db)
+            user = user_service.create_user(
+                request_payload=request_payload, db=db)
             logger.info("User created successfully: %s", user.email)
         except Exception as e:
             logger.error("Error creating user: %s", str(e))
@@ -68,14 +70,14 @@ async def auth(request: Request):
         logger.error("OAuth error occurred: %s", error)
         # Return a plain text error message
         return PlainTextResponse(f'Error: {error.error}', status_code=400)
-    
+
     if not token:
         logger.warning("OAuth token is not valid or has expired.")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="OAuth token is not valid or has expired.",
         )
-    
+
     user = token.get('userinfo')
     if not user:
         logger.warning("User information is not available in the OAuth token.")
@@ -83,7 +85,7 @@ async def auth(request: Request):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User information is not available in the OAuth token.",
         )
-    
+
     user_data = {
         "email": user.get("email"),
         "password": generate_random_oauth_password()

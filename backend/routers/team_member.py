@@ -44,9 +44,9 @@ async def accept_invitation(
                 detail="The user with this email does not exist",
             )
 
-        team_member_detail = team_member_db_handler.get_by_team_id_and_email(db=db,
-                                                                             email=decoded_token['email'],
-                                                                             team_id=decoded_token['team_id'])
+        team_member_detail = team_member_service.get_by_team_id_and_email(db=db,
+                                                                          email=decoded_token['email'],
+                                                                          team_id=decoded_token['team_id'])
         response = team_member_service.update_team_member_as_active(decoded_token,
                                                                     team_member_detail,
                                                                     db)

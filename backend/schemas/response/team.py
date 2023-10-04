@@ -1,4 +1,4 @@
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, EmailStr
 from typing import List
 from backend.schemas.response.user import DetailSchema
 
@@ -22,9 +22,10 @@ class GetTeamsResponseSchema(BaseModel):
 
 class GetTeamMembersByTeamId(BaseModel):
     team_member_id: UUID4
-    email: str
+    email: EmailStr
     is_activated: bool
     roles: dict
+
 
 class GetTeamMembersByTeamIdResponseSchema(BaseModel):
     team: TeamResponseSchema

@@ -1,8 +1,9 @@
-from pydantic import BaseModel, UUID4, Field
+from pydantic import BaseModel, UUID4, Field, EmailStr
+
 
 class TeamMemberResponseSchema(BaseModel):
     team_id: UUID4
-    email: str
+    email: EmailStr
     role: dict = Field({
         "owner": False,
         "admin": False,

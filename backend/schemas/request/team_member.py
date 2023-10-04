@@ -1,12 +1,10 @@
-from pydantic import BaseModel, UUID4, Field
+from pydantic import BaseModel, Field, EmailStr
 
 
 class TeamMemberSchema(BaseModel):
-    # team_id: UUID4
-    email: str
+    email: EmailStr
     role: dict = Field({
         "owner": False,
         "admin": False,
         "member": False
     })
-    # token: str
