@@ -19,11 +19,27 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import DialogContentText from '@mui/material/DialogContentText/DialogContentText';
 import FolderIcon from '@mui/icons-material/Folder';
+import { TeamsProps } from '@/app/component/interfaces';
+import Snackbar from "../../component/Snackbar";
+import CircularProgress from '@mui/material/CircularProgress';
 import Link from '@mui/material/Link';
 
 const defaultTheme = createTheme();
 
-export default function TeamList() {
+export default function TeamList(
+  {
+    loading,
+    showMessage,
+    setShowMessage,
+    message,
+    messageColor,
+    onSubmit,
+    formHandleSubmit,
+    register,
+    errors,
+    teams,
+  }: TeamsProps
+) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,16 +48,17 @@ export default function TeamList() {
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <Box className="mt-4 w-full mr-4">
-      <Paper elevation={3} className="ml-2">
+      <Paper elevation={3} className="ml-2 mr-2">
         <br></br>
         <div className="flex justify-between">
           <Typography className="mt-0 ml-4 text-left font-bold text-xl">Teams</Typography>
           <Button
             size="small"
             variant="contained"
-            className="text-white bg-primary mr-5"
+            className="text-white bg-primary mr-4"
             onClick={handleClickOpen}
           >
             Create Team
@@ -65,6 +82,9 @@ export default function TeamList() {
                   label="Team Name"
                   type="text"
                   fullWidth
+                  {...register("teamname")}
+                  error={Boolean(errors?.teamname)}
+                  helperText={errors?.teamname ? errors?.teamname.message : " "}
                 />
                 <Button className="mr-1 text-black">
                   <FolderIcon className="mr-1 text-black" />
@@ -75,16 +95,22 @@ export default function TeamList() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Create</Button>
+            <Button
+              type="submit"
+              onClick={formHandleSubmit(onSubmit)}
+            >
+              Create
+            </Button>
           </DialogActions>
         </Dialog>
+        {teams.map((team: any) => (
         <List>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
-              <Avatar className="bg-tertiary">J</Avatar>
+              <Avatar className="bg-tertiary">{team.team_name[0]}</Avatar>
             </ListItemAvatar>
             <ListItemText className="mt-5 font-bold text-black">
-              Jayabharathi
+              {team.team_name}
             </ListItemText>
             <Button
               className="ml-24 mt-1 mb-1 mr-2 text-black"
@@ -95,39 +121,30 @@ export default function TeamList() {
             <Button
               className="ml-2 mt-1 mb-1 text-black"
               variant="outlined"
-            >
-              View
-            </Button>
-          </ListItem>
-          <Divider variant="inset" component="li" />
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar className="bg-tertiary">M</Avatar>
-            </ListItemAvatar>
-            <ListItemText className="mt-5 font-bold text-black">
-            <Link href="/view"  className="text-black">
-              Maverick
-            </Link>
-              {/* Maverick */}
-            </ListItemText>
-            <Button
-              className="ml-24 mt-1 mb-1 mr-2 text-black"
-              variant="outlined"
-            >
-              Switch
-            </Button>
-            <Button
-              className="ml-2 mt-1 mb-1 text-black"
-              variant="outlined"
-            >
-              <Link href="/view"  className="text-black">
+
+            > 
+            <Link href={`/teams/${team.team_id}`}>
                 View
-              </Link>
+            </Link>
             </Button>
           </ListItem>
           <Divider variant="inset" component="li" />
         </List>
+        ))}
       </Paper>
+      {message !== "" ? (
+        <Snackbar
+          showMessage={showMessage}
+          setShowMessage={setShowMessage}
+          message={message}
+          messageColor={messageColor}
+        />
+      ) : null}
+      {loading ? (
+        <Box>
+          <CircularProgress />
+        </Box>
+      ) : null}
     </Box>
   );
 }

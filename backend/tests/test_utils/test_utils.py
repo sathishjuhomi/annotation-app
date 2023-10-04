@@ -11,6 +11,7 @@ from backend.utils.utils import (
     create_access_token,
     generate_password_reset_token,
     verify_password_reset_token,
+    generate_random_oauth_password
 )
 
 
@@ -34,6 +35,11 @@ class TestUtils(unittest.TestCase):
     def test_generate_salt(self):
         salt = generate_salt()
         self.assertEqual(len(salt), 32)
+
+    def test_generate_random_oauth_password(self):
+        custom_length = 15
+        password = generate_random_oauth_password(custom_length)
+        self.assertEqual(len(password), custom_length)
 
     @patch("backend.utils.utils.jwt.encode", return_value="mock_token")
     def test_create_access_token(self, *args):
