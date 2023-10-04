@@ -52,10 +52,8 @@ def verify_password_reset_token(token: str) -> str | None:
         return decoded_token["email"]
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.DecodeError:
-        raise HTTPException(status_code=401, detail="Token is invalid")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except jwt.JWTError as e:
+        raise HTTPException(status_code=401, detail=f"JWT verification error: {str(e)}")
 
 
 def generate_random_oauth_password(length=20):
@@ -71,10 +69,8 @@ def decode_token(token: str):
         return decoded_token
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.DecodeError:
-        raise HTTPException(status_code=401, detail="Token is invalid")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except jwt.JWTError as e:
+        raise HTTPException(status_code=401, detail=f"JWT verification error: {str(e)}")
 
 
 def get_user_detail(decoded_token: str, db):

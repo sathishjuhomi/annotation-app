@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from typing import Optional
 from pydantic import UUID4
 from fastapi import HTTPException, status
@@ -31,6 +32,14 @@ class TeamService():
         team_data = self.preprocess_team_data(
             decoded_token, request_payload, db)
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
+
+    def delete_team(self, team: Teams, db: Session, deleter_id=id):
+        update_data = {
+            "is_deleted": True,
+            "t_delete": datetime.now(),
+            "deleted_by_id": deleter_id
+        }
+        return team_db_handler.update(db=db, db_obj=team, input_object=update_data)
 
     def get_teams_for_current_user(self, token: str, db: Session):
         team_member_detail = get_user_detail(decoded_token=token, db=db)
@@ -86,6 +95,7 @@ class TeamService():
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             })
+            print("team_member ", vars(team_member))
         return {"team": team, "team_members": team_members_details}
 
 

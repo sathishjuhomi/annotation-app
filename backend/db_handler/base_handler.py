@@ -28,14 +28,22 @@ class BaseDBHandler:
         return db_obj
 
     def update(self, db: Session, *, db_obj, input_object):
+        print('db_obj_31 ', vars(db_obj))
+        print()
         obj_data = jsonable_encoder(db_obj)
         if isinstance(input_object, dict):
             update_data = input_object
         else:
             update_data = input_object.dict(exclude_unset=True)
+        print("update_data ", update_data)
+        print()
         for field in obj_data:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
+        # for key, value in update_data.items():
+        #     setattr(db_obj, key, value)
+        print('db_obj ', vars(db_obj))
+        print()
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

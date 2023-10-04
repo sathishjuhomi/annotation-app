@@ -1,6 +1,7 @@
 from typing import List
 import logging
 from pydantic import UUID4
+import copy
 
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
@@ -16,6 +17,7 @@ from backend.service.team import team_service
 from backend.db_handler.team_handler import team_db_handler
 from backend.service.team_member import team_member_service
 from backend.utils.utils import decode_token
+from backend.models.team import Teams
 
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
@@ -108,8 +110,8 @@ def get_teams(
         return team_service.get_teams_for_current_user(decoded_token, db)
 
 
-@team_router.delete(
-    "/teams/{id}",
+@team_router.patch(
+    "/teams/{id}/delete",
     description="Delete a team by ID",
     response_model=DeleteTeamResponseSchema
 )
@@ -119,10 +121,15 @@ def delete_team(
     db: Session = Depends(get_db)
 ):
     decoded_token = decode_token(token=token)
-    if decoded_token:
-        _ = team_service.get_team_or_raise_404(db, id=id)
-        deleted_team = team_db_handler.delete(db=db, id=id)
-        return {
-            "detail": "Team deleted successfully",
-            "deleted_team": deleted_team
-        }
+
+    team_member_service.delete_team_members(
+        db, team_id=id, deleter_id=decoded_token['id'])
+
+    team = team_service.get_team_or_raise_404(db, id=id)
+
+    deleted_team = team_service.delete_team(team, db, deleter_id=decoded_token['id'])
+
+    return {
+        "detail": "Team deleted successfully",
+        "deleted_team": deleted_team
+    }
