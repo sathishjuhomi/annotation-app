@@ -28,22 +28,15 @@ class BaseDBHandler:
         return db_obj
 
     def update(self, db: Session, *, db_obj, input_object):
-        print('db_obj_31 ', vars(db_obj))
-        print()
+        print(vars(db_obj))
         obj_data = jsonable_encoder(db_obj)
         if isinstance(input_object, dict):
             update_data = input_object
         else:
             update_data = input_object.dict(exclude_unset=True)
-        print("update_data ", update_data)
-        print()
         for field in obj_data:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
-        # for key, value in update_data.items():
-        #     setattr(db_obj, key, value)
-        print('db_obj ', vars(db_obj))
-        print()
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -59,3 +52,22 @@ class BaseDBHandler:
         # Dynamically access the column attribute using getattr
         column = getattr(self.model, column_name)
         return db.query(self.model).filter(column == value).all()
+
+    def bulk_update(self, db: Session, db_objs: list, input_data_list: list):
+        if len(db_objs) != len(input_data_list):
+            raise ValueError("Length of 'objs' and 'update_data_list' must be the same.")
+
+        for obj, update_data in zip(db_objs, input_data_list):
+            obj_data = jsonable_encoder(obj)
+            if isinstance(update_data, dict):
+                update_dict = update_data
+            else:
+                update_dict = update_data.dict(exclude_unset=True)
+            for field in obj_data:
+                if field in update_dict:
+                    setattr(obj, field, update_dict[field])
+
+        db.add_all(db_objs)
+        db.commit()
+        for db_obj in db_objs:
+            db.refresh(db_obj)

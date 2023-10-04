@@ -94,19 +94,17 @@ class TeamMemberService():
     def delete_team_members(self, db, team_id, deleter_id):
         team_members = team_member_db_handler.load_all_by_column(
             db=db, column_name='team_id', value=team_id)
-
-        for team_member in team_members:
-
-            delete_team_member = {
+        input_data_list = [
+            {
                 "is_deleted": True,
                 "is_activated": False,
                 "t_delete": datetime.now(),
                 "deleted_by_id": deleter_id
             }
-            print("team_member ", vars(team_member))
-            response = team_member_db_handler.update(db=db,
-                                                     db_obj=team_member,
-                                                     input_object=delete_team_member)
+            for _ in team_members
+        ]
+        db_objs = list(team_members)
+        _ = team_member_db_handler.bulk_update(db=db, db_objs=db_objs, input_data_list=input_data_list)
 
 
 team_member_service = TeamMemberService()
