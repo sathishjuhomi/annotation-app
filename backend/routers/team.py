@@ -2,7 +2,7 @@ from typing import List
 import logging
 from backend.db_handler.team_member_handler import team_member_db_handler
 from pydantic import UUID4
-
+from fastapi.security import HTTPBearer
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from backend.schemas.request.team import TeamSchema
@@ -21,6 +21,7 @@ from backend.utils.utils import decode_token
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 
+bearer = HTTPBearer()
 
 @team_router.post(
     "/teams",
@@ -35,11 +36,11 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 )
 async def create_team(
     request_payload: TeamSchema,
-    Authorization: str = Header(),
+    authorization: str = Depends(bearer),
     db: Session = Depends(get_db)
 ):
-    print("Authorization ", Authorization)
-    decoded_token = decode_token(token=Authorization)
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
     team_service.get_team(
         db, name=request_payload.team_name)
 

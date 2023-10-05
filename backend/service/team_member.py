@@ -43,7 +43,7 @@ class TeamMemberService():
             invitation_token = create_access_token(member_detail)
 
             # Create team member data for database insertion
-            team_member_data = team_member_service.add_team_member(team_id=team_id,
+            team_member_data = self.add_team_member(team_id=team_id,
                                                                    email=member_detail["email"],
                                                                    invited_by_id=None,
                                                                    role=member_detail["role"],
