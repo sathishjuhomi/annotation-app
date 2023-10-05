@@ -67,7 +67,9 @@ def generate_random_oauth_password(length=20):
 
 def decode_token(token: str):
     try:
-        token = token.split()[1]
+        # if not token.startswith("Bearer "):
+        #     raise HTTPException(status_code=401, detail="Invalid Token")
+        # access_token = token.split(" ")[1]
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         return decoded_token
     except jwt.ExpiredSignatureError:

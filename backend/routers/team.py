@@ -35,10 +35,10 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 )
 async def create_team(
     request_payload: TeamSchema,
-    Authorization: str = Header(),
+    token: str = Header(),
     db: Session = Depends(get_db)
 ):
-    decoded_token = decode_token(token=Authorization)
+    decoded_token = decode_token(token=token)
     team_service.get_team(
         db, name=request_payload.team_name)
 
