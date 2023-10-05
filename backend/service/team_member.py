@@ -2,6 +2,7 @@ from typing import List
 import uuid
 from backend.schemas.response.team import TeamResponseSchema
 from datetime import datetime
+from backend.schemas.response.user import DetailSchema
 
 from pydantic import UUID4
 from sqlalchemy.orm import Session
@@ -44,7 +45,7 @@ class TeamMemberService():
             # Create team member data for database insertion
             team_member_data = team_member_service.add_team_member(team_id=team_id,
                                                                    email=member_detail["email"],
-                                                                   invited_by_id=None,
+                                                                   invited_by_id=decoded_token["id"],
                                                                    role=member_detail["role"],
                                                                    is_activated=False,
                                                                    is_declined=False)
@@ -93,15 +94,17 @@ class TeamMemberService():
         _ = team_member_db_handler.bulk_update(
             db=db, db_objs=db_objs, input_data_list=input_data_list)
 
-    def delete_team_member(self, decoded_token, team_id, id, db):
+    @staticmethod
+    async def delete_team_member(decoded_token, team_id, id, db):
         """
-validate the token
-check the current user role, owner or admin
-If owner or admin, get the team member with member id from team member table
-or raise exception
-create a dict with key is_deleted and value True, key deleted_by_id and value current user id
-call the update method
-"""
+        validate the token
+        check the current user role, owner or admin
+        If owner or admin, get the team member with member id from team member table
+        or raise exception
+        create a dict with key is_deleted and value True,
+          key deleted_by_id and value current user id
+        call the update method
+        """
         deleter_detail = team_member_db_handler.load_by_column(
             db=db, column_name="email", value=decoded_token["email"])
 
@@ -113,9 +116,8 @@ call the update method
         team_member_detail = team_member_db_handler.load_by_column(
             db=db, column_name="id", value=id)
 
-        print('team_member_detail ', team_member_detail)
-
         member_detail = {
+            "is_activated": False,
             "is_deleted": True,
             "deleted_by_id": decoded_token["id"],
             "t_delete": datetime.now()
@@ -124,8 +126,8 @@ call the update method
         team_member_db_handler.update(db=db,
                                       db_obj=team_member_detail,
                                       input_object=member_detail)
-
-        return {"detail": f"{team_member_detail.email} deleted successfully"}
+        detail_message = f"{team_member_detail.email} deleted successfully"
+        return DetailSchema(detail=detail_message)
 
 
 team_member_service = TeamMemberService()

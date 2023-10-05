@@ -50,7 +50,8 @@ async def create_team(
         # Add the creator as a team member if the team was successfully created
         team_member_data = team_member_service.add_team_member(team_id=created_team.id,
                                                                email=creator_email,
-                                                               invited_by_id=None, role={
+                                                               invited_by_id=None,
+                                                               role={
                                                                    "owner": True,
                                                                    "admin": True,
                                                                    "member": False},
