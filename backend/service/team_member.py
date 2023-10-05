@@ -1,5 +1,7 @@
+from typing import List
 import uuid
 from backend.schemas.response.team import TeamResponseSchema
+from datetime import datetime
 
 from pydantic import UUID4
 from sqlalchemy.orm import Session
@@ -38,6 +40,10 @@ class TeamMemberService():
             "is_declined": False
         }
         return team_member_data
+
+    @staticmethod
+    def get_by_team_id_and_email(db: Session, team_id: str, email: str):
+        return db.query(TeamMembers).filter_by(team_id=team_id, email=email).first()
 
     async def email_invitation(self, team_id, decoded_token, request_payload, db: Session):
         try:
@@ -84,6 +90,21 @@ class TeamMemberService():
         return team_member_db_handler.update(db=db,
                                              db_obj=team_member,
                                              input_object=decoded_token)
+
+    def delete_team_members(self, db, team_id, deleter_id):
+        team_members = team_member_db_handler.load_all_by_column(
+            db=db, column_name='team_id', value=team_id)
+        input_data_list = [
+            {
+                "is_deleted": True,
+                "is_activated": False,
+                "t_delete": datetime.now(),
+                "deleted_by_id": deleter_id
+            }
+            for _ in team_members
+        ]
+        db_objs = list(team_members)
+        _ = team_member_db_handler.bulk_update(db=db, db_objs=db_objs, input_data_list=input_data_list)
 
 
 team_member_service = TeamMemberService()

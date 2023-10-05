@@ -49,17 +49,11 @@ def generate_password_reset_token(email: str) -> str:
 def verify_password_reset_token(token: str) -> str | None:
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        print('decoded_token ', decoded_token)
-        expiration_time = decoded_token.get("exp")
-        if expiration_time:
-            current_time = datetime.utcnow().timestamp()
-        if not (current_time >= expiration_time):
-            return decoded_token["email"]
-
+        return decoded_token["email"]
     except jwt.ExpiredSignatureError:
-        print("Token has expired")
-    except jwt.DecodeError:
-        print("Token is invalid")
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.JWTError as e:
+        raise HTTPException(status_code=401, detail=f"JWT verification error: {str(e)}")
 
 
 def generate_random_oauth_password(length=20):
@@ -75,11 +69,11 @@ def decode_token(token: str):
         return decoded_token
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.DecodeError:
-        raise HTTPException(status_code=401, detail="Token is invalid")
+    except jwt.JWTError as e:
+        raise HTTPException(status_code=401, detail=f"JWT verification error: {str(e)}")
 
 
-def get_user_detail(decoded_token: str, db) -> int:
+def get_user_detail(decoded_token: str, db):
     email = decoded_token["email"]
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)

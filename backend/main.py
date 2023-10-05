@@ -8,7 +8,7 @@ from backend.routers.oauth import oauth_router
 from backend.routers.team import team_router
 from backend.routers.team_member import team_member_router
 
-logger = logging.getLogger(__name__) 
+logger = logging.getLogger(__name__)
 fileHandler = logging.FileHandler("logs.txt")
 
 stdoutFmt = logging.Formatter(
@@ -16,8 +16,9 @@ stdoutFmt = logging.Formatter(
 )
 
 logging.basicConfig(
-    level = logging.INFO,  # Set the logging level to INFO, you can change it as needed.
-    format = "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
+    # Set the logging level to INFO, you can change it as needed.
+    level=logging.INFO,
+    format="%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
 )
 fileHandler.setFormatter(stdoutFmt)
 logger.addHandler(fileHandler)
@@ -36,4 +37,3 @@ app.include_router(auth_router)
 app.include_router(oauth_router)
 app.include_router(team_router)
 app.include_router(team_member_router)
-logger.info("Executed main.py")

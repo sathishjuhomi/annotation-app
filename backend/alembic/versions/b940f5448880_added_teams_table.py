@@ -29,6 +29,9 @@ def upgrade():
             sa.ForeignKey("users.id", ondelete="CASCADE"),
             nullable=True,
         ),
+        sa.Column("is_deleted", sa.Boolean, nullable=False, server_default='false'),
+        sa.Column("deleted_by_id", sa.dialects.postgresql.UUID(
+            as_uuid=True), nullable=True),
         sa.Column(
             "t_create",
             sa.TIMESTAMP(timezone=True),

@@ -2,9 +2,10 @@ from sqlalchemy import Column, TIMESTAMP, text, ForeignKey, Boolean, UniqueConst
 from sqlalchemy.dialects.postgresql import UUID, JSON
 from sqlalchemy.orm import relationship
 from backend.models.database import Base
+from backend.models.timestamp_mixin import TimestampMixIn
 
 
-class TeamMembers(Base):
+class TeamMembers(Base, TimestampMixIn):
     __tablename__ = "team_members"
 
     id = Column(UUID(as_uuid=True), primary_key=True)
@@ -15,17 +16,8 @@ class TeamMembers(Base):
     roles = Column(JSON, nullable=False)
     is_activated = Column(Boolean, default=False)
     is_declined = Column(Boolean, default=False)
-    t_create = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
-    )
-    t_update = Column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=text("now()"),
-        onupdate=text("now()"),
-    )
-    t_delete = Column(TIMESTAMP(timezone=True))
-
+    is_deleted = Column(Boolean, default=False, nullable=False)
+    deleted_by_id = Column(UUID(as_uuid=True), nullable=True)
     # Define relationships to Users and Teams with foreign keys
     team = relationship("Teams", foreign_keys=[team_id])
 
