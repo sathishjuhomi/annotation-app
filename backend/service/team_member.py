@@ -39,7 +39,7 @@ class TeamMemberService():
             # Create team member data for database insertion
             team_member_data = team_member_service.add_team_member(team_id=team_id,
                                                                    email=member_detail["email"],
-                                                                   invited_by_id=None,
+                                                                   invited_by_id=decoded_token["id"],
                                                                    role=member_detail["role"],
                                                                    is_activated=False,
                                                                    is_declined=False)
