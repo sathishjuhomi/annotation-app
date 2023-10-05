@@ -56,7 +56,7 @@ async def accept_invitation(
 
 
 @team_member_router.patch("/teams/{team_id}/team-members/{id}/delete",
-                          response_model=TeamMemberResponseSchema | DetailSchema)
+                          response_model= DetailSchema)
 async def delete_team_member(
     team_id: UUID4,
     id: UUID4,
@@ -67,7 +67,7 @@ async def delete_team_member(
     """
     validate the token
     check the current user role, owner or admin
-    If owner or admin, get the team member with team_id and member id from team member table
+    If owner or admin, get the team member with member id from team member table
     or raise exception
     create a dict with key is_deleted and value True, key deleted_by_id and value current user id
     call the update method

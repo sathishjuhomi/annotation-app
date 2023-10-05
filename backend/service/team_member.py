@@ -98,7 +98,7 @@ class TeamMemberService():
         """
 validate the token
 check the current user role, owner or admin
-If owner or admin, get the team member with team_id and member id from team member table
+If owner or admin, get the team member with member id from team member table
 or raise exception
 create a dict with key is_deleted and value True, key deleted_by_id and value current user id
 call the update method
@@ -111,9 +111,9 @@ call the update method
             raise Exception(
                 'Only Admin or Owner of the team can delete a team member')
 
-        team_member_detail = db.query(TeamMembers).filter_by(
-            team_id=team_id, id=id).first()
-        
+        team_member_detail = team_member_db_handler.load_by_column(
+            db=db, column_name="id", value=id)
+
         print('team_member_detail ', team_member_detail)
 
         member_detail = {
@@ -122,9 +122,11 @@ call the update method
             "t_delete": datetime.now()
         }
 
-        return team_member_db_handler.update(db=db,
-                                             db_obj=team_member_detail,
-                                             input_object=member_detail)
+        team_member_db_handler.update(db=db,
+                                      db_obj=team_member_detail,
+                                      input_object=member_detail)
+
+        return {"detail": f"{team_member_detail.email} deleted successfully"}
 
 
 team_member_service = TeamMemberService()
