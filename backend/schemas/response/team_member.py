@@ -10,3 +10,5 @@ class TeamMemberResponseSchema(BaseModel):
         "member": False
     })
     is_activated: bool
+
+
