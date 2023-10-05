@@ -75,7 +75,7 @@ export default function TeamList(
           setOpen={setOpen}
           teamTitle="Create New Team"
         />
-        {teams.map((team: any) => (
+        {teams.length > 0 ? teams.map((team: any) => (
           <List>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
@@ -102,7 +102,10 @@ export default function TeamList(
             </ListItem>
             <Divider variant="inset" component="li" />
           </List>
-        ))}
+        )) : <Box>
+          <Typography className='text-center mt-10 mb-2'> No Teams </Typography>
+          <br />
+        </Box>}
       </Paper>
       {message !== "" ? (
         <Snackbar

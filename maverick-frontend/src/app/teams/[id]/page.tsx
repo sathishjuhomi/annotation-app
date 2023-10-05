@@ -10,7 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
-import { getTeamAndTeamMembers } from "../api/route";
+import { deleteTeam, getTeamAndTeamMembers } from "../api/route";
 import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, ListItemAvatar } from "@mui/material";
 import ListItem from '@mui/material/ListItem';
 import * as Constants from "../../utils/constant";
@@ -22,7 +22,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TeamsFormData } from "@/app/component/interfaces";
 import { updateTeam } from "../api/route";
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
+import { useRouter } from "next/navigation";
 
 const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [loading, setLoading] = React.useState(false);
@@ -82,6 +84,30 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const handleCloseDelete = () => {
         setOpenDelete(false);
     };
+    const router = useRouter();
+    const handleDeleteTeam = async () => {
+        setShowMessage(true);
+        setLoading(true);
+        await deleteTeam(params.id)
+            .then(async (res) => {
+                const response = await res.json();
+                if (res.status === 200) {
+                    setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
+                    setMessageColor(Constants.SUCCESS);
+                    router.push('/teams');
+                } else{
+                    const data = response.detail;
+                    setMessage(data);
+                    setMessageColor(Constants.ERROR);
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                setMessage(error);
+                setLoading(false);
+                setMessageColor(Constants.ERROR);
+            });
+    }
     const { register,
         handleSubmit,
         formState: { errors },
@@ -95,10 +121,9 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
-                    console.log("Update Team res", response);
                     setMessage(Constants.TEAM_UPDATED_SUCCESSFULLY);
                     setMessageColor(Constants.SUCCESS);
-                    location.reload()
+                    location.reload();
                 } else {
                     const data = response.detail;
                     setMessage(data);
@@ -128,44 +153,13 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                             {teamName}
                         </Typography>
                         <Fab
-                            color="secondary"
+                            className="ml-auto mt-1 mb-1 mr-2 text-white bg-primary"
+                            color="primary"
                             size="small"
-                            className="ml-auto mr-2 mt-1 bg-primary"
-                            onClick={handleClickOpenDelete}
-                        >
-                            <DeleteIcon />
-                        </Fab>
-                        <Dialog open={openDelete} onClose={handleCloseDelete}>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    Are you sure You want to delete the Team {teamName} ?
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    className="bg-primary"
-                                // onClick={}
-                                >
-                                    Yes
-                                </Button>
-                                <Button
-                                    onClick={handleCloseDelete}
-                                    variant="contained"
-                                    className="bg-primary"
-                                >
-                                    No
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Button
-                            className="mt-1 mb-1 text-white bg-primary"
-                            variant="contained"
                             onClick={handleClickOpen}
                         >
-                            Edit Team
-                        </Button>
+                            <EditIcon />
+                        </Fab>
                         <CreateUpdateForm
                             loading={loading}
                             showMessage={showMessage}
@@ -180,6 +174,36 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                             setOpen={setOpen}
                             teamTitle={teamName}
                         />
+                        <Fab
+                            size="small"
+                            className="mr-1 mt-1 bg-grey text-white"
+                            onClick={handleClickOpenDelete}
+                        >
+                            <DeleteIcon />
+                        </Fab>
+                        <Dialog open={openDelete} onClose={handleCloseDelete}>
+                            <DialogContent>
+                                <DialogContentText className="text-black">
+                                    Are you sure you want to delete the Team {teamName} ?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    className="bg-primary"
+                                    onClick={handleDeleteTeam}
+                                >
+                                    Yes
+                                </Button>
+                                <Button
+                                    onClick={handleCloseDelete}
+                                    variant="outlined"
+                                >
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </ListItem>
                     <Table aria-label="simple table">
                         <TableHead>

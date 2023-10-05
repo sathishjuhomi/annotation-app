@@ -29,7 +29,7 @@ export async function createTeam(formData: TeamsFormData) {
 
   export async function getTeamAndTeamMembers(teamId: string) {
     const storedAccessToken = sessionStorage.getItem('access_token');
-    const res = await fetch(`http://127.0.0.1:8000/api/v1/team/${teamId}`, {
+    const res = await fetch(`http://127.0.0.1:8000/api/v1/teams/${teamId}`, {
         method: "GET",
         headers: {
             "Content-type": "application/json",
@@ -49,6 +49,18 @@ export async function updateTeam(teamId: string, formData:TeamsFormData) {
           "token": `${storedAccessToken}`,
       },
       body: JSON.stringify(body),
+  });
+  return res;
+}
+
+export async function deleteTeam(teamId:string){
+  const storedAccessToken = sessionStorage.getItem('access_token');
+  const res = await fetch(`http://127.0.01:8000/api/v1/teams/${teamId}/delete`,{
+    method: "PATCH",
+    headers:{
+      "content-type": "application/json",
+      "token": `${storedAccessToken}`,
+    }
   });
   return res;
 }

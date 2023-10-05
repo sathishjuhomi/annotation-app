@@ -12,3 +12,4 @@ export const TEAMNAME_REQUIRED = "Team name is required";
 export const TEAM_CREATED_SUCCESSFULLY = "Team created successfully";
 export const CREATE_TEAM = "Create New Team";
 export const TEAM_UPDATED_SUCCESSFULLY = "Team updated successfully";
+export const TEAM_DELETED_SUCCESSFULLY = "Team deleted successfully";
