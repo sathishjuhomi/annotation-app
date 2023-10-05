@@ -36,12 +36,6 @@ class TeamMemberService():
                 raise Exception(
                     'Only Admin or Owner of the team can invite a team member')
 
-            member_detail['team_id'] = str(team_id)
-            print('member_detail ', member_detail)
-
-            # Create an access token for the invitation
-            invitation_token = create_access_token(member_detail)
-
             # Create team member data for database insertion
             team_member_data = team_member_service.add_team_member(team_id=team_id,
                                                                    email=member_detail["email"],
@@ -49,6 +43,11 @@ class TeamMemberService():
                                                                    role=member_detail["role"],
                                                                    is_activated=False,
                                                                    is_declined=False)
+
+            member_detail['team_id'] = str(team_id)
+            member_detail.pop('role', None)
+            # Create an access token for the invitation
+            invitation_token = create_access_token(member_detail)
 
             # Insert the team member data into the database
             _ = team_member_db_handler.create(
