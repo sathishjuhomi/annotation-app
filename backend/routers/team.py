@@ -35,10 +35,10 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 )
 async def create_team(
     request_payload: TeamSchema,
-    token: str = Header(),
+    Authorization: str = Header(),
     db: Session = Depends(get_db)
 ):
-    decoded_token = decode_token(token=token)
+    decoded_token = decode_token(token=Authorization)
     team_service.get_team(
         db, name=request_payload.team_name)
 
@@ -76,10 +76,10 @@ async def create_team(
 def update_team(
     id: UUID4,
     request_payload: TeamSchema,
-    token: str = Header(),
+    Authorization: str = Header(),
     db: Session = Depends(get_db)
 ):
-    decoded_token = decode_token(token=token)
+    decoded_token = decode_token(token=Authorization)
 
     team = team_service.get_team(db, id=id)
     return team_service.update_team(decoded_token, request_payload, team, db)
@@ -92,10 +92,10 @@ def update_team(
 )
 def get_team_by_id(
     id: UUID4,
-    token: str = Header(),
+    Authorization: str = Header(),
     db: Session = Depends(get_db)
 ):
-    _ = decode_token(token=token)
+    _ = decode_token(token=Authorization)
 
     return team_service.get_team_members_detail_with_team_id(db, id)
 
@@ -106,10 +106,10 @@ def get_team_by_id(
     response_model=List[GetTeamsResponseSchema] | DetailSchema
 )
 def get_teams(
-    token: str = Header(),
+    Authorization: str = Header(),
     db: Session = Depends(get_db)
 ):
-    decoded_token = decode_token(token=token)
+    decoded_token = decode_token(token=Authorization)
     return team_service.get_teams_for_current_user(decoded_token, db)
 
 
@@ -120,10 +120,10 @@ def get_teams(
 )
 def delete_team(
     id: UUID4,
-    token: str = Header(),
+    Authorization: str = Header(),
     db: Session = Depends(get_db)
 ):
-    _ = decode_token(token=token)
+    _ = decode_token(token=Authorization)
 
     _ = team_service.get_team(db, id=id)
     deleted_team = team_db_handler.delete(db=db, id=id)
