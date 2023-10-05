@@ -1,7 +1,8 @@
-from typing import Any, Annotated
+from typing import Any
+from backend.db_handler.team_member_handler import team_member_db_handler
 from pydantic import UUID4
 import logging
-from backend.db_handler.team_member_handler import team_member_db_handler
+
 from backend.schemas.response.team_member import TeamMemberResponseSchema
 from backend.schemas.response.user import DetailSchema
 
@@ -21,11 +22,11 @@ team_member_router = APIRouter(prefix="/api/v1", tags=["Team_Members"])
 async def invite_team_member(team_id: UUID4,
                              request_payload: TeamMemberSchema,
                              db: Session = Depends(get_db),
-                             token: str = Header()) -> dict:
+                             token: str = Header()) -> Any:
     decoded_token = decode_token(token=token)
-    if decoded_token:
-        response = await team_member_service.email_invitation(team_id, decoded_token, request_payload=request_payload, db=db)
-        return response
+
+    response = await team_member_service.email_invitation(team_id, decoded_token, request_payload=request_payload, db=db)
+    return response
 
 
 @team_member_router.patch("/teams/team-members/accept-invitation",
@@ -33,22 +34,22 @@ async def invite_team_member(team_id: UUID4,
 async def accept_invitation(
     db: Session = Depends(get_db),
     token: str = Header(),
-) -> dict:
+) -> Any:
     decoded_token = decode_token(token=token)
-    if decoded_token:
-        user = get_user_detail(decoded_token=decoded_token, db=db)
+    user = get_user_detail(decoded_token=decoded_token, db=db)
 
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The user with this email does not exist",
-            )
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The user with this email does not exist",
+        )
 
-        team_member_detail = team_member_service.get_by_team_id_and_email(db=db,
-                                                                          email=decoded_token['email'],
-                                                                          team_id=decoded_token['team_id'])
-        response = team_member_service.update_team_member_as_active(decoded_token,
-                                                                    team_member_detail,
-                                                                    db)
+    team_member_detail = team_member_service.get_by_team_id_and_email(db=db,
+                                                                      email=decoded_token['email'],
+                                                                      team_id=decoded_token['team_id'])
 
-        return response
+    decoded_token["is_activated"] = True
+
+    return team_member_db_handler.update(db=db,
+                                         db_obj=team_member_detail,
+                                         input_object=decoded_token)

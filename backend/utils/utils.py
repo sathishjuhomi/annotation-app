@@ -71,8 +71,6 @@ def decode_token(token: str):
         return decoded_token
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.DecodeError:
-        raise HTTPException(status_code=401, detail="Token is invalid")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

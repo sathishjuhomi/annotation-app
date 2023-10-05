@@ -33,30 +33,28 @@ class TeamService():
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 
     def get_teams_for_current_user(self, token: str, db: Session):
-        team_member_detail = get_user_detail(decoded_token=token, db=db)
-
         # Load teams based on the user's email
         teams = team_member_db_handler.load_all_by_column(
-            db=db, column_name='email', value=team_member_detail.email)
+            db=db, column_name='email', value=token["email"])
 
         if not teams:
             return {"detail": "No Teams Found"}
 
         # Construct a list of team details for the user
-        team_details = []
-        for team_member in teams:
-            team = team_member.team
-            team_detail = {
-                "team_id": team.id,
-                "team_name": team.team_name,
+        team_details = [
+            {
+                "team_id": team_member.team.id,
+                "team_name": team_member.team.team_name,
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             }
-            team_details.append(team_detail)
+            for team_member in teams
+        ]
         return team_details
 
-    def get_team_or_raise_404(self, db: Session, id: Optional[UUID4] = None, name: Optional[str] = None):
-        if id is not None:
+    @staticmethod
+    def get_team(db: Session, id: Optional[UUID4] = None, name: Optional[str] = None):
+        if id:
             team = team_db_handler.load_by_id(db=db, id=id)
             if not team:
                 raise HTTPException(
@@ -64,28 +62,29 @@ class TeamService():
                     detail="team not found"
                 )
             return team
-        if name is not None:
+        if name:
             team = team_db_handler.load_by_column(
                 db=db, column_name="team_name", value=name)
             if team:
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=status.HTTP_409_CONFLICT,
                     detail="Team name already exist"
                 )
-            return team
+            return None
 
     def get_team_members_detail_with_team_id(self, db: Session, id):
-        team = self.get_team_or_raise_404(db, id=id)
+        team = self.get_team(db, id=id)
         team_members = team_member_db_handler.load_all_by_column(
             db=db, column_name='team_id', value=id)
-        team_members_details = []
-        for team_member in team_members:
-            team_members_details.append({
+        team_members_details = [
+            {
                 "team_member_id": team_member.id,
                 "email": team_member.email,
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
-            })
+            }
+            for team_member in team_members
+        ]
         return {"team": team, "team_members": team_members_details}
 
 
