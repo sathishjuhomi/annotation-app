@@ -53,6 +53,18 @@ export interface TeamsProps {
   teams: any;
 }
 
-export interface CreateUpdateFormData {
-  teamname: string;
+export interface CreateUpdateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+  register: any;
+  errors: any;
+  open: boolean;
+  setOpen: any;
+  teamTitle: string;
 }
+

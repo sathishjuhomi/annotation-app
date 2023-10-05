@@ -23,7 +23,7 @@ import { TeamsProps } from '@/app/component/interfaces';
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from '@mui/material/CircularProgress';
 import Link from '@mui/material/Link';
-//To DO: import CreateUpdateForm from './CreateUpdateForm';
+import CreateUpdateForm from './CreateUpdateForm';
 
 const defaultTheme = createTheme();
 
@@ -46,10 +46,6 @@ export default function TeamList(
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Box className="mt-4 w-full mr-4">
       <Paper elevation={3} className="ml-2 mr-2">
@@ -64,83 +60,48 @@ export default function TeamList(
           >
             Create Team
           </Button>
-          {/*To Do <CreateUpdateForm
+        </div>
+        <CreateUpdateForm
           loading={loading}
           showMessage={showMessage}
           setShowMessage={setShowMessage}
           message={message}
           messageColor={messageColor}
-          onSubmit={submit}
-          formHandleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          formHandleSubmit={formHandleSubmit}
           register={register}
-          errors={errors}/> */}
-        </div>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Create New Team</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              You can collaborate and share with others by creating new team.
-            </DialogContentText>
-          </DialogContent>
-          <DialogContent>
-            <form noValidate>
-              <Grid item xs={25}>
-                <TextField
-                  autoFocus
-                  required
-                  margin="dense"
-                  id="teamname"
-                  label="Team Name"
-                  type="text"
-                  fullWidth
-                  {...register("teamname")}
-                  error={Boolean(errors?.teamname)}
-                  helperText={errors?.teamname ? errors?.teamname.message : " "}
-                />
-                <Button className="mr-1 text-black">
-                  <FolderIcon className="mr-1 text-black" />
-                  File Upload for avatar
-                </Button>
-              </Grid>
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button
-              type="submit"
-              onClick={formHandleSubmit(onSubmit)}
-            >
-              Create
-            </Button>
-          </DialogActions>
-        </Dialog>
+          errors={errors}
+          open={open}
+          setOpen={setOpen}
+          teamTitle="Create New Team"
+        />
         {teams.map((team: any) => (
-        <List>
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar className="bg-tertiary">{team.team_name[0]}</Avatar>
-            </ListItemAvatar>
-            <ListItemText className="mt-5 font-bold text-black">
-              {team.team_name}
-            </ListItemText>
-            <Button
-              className="ml-24 mt-1 mb-1 mr-2 text-black"
-              variant="outlined"
-            >
-              Switch
-            </Button>
-            <Button
-              className="ml-2 mt-1 mb-1 text-black"
-              variant="outlined"
+          <List>
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar className="bg-tertiary">{team.team_name[0]}</Avatar>
+              </ListItemAvatar>
+              <ListItemText className="mt-5 font-bold text-black">
+                {team.team_name}
+              </ListItemText>
+              <Button
+                className="ml-24 mt-1 mb-1 mr-2 text-black"
+                variant="outlined"
+              >
+                Switch
+              </Button>
+              <Button
+                className="ml-2 mt-1 mb-1 text-black"
+                variant="outlined"
 
-            > 
-            <Link href={`/teams/${team.team_id}`}>
-                View
-            </Link>
-            </Button>
-          </ListItem>
-          <Divider variant="inset" component="li" />
-        </List>
+              >
+                <Link href={`/teams/${team.team_id}`}>
+                  View
+                </Link>
+              </Button>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+          </List>
         ))}
       </Paper>
       {message !== "" ? (

@@ -11,13 +11,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import DialogContentText from '@mui/material/DialogContentText/DialogContentText';
 import FolderIcon from '@mui/icons-material/Folder';
-import { SignUpProps, TeamsProps } from '@/app/component/interfaces';
+import { CreateUpdateProps} from '@/app/component/interfaces';
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import * as Constants from "../../utils/constant";
 
-export default function CreateOrUpdate(
+export default function CreateOrUpdateForm(
     {
         loading,
         showMessage,
@@ -28,10 +29,11 @@ export default function CreateOrUpdate(
         formHandleSubmit,
         register,
         errors,
-    }: SignUpProps
+        open,
+        setOpen,
+        teamTitle,
+    }: CreateUpdateProps
 ) {
-    const [open, setOpen] = React.useState(false);
-
     const handleClose = () => {
         setOpen(false);
     };
@@ -39,10 +41,10 @@ export default function CreateOrUpdate(
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Create New Team</DialogTitle>
+                <DialogTitle>{teamTitle}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        You can collaborate and share with others by creating new team.
+                        You can collaborate and share with others by {teamTitle === Constants.CREATE_TEAM ? "creating" : "updating"} new team.
                     </DialogContentText>
                 </DialogContent>
                 <DialogContent>
@@ -55,6 +57,7 @@ export default function CreateOrUpdate(
                                 id="teamname"
                                 label="Team Name"
                                 type="text"
+                                defaultValue={teamTitle === Constants.CREATE_TEAM ? "" : teamTitle}
                                 fullWidth
                                 {...register("teamname")}
                                 error={Boolean(errors?.teamname)}
@@ -73,7 +76,7 @@ export default function CreateOrUpdate(
                         type="submit"
                         onClick={formHandleSubmit(onSubmit)}
                     >
-                        Create
+                        {teamTitle === Constants.CREATE_TEAM ? "Create" : "Update"}
                     </Button>
                 </DialogActions>
             </Dialog>

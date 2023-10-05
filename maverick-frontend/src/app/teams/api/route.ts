@@ -23,7 +23,6 @@ export async function createTeam(formData: TeamsFormData) {
         "Content-type": "application/json",
         "token": `${storedAccessToken}`,
      },
-
     });
     return res;
   }
@@ -40,14 +39,16 @@ export async function createTeam(formData: TeamsFormData) {
     return res;
 }
 
-export async function editTeamName(teamId: string) {
+export async function updateTeam(teamId: string, formData:TeamsFormData) {
   const storedAccessToken = sessionStorage.getItem('access_token');
-  const res = await fetch(`http://127.0.0.1:8000/api/v1/team/${teamId}`, {
+  const body = { team_name: formData.teamname };
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/teams/${teamId}`, {
       method: "PATCH",
       headers: {
           "Content-type": "application/json",
           "token": `${storedAccessToken}`,
       },
+      body: JSON.stringify(body),
   });
   return res;
 }

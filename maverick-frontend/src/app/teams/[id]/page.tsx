@@ -11,11 +11,18 @@ import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
 import { getTeamAndTeamMembers } from "../api/route";
-import { Avatar, Button, CircularProgress, ListItemAvatar } from "@mui/material";
+import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, ListItemAvatar } from "@mui/material";
 import ListItem from '@mui/material/ListItem';
 import * as Constants from "../../utils/constant";
 import Snackbar from "@/app/component/Snackbar";
-
+import CreateUpdateForm from "../component/CreateUpdateForm";
+import { useForm } from "react-hook-form";
+import teamSchema from "../validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { TeamsFormData } from "@/app/component/interfaces";
+import { updateTeam } from "../api/route";
+import DeleteIcon from '@mui/icons-material/Delete';
+import Fab from '@mui/material/Fab';
 
 const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [loading, setLoading] = React.useState(false);
@@ -37,14 +44,14 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     const data = response.detail;
                     setMessage(data);
                     setMessageColor(Constants.ERROR);
-                  }
-                  setLoading(false);
+                }
+                setLoading(false);
             })
             .catch((error) => {
                 setMessage(error);
                 setLoading(false);
                 setMessageColor(Constants.ERROR);
-              });
+            });
     }, []);
 
     const getTeamMemberRoles = (role: any) => {
@@ -57,9 +64,54 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
         }
         if (role['member'] === true) {
             roleNames.push("Member")
-        } 
-        return roleNames.join(', ')       
+        }
+        return roleNames.join(', ')
     }
+
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const handleClickOpenDelete = () => {
+        setOpenDelete(true);
+    };
+    const handleCloseDelete = () => {
+        setOpenDelete(false);
+    };
+    const { register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm(
+        { resolver: yupResolver(teamSchema) }
+    )
+    const submit = async (data: TeamsFormData) => {
+        setShowMessage(true);
+        setLoading(true);
+        await updateTeam(params.id, data)
+            .then(async (res) => {
+                const response = await res.json();
+                if (res.status === 200) {
+                    console.log("Update Team res", response);
+                    setMessage(Constants.TEAM_UPDATED_SUCCESSFULLY);
+                    setMessageColor(Constants.SUCCESS);
+                    location.reload()
+                } else {
+                    const data = response.detail;
+                    setMessage(data);
+                    setMessageColor(Constants.ERROR);
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                setMessage(error);
+                setLoading(false);
+                setMessageColor(Constants.ERROR);
+            });
+    };
 
     return (
         <Box className="flex">
@@ -75,12 +127,59 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                         <Typography className="mt-5 text-black text-xl font-bold">
                             {teamName}
                         </Typography>
+                        <Fab
+                            color="secondary"
+                            size="small"
+                            className="ml-auto mr-2 mt-1 bg-primary"
+                            onClick={handleClickOpenDelete}
+                        >
+                            <DeleteIcon />
+                        </Fab>
+                        <Dialog open={openDelete} onClose={handleCloseDelete}>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure You want to delete the Team {teamName} ?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    className="bg-primary"
+                                // onClick={}
+                                >
+                                    Yes
+                                </Button>
+                                <Button
+                                    onClick={handleCloseDelete}
+                                    variant="contained"
+                                    className="bg-primary"
+                                >
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                         <Button
-                            className="ml-auto mt-1 mb-1 text-white bg-primary"
+                            className="mt-1 mb-1 text-white bg-primary"
                             variant="contained"
+                            onClick={handleClickOpen}
                         >
                             Edit Team
                         </Button>
+                        <CreateUpdateForm
+                            loading={loading}
+                            showMessage={showMessage}
+                            setShowMessage={setShowMessage}
+                            message={message}
+                            messageColor={messageColor}
+                            onSubmit={submit}
+                            formHandleSubmit={handleSubmit}
+                            register={register}
+                            errors={errors}
+                            open={open}
+                            setOpen={setOpen}
+                            teamTitle={teamName}
+                        />
                     </ListItem>
                     <Table aria-label="simple table">
                         <TableHead>
@@ -123,17 +222,17 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     </Button>
                 </Paper>
                 {message !== "" ? (
-                <Snackbar
-                    showMessage={showMessage}
-                    setShowMessage={setShowMessage}
-                    message={message}
-                    messageColor={messageColor}
-                />
+                    <Snackbar
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        message={message}
+                        messageColor={messageColor}
+                    />
                 ) : null}
                 {loading ? (
-                <Box>
-                    <CircularProgress />
-                </Box>
+                    <Box>
+                        <CircularProgress />
+                    </Box>
                 ) : null}
             </Box>
         </Box>
