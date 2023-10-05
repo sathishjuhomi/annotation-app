@@ -24,7 +24,7 @@ class TeamMemberService():
             "is_activated": True,
             "is_declined": False
         }
-        return team_member_db_handler.create(db=db, input_object=team_member_data)
+        team_member_db_handler.create(db=db, input_object=team_member_data)
 
     @staticmethod
     def team_member_data(member_detail: dict, invited_by_id: UUID4) -> dict:
@@ -39,12 +39,12 @@ class TeamMemberService():
         }
         return team_member_data
 
-    async def email_invitation(self, team_id, token, request_payload, db: Session):
+    async def email_invitation(self, team_id, decoded_token, request_payload, db: Session):
         try:
             member_detail = request_payload.model_dump()
 
             # Get the user ID of the inviter from the token
-            invitor, _ = get_user_detail(token, db)
+            invitor = get_user_detail(decoded_token, db)
             invitor_detail = team_member_db_handler.load_by_column(
                 db=db, column_name="email", value=invitor.email)
 
@@ -55,7 +55,6 @@ class TeamMemberService():
 
             member_detail['team_id'] = str(team_id)
             member_detail['is_activated'] = False
-            member_detail.pop("token", None)
 
             # Create an access token for the invitation
             invitation_token = create_access_token(member_detail)
@@ -77,10 +76,9 @@ class TeamMemberService():
         except Exception as e:
             return {"error": str(e)}
 
-    def update_team_member_as_active(self, token: str,
+    def update_team_member_as_active(self, decoded_token: dict,
                                      team_member: TeamMembers,
                                      db: Session):
-        user, decoded_token = get_user_detail(token=token, db=db)
         decoded_token["is_activated"] = True
 
         return team_member_db_handler.update(db=db,

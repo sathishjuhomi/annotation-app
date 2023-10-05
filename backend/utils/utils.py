@@ -4,6 +4,7 @@ from typing import Final
 from backend.db_handler.user_handler import user_db_handler
 from jose import jwt
 from passlib.context import CryptContext
+from fastapi import HTTPException
 
 from backend.config import get_settings
 
@@ -68,16 +69,18 @@ def generate_random_oauth_password(length=20):
     return token.translate(translation)
 
 
-def get_user_detail(token: str, db) -> int:
+def decode_token(token: str):
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    except jwt.JWTError as e:
-        return {"detail": "Authentication error: Your Invitation got expired, ask admin to resend invitation"}
+        return decoded_token
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.DecodeError:
+        raise HTTPException(status_code=401, detail="Token is invalid")
 
+
+def get_user_detail(decoded_token: str, db) -> int:
     email = decoded_token["email"]
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)
-    print('user_detail ', user_detail)
-    print()
-    print('decoded_token ', decoded_token)
-    return user_detail, decoded_token
+    return user_detail

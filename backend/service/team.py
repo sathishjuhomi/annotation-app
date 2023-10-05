@@ -12,27 +12,26 @@ from backend.models.team import Teams
 
 class TeamService():
     @staticmethod
-    def preprocess_team_data(token, request_payload, db):
+    def preprocess_team_data(decoded_token, request_payload, db):
         team = request_payload.model_dump()
-        creater_detail, decoded_token = get_user_detail(token, db)
+        creater_detail = get_user_detail(decoded_token, db)
         team["created_by_id"] = creater_detail.id
         team["creator_email"] = creater_detail.email
-        # team.pop("token", None)
         return team
 
-    def create_team(self, token, request_payload: TeamSchema, db: Session):
-        team_data = self.preprocess_team_data(token, request_payload, db)
+    def create_team(self, decoded_token, request_payload: TeamSchema, db: Session):
+        team_data = self.preprocess_team_data(decoded_token, request_payload, db)
         team_data["id"] = uuid.uuid4()
         creator_email = team_data["creator_email"]
         team_data.pop("creator_email", None)
         return team_db_handler.create(db, input_object=team_data), creator_email
 
-    def update_team(self, token, request_payload: TeamSchema, team: Teams, db: Session):
-        team_data = self.preprocess_team_data(token, request_payload, db)
+    def update_team(self, decoded_token, request_payload: TeamSchema, team: Teams, db: Session):
+        team_data = self.preprocess_team_data(decoded_token, request_payload, db)
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 
-    def get_teams_for_logged_in_user(self, token: str, db: Session):
-        team_member_detail, decoded_token = get_user_detail(token=token, db=db)
+    def get_teams_for_current_user(self, token: str, db: Session):
+        team_member_detail = get_user_detail(decoded_token=token, db=db)
 
         # Load teams based on the user's email
         teams = team_member_db_handler.load_all_by_column(
