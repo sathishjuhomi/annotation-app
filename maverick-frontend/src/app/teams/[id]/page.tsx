@@ -24,7 +24,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("")
     const [teamMembers, setTeamMembers] = React.useState([])
-    console.log("Team ID: ", params.id);
     useEffect(() => {
         getTeamAndTeamMembers(params.id)
             .then(async (res) => {
@@ -88,11 +87,10 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                             <TableRow>
                                 <TableCell className="text-left font-bold text-lg">Member</TableCell>
                                 <TableCell className="text-right font-bold text-lg">Role</TableCell>
-                                <TableCell className="text-right font-bold text-lg">Action</TableCell>
+                                <TableCell className="text-right font-bold text-lg"> </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-
                             {teamMembers.map((teamMember) => (
                                 <TableRow
                                     key={teamMember['team_member_id']}

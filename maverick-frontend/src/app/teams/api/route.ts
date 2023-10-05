@@ -39,3 +39,15 @@ export async function createTeam(formData: TeamsFormData) {
     });
     return res;
 }
+
+export async function editTeamName(teamId: string) {
+  const storedAccessToken = sessionStorage.getItem('access_token');
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/team/${teamId}`, {
+      method: "PATCH",
+      headers: {
+          "Content-type": "application/json",
+          "token": `${storedAccessToken}`,
+      },
+  });
+  return res;
+}

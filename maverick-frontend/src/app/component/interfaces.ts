@@ -52,3 +52,7 @@ export interface TeamsProps {
   errors: any;
   teams: any;
 }
+
+export interface CreateUpdateFormData {
+  teamname: string;
+}
