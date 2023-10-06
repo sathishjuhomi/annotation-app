@@ -2,7 +2,7 @@ from typing import List
 import logging
 from backend.db_handler.team_member_handler import team_member_db_handler
 from pydantic import UUID4
-import copy
+import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
@@ -48,7 +48,8 @@ async def create_team(
         created_team, creator_email = team_service.create_team(
             decoded_token, request_payload=request_payload, db=db)
         # Add the creator as a team member if the team was successfully created
-        team_member_data = team_member_service.add_team_member(team_id=created_team.id,
+        id = uuid.uuid4()
+        team_member_data = team_member_service.add_team_member(id=id,team_id=created_team.id,
                                                                email=creator_email,
                                                                invited_by_id=None,
                                                                role={
@@ -121,15 +122,17 @@ def get_teams(
     description="Delete a team by ID",
     response_model=DeleteTeamResponseSchema
 )
-def delete_team(
+async def delete_team(
     id: UUID4,
     token: str = Header(),
     db: Session = Depends(get_db)
 ):
-    _ = decode_token(token=token)
+    decoded_token = decode_token(token=token)
 
-    _ = team_service.get_team(db, id=id)
-    deleted_team = team_db_handler.delete(db=db, id=id)
+    team = team_service.get_team(db, id=id)
+    team_member_service.delete_team_members(db, id, deleter_id=decoded_token["id"])
+    deleted_team = await team_service.delete_team(team, db, decoded_token["id"])
+    # deleted_team = team_db_handler.delete(db=db, id=id)
     return {
         "detail": "Team deleted successfully",
         "deleted_team": deleted_team

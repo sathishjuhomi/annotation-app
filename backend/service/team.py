@@ -33,7 +33,8 @@ class TeamService():
             decoded_token, request_payload, db)
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 
-    def delete_team(self, team: Teams, db: Session, deleter_id=id):
+    @staticmethod
+    async def delete_team(team: Teams, db: Session, deleter_id=id):
         update_data = {
             "is_deleted": True,
             "t_delete": datetime.now(),
@@ -58,7 +59,8 @@ class TeamService():
                 "roles": team_member.roles,
             }
             for team_member in teams
-            if team_member.is_deleted == False            
+            if (team_member.is_deleted == False) and
+            (team_member.is_declined == False)
         ]
         return team_details
 
@@ -93,8 +95,9 @@ class TeamService():
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             }
-            for team_member in team_members 
-            if team_member.is_deleted == False
+            for team_member in team_members
+            if (team_member.is_deleted == False) and
+            (team_member.is_declined == False)
         ]
         return {"team": team, "team_members": team_members_details}
 

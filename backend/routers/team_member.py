@@ -72,3 +72,21 @@ async def delete_team_member(
     """
     decoded_token = decode_token(token=token)
     await team_member_service.delete_member(decoded_token, id, db=db)
+
+
+@team_member_router.patch("/teams/team-members/decline-invitation",
+                          response_model=TeamMemberResponseSchema)
+async def decline_invitation(
+    db: Session = Depends(get_db),
+    token: str = Header(),
+) -> Any:
+    decoded_token = decode_token(token=token)
+    team_member_detail = team_member_db_handler.load_by_column(db=db,
+                                                               column_name="id",
+                                                               value=decoded_token['id'])
+
+    decline = {"is_declined": True}
+
+    return team_member_db_handler.update(db=db,
+                                         db_obj=team_member_detail,
+                                         input_object=decline)

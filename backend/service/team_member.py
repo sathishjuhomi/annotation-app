@@ -37,31 +37,46 @@ class TeamMemberService():
                 'Only Admin or Owner of the team have access to modify the team')
 
     async def email_invitation(self, team_id, decoded_token, request_payload, db: Session):
-        try:
-            member_detail = request_payload.model_dump()
 
+        try:
             # Check if the inviter has 'owner' or 'admin' roles
             self.role_validation(decoded_token, db)
 
-            id = uuid.uuid4()
-            # Create team member data for database insertion
+            member_detail = request_payload.model_dump()
 
-            team_member_data = self.add_team_member(id=id,
-                                                    team_id=team_id,
-                                                    email=member_detail["email"],
-                                                    invited_by_id=decoded_token["id"],
-                                                    role=member_detail["role"],
-                                                    is_activated=False,
-                                                    is_declined=False)
+            member = db.query(TeamMembers).filter_by(
+                team_id=team_id, email=member_detail["email"]).first()
+            if member:
+                update_declined_flag = {
+                    "is_declined": False, "invited_by_id": decoded_token["id"]}
 
-            to_create_access_token = {
-                'id': str(id), 'email': member_detail["email"]}
+                team_member_db_handler.update(db=db,
+                                              db_obj=member,
+                                              input_object=update_declined_flag)
+
+                to_create_access_token = {
+                    'id': str(member.id), 'email': member_detail["email"]}
+
+            else:
+                id = uuid.uuid4()
+                # Create team member data for database insertion
+
+                team_member_data = self.add_team_member(id=id,
+                                                        team_id=team_id,
+                                                        email=member_detail["email"],
+                                                        invited_by_id=decoded_token["id"],
+                                                        role=member_detail["role"],
+                                                        is_activated=False,
+                                                        is_declined=False)
+                # Insert the team member data into the database
+                _ = team_member_db_handler.create(
+                    db=db, input_object=team_member_data)
+
+                to_create_access_token = {
+                    'id': str(id), 'email': member_detail["email"]}
+
             # Create an access token for the invitation
             invitation_token = create_access_token(to_create_access_token)
-
-            # Insert the team member data into the database
-            _ = team_member_db_handler.create(
-                db=db, input_object=team_member_data)
 
             # Get the email from the request payload and send an invitation email
             email = member_detail["email"]
