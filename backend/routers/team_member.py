@@ -24,7 +24,6 @@ async def invite_team_member(team_id: UUID4,
                              db: Session = Depends(get_db),
                              token: str = Header()) -> Any:
     decoded_token = decode_token(token=token)
-
     response = await team_member_service.email_invitation(team_id, decoded_token, request_payload=request_payload, db=db)
     return response
 
@@ -44,12 +43,11 @@ async def accept_invitation(
             detail="The user with this email does not exist",
         )
 
-    team_member_detail = team_member_service.get_by_team_id_and_email(db=db,
-                                                                      email=decoded_token['email'],
-                                                                      team_id=decoded_token['team_id'])
-
-    decoded_token["is_activated"] = True
+    team_member_detail = team_member_db_handler.load_by_column(db=db,
+                                                               column_name="id",
+                                                               value=decoded_token['id'])
+    activate = {"is_activated": True}
 
     return team_member_db_handler.update(db=db,
                                          db_obj=team_member_detail,
-                                         input_object=decoded_token)
+                                         input_object=activate)

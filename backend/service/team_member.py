@@ -8,9 +8,9 @@ from backend.models.team_member import TeamMembers
 
 class TeamMemberService():
     @staticmethod
-    def add_team_member(team_id, email, invited_by_id, role: dict, is_activated: bool, is_declined: bool):
+    def add_team_member(id, team_id, email, invited_by_id, role: dict, is_activated: bool, is_declined: bool):
         team_member_data = {
-            "id": uuid.uuid4(),
+            "id": id,
             "team_id": team_id,
             "email": email,
             "invited_by_id": invited_by_id,
@@ -19,10 +19,6 @@ class TeamMemberService():
             "is_declined": is_declined
         }
         return team_member_data
-
-    @staticmethod
-    def get_by_team_id_and_email(db: Session, team_id: str, email: str):
-        return db.query(TeamMembers).filter_by(team_id=team_id, email=email).first()
 
     async def email_invitation(self, team_id, decoded_token, request_payload, db: Session):
         try:
@@ -36,18 +32,20 @@ class TeamMemberService():
                 raise Exception(
                     'Only Admin or Owner of the team can invite a team member')
 
+            id = uuid.uuid4()
             # Create team member data for database insertion
-            team_member_data = team_member_service.add_team_member(team_id=team_id,
+            team_member_data = team_member_service.add_team_member(id=id,
+                                                                   team_id=team_id,
                                                                    email=member_detail["email"],
                                                                    invited_by_id=decoded_token["id"],
                                                                    role=member_detail["role"],
                                                                    is_activated=False,
                                                                    is_declined=False)
 
-            member_detail['team_id'] = str(team_id)
-            member_detail.pop('role', None)
+            to_create_access_token = {
+                'id': str(id), 'email': member_detail["email"]}
             # Create an access token for the invitation
-            invitation_token = create_access_token(member_detail)
+            invitation_token = create_access_token(to_create_access_token)
 
             # Insert the team member data into the database
             _ = team_member_db_handler.create(
