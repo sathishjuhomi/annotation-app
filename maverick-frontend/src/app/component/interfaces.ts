@@ -85,5 +85,5 @@ export interface InviteATeamMemberProps{
 export interface InviteATeamMemberFormData {
   email: string;
   admin: boolean;
-  member: any;
+  member: boolean;
 }

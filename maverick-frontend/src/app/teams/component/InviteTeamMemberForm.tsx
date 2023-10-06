@@ -49,7 +49,7 @@ export default function inviteTeamMember(
     };
 
     const { owner, admin, member } = state;
-    const error = [owner, admin, member].filter((v) => v).length !== 1;
+    // const error = [owner, admin, member].filter((v) => v).length !== 1;
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
@@ -67,10 +67,9 @@ export default function inviteTeamMember(
                         name="email"
                         variant='outlined'
                         placeholder="Enter invite member's mail Id"
-                        // TO DO:
-                        // {...register("email")}
-                        // error={Boolean(errors?.email)}
-                        // helperText={errors?.email ? errors?.email.message : " "}
+                        {...register("email")}
+                        error={Boolean(errors?.email)}
+                        helperText={errors?.email ? errors?.email.message : " "}
                     />
                     <br></br><br></br>
                     <FormControl component="fieldset" variant="standard">
@@ -82,9 +81,9 @@ export default function inviteTeamMember(
                                 }
                                 label="Admin"
                                 // TO DO:
-                                // {...register("admin")}
-                                // error={Boolean(errors?.admin)}
-                                // helperText={admin?.admin ? errors?.admin.message : " "}
+                                {...register("admin")}
+                                error={Boolean(errors?.admin)}
+                                helperText={admin?.admin ? errors?.admin.message : " "}
                             />
                             <FormControlLabel
                                 control={
@@ -92,9 +91,9 @@ export default function inviteTeamMember(
                                 }
                                 label="Member"
                                 // TO DO:
-                                // {...register("member")}
-                                // error={Boolean(errors?.member)}
-                                // helperText={member?.member ? errors?.member.message : " "}
+                                {...register("member")}
+                                error={Boolean(errors?.member)}
+                                helperText={member?.member ? errors?.member.message : " "}
                             />
                         </FormGroup>
                     </FormControl>
