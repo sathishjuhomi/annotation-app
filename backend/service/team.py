@@ -58,6 +58,7 @@ class TeamService():
                 "roles": team_member.roles,
             }
             for team_member in teams
+            if team_member.is_deleted == False            
         ]
         return team_details
 
@@ -92,7 +93,8 @@ class TeamService():
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
             }
-            for team_member in team_members
+            for team_member in team_members 
+            if team_member.is_deleted == False
         ]
         return {"team": team, "team_members": team_members_details}
 
