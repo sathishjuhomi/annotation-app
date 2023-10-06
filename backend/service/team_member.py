@@ -27,6 +27,16 @@ class TeamMemberService():
         return team_member_data
 
     @staticmethod
+    def role_validation(decoded_token, db: Session):
+        team_member = team_member_db_handler.load_by_column(
+            db=db, column_name="email", value=decoded_token["email"])
+
+        # Check if the inviter has 'owner' or 'admin' roles
+        if not (team_member.roles['owner'] or team_member.roles['admin']):
+            raise Exception(
+                'Only Admin or Owner of the team have access to modify the team')
+
+    @staticmethod
     def get_by_team_id_and_email(db: Session, team_id: str, email: str):
         return db.query(TeamMembers).filter_by(team_id=team_id, email=email).first()
 
@@ -34,21 +44,16 @@ class TeamMemberService():
         try:
             member_detail = request_payload.model_dump()
 
-            invitor_detail = team_member_db_handler.load_by_column(
-                db=db, column_name="email", value=decoded_token["email"])
-
             # Check if the inviter has 'owner' or 'admin' roles
-            if not (invitor_detail.roles['owner'] or invitor_detail.roles['admin']):
-                raise Exception(
-                    'Only Admin or Owner of the team can invite a team member')
+            self.role_validation(decoded_token, db)
 
             # Create team member data for database insertion
-            team_member_data = team_member_service.add_team_member(team_id=team_id,
-                                                                   email=member_detail["email"],
-                                                                   invited_by_id=decoded_token["id"],
-                                                                   role=member_detail["role"],
-                                                                   is_activated=False,
-                                                                   is_declined=False)
+            team_member_data = self.add_team_member(team_id=team_id,
+                                                    email=member_detail["email"],
+                                                    invited_by_id=decoded_token["id"],
+                                                    role=member_detail["role"],
+                                                    is_activated=False,
+                                                    is_declined=False)
 
             member_detail['team_id'] = str(team_id)
             member_detail.pop('role', None)
@@ -94,8 +99,7 @@ class TeamMemberService():
         _ = team_member_db_handler.bulk_update(
             db=db, db_objs=db_objs, input_data_list=input_data_list)
 
-    @staticmethod
-    async def delete_team_member(decoded_token, team_id, id, db):
+    async def delete_member(self, decoded_token, id, db):
         """
         validate the token
         check the current user role, owner or admin
@@ -105,13 +109,8 @@ class TeamMemberService():
           key deleted_by_id and value current user id
         call the update method
         """
-        deleter_detail = team_member_db_handler.load_by_column(
-            db=db, column_name="email", value=decoded_token["email"])
-
         # Check if the inviter has 'owner' or 'admin' roles
-        if not (deleter_detail.roles['owner'] or deleter_detail.roles['admin']):
-            raise Exception(
-                'Only Admin or Owner of the team can delete a team member')
+        self.role_validation(decoded_token, db)
 
         team_member_detail = team_member_db_handler.load_by_column(
             db=db, column_name="id", value=id)
@@ -126,8 +125,8 @@ class TeamMemberService():
         team_member_db_handler.update(db=db,
                                       db_obj=team_member_detail,
                                       input_object=member_detail)
-        detail_message = f"{team_member_detail.email} deleted successfully"
-        return DetailSchema(detail=detail_message)
+
+        return {"detail": f"{team_member_detail.email} deleted successfully"}
 
 
 team_member_service = TeamMemberService()

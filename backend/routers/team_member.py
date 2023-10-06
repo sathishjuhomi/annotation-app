@@ -34,7 +34,7 @@ async def invite_team_member(team_id: UUID4,
 async def accept_invitation(
     db: Session = Depends(get_db),
     token: str = Header(),
-) -> Any:
+) -> dict:
     decoded_token = decode_token(token=token)
     user = get_user_detail(decoded_token=decoded_token, db=db)
 
@@ -56,21 +56,22 @@ async def accept_invitation(
 
 
 @team_member_router.patch("/teams/{team_id}/team-members/{id}/delete",
-                          response_model= DetailSchema)
+                          response_model=DetailSchema)
 async def delete_team_member(
     team_id: UUID4,
     id: UUID4,
     db: Session = Depends(get_db),
     token: str = Header(),
 ) -> Any:
-    
+
     """
     validate the token
     check the current user role, owner or admin
     If owner or admin, get the team member with member id from team member table
     or raise exception
-    create a dict with key is_deleted and value True, key deleted_by_id and value current user id
+    create a dict with key is_deleted and value True,
+        key deleted_by_id and value current user id
     call the update method
     """
     decoded_token = decode_token(token=token)
-    team_member_service.delete_team_member(decoded_token, team_id, id, db=db)
+    await team_member_service.delete_member(decoded_token, id, db=db)
