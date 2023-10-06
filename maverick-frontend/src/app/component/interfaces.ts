@@ -68,3 +68,22 @@ export interface CreateUpdateProps {
   teamTitle: string;
 }
 
+export interface InviteATeamMemberProps{
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmitInvite: any;
+  register: any;
+  errors: any;
+  open: boolean;
+  setOpen: any;
+}
+
+export interface InviteATeamMemberFormData {
+  email: string;
+  admin: boolean;
+  member: any;
+}

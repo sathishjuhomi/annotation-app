@@ -10,16 +10,18 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
-import { deleteTeam, getTeamAndTeamMembers } from "../api/route";
+import { deleteTeam, getTeamAndTeamMembers, inviteATeamMember } from "../api/route";
 import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, ListItemAvatar } from "@mui/material";
 import ListItem from '@mui/material/ListItem';
 import * as Constants from "../../utils/constant";
 import Snackbar from "@/app/component/Snackbar";
 import CreateUpdateForm from "../component/CreateUpdateForm";
+import InviteTeamMember from "../component/InviteTeamMemberForm";
 import { useForm } from "react-hook-form";
 import teamSchema from "../validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TeamsFormData } from "@/app/component/interfaces";
+import { InviteATeamMemberFormData } from "@/app/component/interfaces";
 import { updateTeam } from "../api/route";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -42,6 +44,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     const teamMembers = response.team_members;
                     setTeamName(teamNameValue);
                     setTeamMembers(teamMembers);
+                    router.push(`/teams/${params.id}`);
                 } else {
                     const data = response.detail;
                     setMessage(data);
@@ -95,7 +98,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
                     setMessageColor(Constants.SUCCESS);
                     router.push('/teams');
-                } else{
+                } else {
                     const data = response.detail;
                     setMessage(data);
                     setMessageColor(Constants.ERROR);
@@ -137,6 +140,35 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                 setMessageColor(Constants.ERROR);
             });
     };
+
+    const [openInvite, setOpenInvite] = React.useState(false);
+    const handleClickOpenInvite = () => {
+        setOpenInvite(true);
+    };
+
+    const onsubmit = async (data: InviteATeamMemberFormData) => {
+        setShowMessage(true);
+        setLoading(true);
+        await inviteATeamMember(params.id, data)
+            .then(async (res) => {
+                const response = await res.json();
+                if (res.status === 200) {
+                    setMessage(Constants.INVITED_SUCCESSFULLY);
+                    setMessageColor(Constants.SUCCESS);
+                } else {
+                    const data = response.detail;
+                    setMessage(data);
+                    setMessageColor(Constants.ERROR);
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                setMessage(error);
+                setLoading(false);
+                setMessageColor(Constants.ERROR);
+            });
+    };
+
 
     return (
         <Box className="flex">
@@ -241,9 +273,23 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     <Button
                         className="ml-3 mt-1 mb-4 text-white font-bold bg-tertiary"
                         variant="contained"
+                        onClick={handleClickOpenInvite}
                     >
                         Invite A Member
                     </Button>
+                    <InviteTeamMember
+                        loading={loading}
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        message={message}
+                        messageColor={messageColor}
+                        onSubmit={onsubmit}
+                        formHandleSubmitInvite={handleSubmit}
+                        register={register}
+                        errors={errors}
+                        open={openInvite}
+                        setOpen={setOpenInvite}
+                    />
                 </Paper>
                 {message !== "" ? (
                     <Snackbar
