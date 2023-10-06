@@ -18,7 +18,7 @@ import Snackbar from "@/app/component/Snackbar";
 import CreateUpdateForm from "../component/CreateUpdateForm";
 import InviteTeamMember from "../component/InviteTeamMemberForm";
 import { useForm } from "react-hook-form";
-import teamSchema from "../validation";
+import { createOrUpdateTeamSchema, inviteTeamMemberSchema } from "../validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TeamsFormData } from "@/app/component/interfaces";
 import { InviteATeamMemberFormData } from "@/app/component/interfaces";
@@ -111,12 +111,21 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                 setMessageColor(Constants.ERROR);
             });
     }
-    const { register,
-        handleSubmit,
-        formState: { errors },
+
+    const { register: createOrUpdateRegister,
+        handleSubmit: createOrUpdateTeam,
+        formState: { errors: createOrUpdateTeamErrors },
     } = useForm(
-        { resolver: yupResolver(teamSchema) }
+        { resolver: yupResolver(createOrUpdateTeamSchema) }
     )
+
+    const { register: inviteTeamMemberRegister,
+        handleSubmit: inviteTeamMember,
+        formState: { errors: inviteTeamMemberErrors },
+    } = useForm(
+        { resolver: yupResolver(inviteTeamMemberSchema) }
+    )
+
     const submit = async (data: TeamsFormData) => {
         setShowMessage(true);
         setLoading(true);
@@ -146,7 +155,8 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
         setOpenInvite(true);
     };
 
-    const onsubmit = async (data: InviteATeamMemberFormData) => {
+    const onInviteTeamMember = async (data: InviteATeamMemberFormData) => {
+        console.log("Invite Team Member Response: ");
         setShowMessage(true);
         setLoading(true);
         await inviteATeamMember(params.id, data)
@@ -199,9 +209,9 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                             message={message}
                             messageColor={messageColor}
                             onSubmit={submit}
-                            formHandleSubmit={handleSubmit}
-                            register={register}
-                            errors={errors}
+                            formHandleSubmit={createOrUpdateTeam}
+                            register={createOrUpdateRegister}
+                            errors={createOrUpdateTeamErrors}
                             open={open}
                             setOpen={setOpen}
                             teamTitle={teamName}
@@ -283,10 +293,10 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                         setShowMessage={setShowMessage}
                         message={message}
                         messageColor={messageColor}
-                        onSubmit={onsubmit}
-                        formHandleSubmitInvite={handleSubmit}
-                        register={register}
-                        errors={errors}
+                        onSubmit={onInviteTeamMember}
+                        formHandleSubmitInvite={inviteTeamMember}
+                        register={inviteTeamMemberRegister}
+                        errors={inviteTeamMemberErrors}
                         open={openInvite}
                         setOpen={setOpenInvite}
                     />

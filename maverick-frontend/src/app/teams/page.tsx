@@ -6,7 +6,7 @@ import NavBar from "../component/NavBar";
 import Box from "@mui/material/Box";
 import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
-import registerSchema from "./validation";
+import {createOrUpdateTeamSchema } from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Constants from "../utils/constant";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ const Teams = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(registerSchema),
+    resolver: yupResolver(createOrUpdateTeamSchema),
   });
   const router = useRouter();
 

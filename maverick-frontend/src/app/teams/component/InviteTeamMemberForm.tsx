@@ -13,7 +13,7 @@ import { CircularProgress, DialogContent, DialogContentText, DialogTitle } from 
 import { InviteATeamMemberProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
 
-export default function inviteTeamMember(
+export default function InviteTeamMember(
     {
         loading,
         showMessage,
@@ -35,21 +35,37 @@ export default function inviteTeamMember(
     const handleCloseInvite = () => {
         setOpen(false);
     };
-    const [state, setState] = React.useState({
-        owner: false,
+
+    // Things which tried
+    // const initialRolesState = [
+    //     { name: "admin", checked: false },
+    //     { name: "member", checked: false },
+    // ];
+
+    // const [roles, setRoles] = React.useState(initialRolesState);
+
+
+    const [role, setRole] = React.useState({
         admin: false,
-        member: true,
+        member: false,
     });
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
+        setRole({
+            ...role,
             [event.target.name]: event.target.checked,
         });
     };
 
-    const { owner, admin, member } = state;
-    // const error = [owner, admin, member].filter((v) => v).length !== 1;
+    // Things to do
+    // const handleChange = (name) => (event) => {
+    //     const updatedRoles = roles.map((role) =>
+    //         role.name === name ? { ...role, checked: event.target.checked } : role
+    //     );
+    //     setRoles(updatedRoles);
+    // };
+
+    const { admin, member } = role;
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
@@ -80,20 +96,18 @@ export default function inviteTeamMember(
                                     <Checkbox checked={admin} onChange={handleChange} name="admin" />
                                 }
                                 label="Admin"
-                                // TO DO:
                                 {...register("admin")}
                                 error={Boolean(errors?.admin)}
-                                helperText={admin?.admin ? errors?.admin.message : " "}
+                                helperText={admin? errors?.admin.message : " "}
                             />
                             <FormControlLabel
                                 control={
                                     <Checkbox checked={member} onChange={handleChange} name="member" />
                                 }
                                 label="Member"
-                                // TO DO:
                                 {...register("member")}
                                 error={Boolean(errors?.member)}
-                                helperText={member?.member ? errors?.member.message : " "}
+                                helperText={member? errors?.member.message : " "}
                             />
                         </FormGroup>
                     </FormControl>
@@ -103,6 +117,14 @@ export default function inviteTeamMember(
                         className='text-white bg-primary'
                         variant='contained'
                         type='submit'
+                        // onClick={() => {
+                        // const formData = {
+                        //     email: register.email.value,
+                        //     admin,
+                        //     member,
+                        // };
+                        // onSubmit(formData);
+                        // }}
                         onClick={formHandleSubmitInvite(onSubmit)}
                     >
                         Send Invitation
