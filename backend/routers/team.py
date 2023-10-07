@@ -15,10 +15,8 @@ from backend.schemas.response.team import (TeamResponseSchema,
                                            GetTeamMembersByTeamIdResponseSchema)
 from backend.models.database import get_db
 from backend.service.team import team_service
-from backend.db_handler.team_handler import team_db_handler
 from backend.service.team_member import team_member_service
 from backend.utils.utils import decode_token
-from backend.models.team import Teams
 
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
@@ -49,15 +47,15 @@ async def create_team(
             decoded_token, request_payload=request_payload, db=db)
         # Add the creator as a team member if the team was successfully created
         id = uuid.uuid4()
-        team_member_data = team_member_service.add_team_member(id=id,team_id=created_team.id,
+        team_member_data = team_member_service.add_team_member(id=id,
+                                                               team_id=created_team.id,
                                                                email=creator_email,
                                                                invited_by_id=None,
                                                                role={
                                                                    "owner": True,
                                                                    "admin": True,
                                                                    "member": False},
-                                                               is_activated=True,
-                                                               is_declined=False)
+                                                               is_activated=True)
         team_member_db_handler.create(db=db, input_object=team_member_data)
         return created_team
     except Exception as e:
@@ -72,6 +70,12 @@ async def create_team(
     description="This API endpoint allows users to update team",
     response_model=TeamResponseSchema,
     responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "Team not found"
+        },
+        status.HTTP_409_CONFLICT: {
+            "description": "Team name already exists"
+        },
         status.HTTP_500_INTERNAL_SERVER_ERROR: {
             "description": "Internal Server Error"
         }
@@ -85,7 +89,7 @@ def update_team(
 ):
     decoded_token = decode_token(token=token)
 
-    team = team_service.get_team(db, id=id)
+    team = team_service.get_team(db, id=id, name=request_payload.team_name)
     return team_service.update_team(decoded_token, request_payload, team, db)
 
 
@@ -131,7 +135,7 @@ async def delete_team(
 
     team = team_service.get_team(db, id=id)
     team_member_service.delete_team_members(db, id, deleter_id=decoded_token["id"])
-    deleted_team = await team_service.delete_team(team, db, decoded_token["id"])
+    deleted_team = await team_service.delete_teams(team, db, decoded_token["id"])
     # deleted_team = team_db_handler.delete(db=db, id=id)
     return {
         "detail": "Team deleted successfully",

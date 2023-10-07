@@ -1,10 +1,7 @@
-from typing import List
+from typing import Optional
 import uuid
-from backend.schemas.response.team import TeamResponseSchema
 from datetime import datetime
-from backend.schemas.response.user import DetailSchema
 
-from pydantic import UUID4
 from sqlalchemy.orm import Session
 from backend.utils.utils import create_access_token
 from backend.utils.email_team_member import send_invitation_email
@@ -14,7 +11,10 @@ from backend.models.team_member import TeamMembers
 
 class TeamMemberService():
     @staticmethod
-    def add_team_member(id, team_id, email, invited_by_id, role: dict, is_activated: bool, is_declined: bool):
+    def add_team_member(id, team_id, email, invited_by_id,
+                        role: dict,
+                        is_activated: Optional[bool] = False,
+                        is_declined: Optional[bool] = False):
         team_member_data = {
             "id": id,
             "team_id": team_id,
@@ -65,9 +65,7 @@ class TeamMemberService():
                                                         team_id=team_id,
                                                         email=member_detail["email"],
                                                         invited_by_id=decoded_token["id"],
-                                                        role=member_detail["role"],
-                                                        is_activated=False,
-                                                        is_declined=False)
+                                                        role=member_detail["role"])
                 # Insert the team member data into the database
                 _ = team_member_db_handler.create(
                     db=db, input_object=team_member_data)
@@ -87,7 +85,7 @@ class TeamMemberService():
         except Exception as e:
             return {"error": str(e)}
 
-    def delete_team_members(self, db, team_id, deleter_id):
+    async def delete_team_members(self, db, team_id, deleter_id):
         team_members = team_member_db_handler.load_all_by_column(
             db=db, column_name='team_id', value=team_id)
         input_data_list = [
@@ -100,7 +98,7 @@ class TeamMemberService():
             for _ in team_members
         ]
         db_objs = list(team_members)
-        _ = team_member_db_handler.bulk_update(
+        _ = await team_member_db_handler.bulk_update(
             db=db, db_objs=db_objs, input_data_list=input_data_list)
 
     async def delete_member(self, decoded_token, id, db):

@@ -34,7 +34,7 @@ class TeamService():
         return team_db_handler.update(db=db, db_obj=team, input_object=team_data)
 
     @staticmethod
-    async def delete_team(team: Teams, db: Session, deleter_id=id):
+    async def delete_teams(team: Teams, db: Session, deleter_id=id):
         update_data = {
             "is_deleted": True,
             "t_delete": datetime.now(),
@@ -71,8 +71,13 @@ class TeamService():
             if not team:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail="team not found"
+                    detail="Team not found"
                 )
+            if name and team.team_name != name:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Team name already exists"
+                )                
             return team
         if name:
             team = team_db_handler.load_by_column(
@@ -82,7 +87,7 @@ class TeamService():
                     status_code=status.HTTP_409_CONFLICT,
                     detail="Team name already exist"
                 )
-            return None
+        return None
 
     def get_team_members_detail_with_team_id(self, db: Session, id):
         team = self.get_team(db, id=id)
