@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Union
 import logging
 from backend.db_handler.team_member_handler import team_member_db_handler
 from pydantic import UUID4
@@ -70,6 +70,9 @@ async def create_team(
     description="This API endpoint allows users to update team",
     response_model=TeamResponseSchema,
     responses={
+        status.HTTP_403_FORBIDDEN: {
+            "description": "Only Owner or Admin can modify the team"
+        },
         status.HTTP_404_NOT_FOUND: {
             "description": "Team not found"
         },
@@ -88,7 +91,7 @@ def update_team(
     db: Session = Depends(get_db)
 ):
     decoded_token = decode_token(token=token)
-
+    team_member_service.role_validation(decoded_token, db)
     team = team_service.get_team(db, id=id, name=request_payload.team_name)
     return team_service.update_team(decoded_token, request_payload, team, db)
 
@@ -96,7 +99,12 @@ def update_team(
 @team_router.get(
     "/teams/{id}",
     description="Get a team by ID",
-    response_model=GetTeamMembersByTeamIdResponseSchema
+    response_model=GetTeamMembersByTeamIdResponseSchema,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "Team not found"
+        }
+    }
 )
 def get_team_by_id(
     id: UUID4,
@@ -105,13 +113,21 @@ def get_team_by_id(
 ):
     _ = decode_token(token=token)
 
-    return team_service.get_team_members_detail_with_team_id(db, id)
+    team = team_service.get_team(db, id=id)
+    team_members_details = team_member_service.get_team_members_detail_with_team_id(
+        db, id)
+    return {"team": team, "team_members": team_members_details}
 
 
 @team_router.get(
     "/teams",
     description="Get a list of all the teams of the current user",
-    response_model=List[GetTeamsResponseSchema] | DetailSchema
+    response_model=List[GetTeamsResponseSchema] | DetailSchema,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "Teams not found"
+        }
+    }
 )
 def get_teams(
     token: str = Header(),
@@ -124,7 +140,15 @@ def get_teams(
 @team_router.patch(
     "/teams/{id}/delete",
     description="Delete a team by ID",
-    response_model=DeleteTeamResponseSchema
+    response_model=DeleteTeamResponseSchema,
+    responses={
+        status.HTTP_403_FORBIDDEN: {
+            "description": "Only Owner or Admin can modify the team"
+        },
+        status.HTTP_404_NOT_FOUND: {
+            "description": "Team not found"
+        }
+    }
 )
 async def delete_team(
     id: UUID4,
@@ -132,9 +156,11 @@ async def delete_team(
     db: Session = Depends(get_db)
 ):
     decoded_token = decode_token(token=token)
-
+    # Check if the inviter has 'owner' or 'admin' roles
+    team_member_service.role_validation(decoded_token, db)
     team = team_service.get_team(db, id=id)
-    team_member_service.delete_team_members(db, id, deleter_id=decoded_token["id"])
+    team_member_service.delete_team_members(
+        db, id, decoded_token["id"])
     deleted_team = await team_service.delete_teams(team, db, decoded_token["id"])
     # deleted_team = team_db_handler.delete(db=db, id=id)
     return {

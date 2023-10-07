@@ -1,7 +1,7 @@
 from typing import Optional
 import uuid
 from datetime import datetime
-
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from backend.utils.utils import create_access_token
 from backend.utils.email_team_member import send_invitation_email
@@ -27,14 +27,50 @@ class TeamMemberService():
         return team_member_data
 
     @staticmethod
+    def get_team_members_detail_with_team_id(db: Session, id):
+        team_members = team_member_db_handler.load_all_by_column(
+            db=db, column_name='team_id', value=id)
+        team_members_details = [
+            {
+                "team_member_id": team_member.id,
+                "email": team_member.email,
+                "is_activated": team_member.is_activated,
+                "roles": team_member.roles,
+            }
+            for team_member in team_members
+            if (team_member.is_deleted == False) and
+            (team_member.is_declined == False)
+        ]
+        return team_members_details
+
+    @staticmethod
     def role_validation(decoded_token, db: Session):
         team_member = team_member_db_handler.load_by_column(
             db=db, column_name="email", value=decoded_token["email"])
 
         # Check if the inviter has 'owner' or 'admin' roles
         if not (team_member.roles['owner'] or team_member.roles['admin']):
-            raise Exception(
-                'Only Admin or Owner of the team have access to modify the team')
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Only Owner or Admin can modify the team"
+            )
+        
+    @staticmethod
+    def delete_team_members(db, team_id, deleter_id):
+        team_members = team_member_db_handler.load_all_by_column(
+            db=db, column_name='team_id', value=team_id)
+        input_data_list = [
+            {
+                "is_deleted": True,
+                "is_activated": False,
+                "t_delete": datetime.now(),
+                "deleted_by_id": deleter_id
+            }
+            for _ in team_members
+        ]
+        db_objs = list(team_members)
+        _ = team_member_db_handler.bulk_update(
+            db=db, db_objs=db_objs, input_data_list=input_data_list)
 
     async def email_invitation(self, team_id, decoded_token, request_payload, db: Session):
 
@@ -84,22 +120,6 @@ class TeamMemberService():
 
         except Exception as e:
             return {"error": str(e)}
-
-    async def delete_team_members(self, db, team_id, deleter_id):
-        team_members = team_member_db_handler.load_all_by_column(
-            db=db, column_name='team_id', value=team_id)
-        input_data_list = [
-            {
-                "is_deleted": True,
-                "is_activated": False,
-                "t_delete": datetime.now(),
-                "deleted_by_id": deleter_id
-            }
-            for _ in team_members
-        ]
-        db_objs = list(team_members)
-        _ = await team_member_db_handler.bulk_update(
-            db=db, db_objs=db_objs, input_data_list=input_data_list)
 
     async def delete_member(self, decoded_token, id, db):
         """
