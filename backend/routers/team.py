@@ -159,9 +159,9 @@ async def delete_team(
     # Check if the inviter has 'owner' or 'admin' roles
     team_member_service.role_validation(decoded_token, db)
     team = team_service.get_team(db, id=id)
-    team_member_service.delete_team_members(
+    await team_member_service.delete_team_members(
         db, id, decoded_token["id"])
-    deleted_team = await team_service.delete_teams(team, db, decoded_token["id"])
+    deleted_team = await team_service.delete_teams(team=team, db=db, deleter_id=decoded_token["id"])
     # deleted_team = team_db_handler.delete(db=db, id=id)
     return {
         "detail": "Team deleted successfully",

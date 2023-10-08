@@ -21,7 +21,7 @@ class TeamService():
         return team
 
     @staticmethod
-    async def delete_teams(team: Teams, db: Session, deleter_id):
+    async def delete_teams(team, db: Session, deleter_id):
         update_data = {
             "is_deleted": True,
             "t_delete": datetime.now(),

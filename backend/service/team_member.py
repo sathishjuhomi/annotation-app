@@ -56,7 +56,7 @@ class TeamMemberService():
             )
         
     @staticmethod
-    def delete_team_members(db, team_id, deleter_id):
+    async def delete_team_members(db, team_id, deleter_id):
         team_members = team_member_db_handler.load_all_by_column(
             db=db, column_name='team_id', value=team_id)
         input_data_list = [
