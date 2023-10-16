@@ -54,7 +54,7 @@ class TeamMemberService():
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only Owner or Admin can modify the team"
             )
-        
+
     @staticmethod
     async def delete_team_members(db, team_id, deleter_id):
         team_members = team_member_db_handler.load_all_by_column(
@@ -133,10 +133,8 @@ class TeamMemberService():
         """
         # Check if the inviter has 'owner' or 'admin' roles
         self.role_validation(decoded_token, db)
-
         team_member_detail = team_member_db_handler.load_by_column(
             db=db, column_name="id", value=id)
-
         member_detail = {
             "is_activated": False,
             "is_deleted": True,
@@ -147,8 +145,8 @@ class TeamMemberService():
         team_member_db_handler.update(db=db,
                                       db_obj=team_member_detail,
                                       input_object=member_detail)
-
-        return {"detail": f"{team_member_detail.email} deleted successfully"}
+        email = team_member_detail.email
+        return {"detail": f"{email} deleted successfully"}
 
 
 team_member_service = TeamMemberService()
