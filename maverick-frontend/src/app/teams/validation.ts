@@ -7,24 +7,21 @@ export const createOrUpdateTeamSchema = yup.object().shape({
     .string()
     .required(Constants.TEAMNAME_REQUIRED),
 });
+
 export const inviteTeamMemberSchema = yup.object().shape({
     email: yup
     .string()
     .email(Constants.VALID_EMAIL)
     .required(Constants.EMAIL_REQUIRED),
-    // owner: yup.boolean(),
-    // admin: yup.boolean(),
-    // member: yup.boolean()
-    // .required(Constants.MEMBER_REQUIRED),
     roles: yup
         .array()
         .of(
             yup.object().shape({
-                name: yup.string(), // Assuming a string field for the checkbox name
-                checked: yup.boolean(), // Boolean field to track checkbox state
+                name: yup.string(), 
+                checked: yup.boolean(), 
             })
         )
-        .required(Constants.MEMBER_REQUIRED)
+        .required(Constants.ROLES_REQUIRED)
         .test(
             "at-least-one-role",
             "Select at least one role",

@@ -76,6 +76,7 @@ export async function inviteATeamMember(teamId: string, formData: InviteATeamMem
       owner: false
     }
   }
+  console.log("InviteTeamResponse: ", body)
   const res = await fetch(`http://127.0.0.1:8000/api/v1/teams/${teamId}/team-members/invite`,
     {
       method: "POST",

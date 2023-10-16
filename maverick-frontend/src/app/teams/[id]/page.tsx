@@ -156,7 +156,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     };
 
     const onInviteTeamMember = async (data: InviteATeamMemberFormData) => {
-        console.log("Invite Team Member Response: ");
         setShowMessage(true);
         setLoading(true);
         await inviteATeamMember(params.id, data)
@@ -165,6 +164,8 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                 if (res.status === 200) {
                     setMessage(Constants.INVITED_SUCCESSFULLY);
                     setMessageColor(Constants.SUCCESS);
+                    setOpenInvite(false);
+                    location.reload();
                 } else {
                     const data = response.detail;
                     setMessage(data);
@@ -178,7 +179,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                 setMessageColor(Constants.ERROR);
             });
     };
-
 
     return (
         <Box className="flex">
