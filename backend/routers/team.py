@@ -1,4 +1,4 @@
-from typing import List, Dict, Union
+from typing import List
 import logging
 from backend.db_handler.team_member_handler import team_member_db_handler
 from pydantic import UUID4
