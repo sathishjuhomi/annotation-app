@@ -28,8 +28,14 @@ class TeamMemberService():
 
     @staticmethod
     def get_team_members_detail_with_team_id(db: Session, id):
-        team_members = team_member_db_handler.load_all_by_column(
-            db=db, column_name='team_id', value=id)
+        filters = {
+            'team_id': id,
+            'is_deleted': False,
+            'is_declined': False
+        }
+
+        team_members = team_member_db_handler.load_all_by_columns(
+            db=db, filters=filters)
         team_members_details = [
             {
                 "team_member_id": team_member.id,
@@ -38,8 +44,6 @@ class TeamMemberService():
                 "roles": team_member.roles,
             }
             for team_member in team_members
-            if (team_member.is_deleted == False) and
-            (team_member.is_declined == False)
         ]
         return team_members_details
 
@@ -121,7 +125,7 @@ class TeamMemberService():
         except Exception as e:
             return {"error": str(e)}
 
-    async def delete_member(self, decoded_token, id, db):
+    def delete_member(self, decoded_token, id, db):
         """
         validate the token
         check the current user role, owner or admin
@@ -135,6 +139,15 @@ class TeamMemberService():
         self.role_validation(decoded_token, db)
         team_member_detail = team_member_db_handler.load_by_column(
             db=db, column_name="id", value=id)
+
+        email = team_member_detail.email
+
+        if team_member_detail.is_deleted == True:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"{email} has already deleted"
+            )
+
         member_detail = {
             "is_activated": False,
             "is_deleted": True,
@@ -145,7 +158,7 @@ class TeamMemberService():
         team_member_db_handler.update(db=db,
                                       db_obj=team_member_detail,
                                       input_object=member_detail)
-        email = team_member_detail.email
+
         return {"detail": f"{email} deleted successfully"}
 
 

@@ -43,13 +43,13 @@ async def create_team(
         db, name=request_payload.team_name)
 
     try:
-        created_team, creator_email = team_service.create_team(
+        created_team= team_service.create_team(
             decoded_token, request_payload=request_payload, db=db)
         # Add the creator as a team member if the team was successfully created
         id = uuid.uuid4()
         team_member_data = team_member_service.add_team_member(id=id,
                                                                team_id=created_team.id,
-                                                               email=creator_email,
+                                                               email=decoded_token["email"],
                                                                invited_by_id=None,
                                                                role={
                                                                    "owner": True,
@@ -93,7 +93,7 @@ def update_team(
     decoded_token = decode_token(token=token)
     team_member_service.role_validation(decoded_token, db)
     team = team_service.get_team(db, id=id, name=request_payload.team_name)
-    return team_service.update_team(decoded_token, request_payload, team, db)
+    return team_service.update_team(request_payload, team, db)
 
 
 @team_router.get(

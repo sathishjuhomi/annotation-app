@@ -6,7 +6,8 @@ import logging
 from backend.schemas.response.team_member import TeamMemberResponseSchema
 from backend.schemas.response.user import DetailSchema
 
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 
 from backend.utils.utils import get_user_detail, decode_token
@@ -17,12 +18,14 @@ from backend.service.team_member import team_member_service
 logger = logging.getLogger(__name__)
 team_member_router = APIRouter(prefix="/api/v1", tags=["Team_Members"])
 
+bearer = HTTPBearer()
 
 @team_member_router.post("/teams/{team_id}/team-members/invite")
 async def invite_team_member(team_id: UUID4,
                              request_payload: TeamMemberSchema,
                              db: Session = Depends(get_db),
-                             token: str = Header()) -> Any:
+                             authorization: str = Depends(bearer)) -> Any:
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
     response = await team_member_service.email_invitation(team_id, decoded_token, request_payload=request_payload, db=db)
     return response
@@ -32,8 +35,9 @@ async def invite_team_member(team_id: UUID4,
                           response_model=TeamMemberResponseSchema | DetailSchema)
 async def accept_invitation(
     db: Session = Depends(get_db),
-    token: str = Header(),
+    authorization: str = Depends(bearer),
 ) -> dict:
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
     user = get_user_detail(decoded_token=decoded_token, db=db)
 
@@ -55,10 +59,10 @@ async def accept_invitation(
 
 @team_member_router.patch("/teams/team-members/{id}/delete",
                           response_model=DetailSchema)
-async def delete_team_member(
+def delete_team_member(
     id: UUID4,
     db: Session = Depends(get_db),
-    token: str = Header(),
+    authorization: str = Depends(bearer),
 ) -> Any:
 
     """
@@ -70,16 +74,18 @@ async def delete_team_member(
         key deleted_by_id and value current user id
     call the update method
     """
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
-    await team_member_service.delete_member(decoded_token, id, db=db)
+    team_member_service.delete_member(decoded_token, id, db=db)
 
 
 @team_member_router.patch("/teams/team-members/decline-invitation",
                           response_model=TeamMemberResponseSchema)
 async def decline_invitation(
     db: Session = Depends(get_db),
-    token: str = Header(),
+    authorization: str = Depends(bearer),
 ) -> Any:
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
     team_member_detail = team_member_db_handler.load_by_column(db=db,
                                                                column_name="id",
