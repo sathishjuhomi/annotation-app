@@ -16,7 +16,8 @@ class TeamMembers(Base, TimestampMixIn):
     roles = Column(JSON, nullable=False)
     is_activated = Column(Boolean, default=False)
     is_declined = Column(Boolean, default=False)
-
+    is_deleted = Column(Boolean, default=False, nullable=False)
+    deleted_by_id = Column(UUID(as_uuid=True), nullable=True)
     # Define relationships to Users and Teams with foreign keys
     team = relationship("Teams", foreign_keys=[team_id])
 

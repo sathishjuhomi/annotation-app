@@ -33,6 +33,9 @@ def upgrade():
                               nullable=False, server_default='false'),
                     sa.Column('is_declined', sa.Boolean, nullable=False,
                               server_default='false'),
+                    sa.Column("is_deleted", sa.Boolean, nullable=False, server_default='false'),
+                    sa.Column("deleted_by_id", sa.dialects.postgresql.UUID(
+                        as_uuid=True), nullable=True),
                     sa.Column('t_create', sa.TIMESTAMP(timezone=True),
                               nullable=False,
                               server_default=sa.text("now()")),

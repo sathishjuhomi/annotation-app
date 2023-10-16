@@ -6,7 +6,8 @@ import logging
 from backend.schemas.response.team_member import TeamMemberResponseSchema
 from backend.schemas.response.user import DetailSchema
 
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 
 from backend.utils.utils import get_user_detail, decode_token
@@ -17,14 +18,15 @@ from backend.service.team_member import team_member_service
 logger = logging.getLogger(__name__)
 team_member_router = APIRouter(prefix="/api/v1", tags=["Team_Members"])
 
+bearer = HTTPBearer()
 
 @team_member_router.post("/teams/{team_id}/team-members/invite")
 async def invite_team_member(team_id: UUID4,
                              request_payload: TeamMemberSchema,
                              db: Session = Depends(get_db),
-                             Authorization: str = Header()) -> Any:
-    decoded_token = decode_token(token=Authorization)
-
+                             authorization: str = Depends(bearer)) -> Any:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
     response = await team_member_service.email_invitation(team_id, decoded_token, request_payload=request_payload, db=db)
     return response
 
@@ -33,9 +35,10 @@ async def invite_team_member(team_id: UUID4,
                           response_model=TeamMemberResponseSchema | DetailSchema)
 async def accept_invitation(
     db: Session = Depends(get_db),
-    Authorization: str = Header(),
-) -> Any:
-    decoded_token = decode_token(token=Authorization)
+    authorization: str = Depends(bearer),
+) -> dict:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
     user = get_user_detail(decoded_token=decoded_token, db=db)
 
     if not user:
@@ -44,12 +47,52 @@ async def accept_invitation(
             detail="The user with this email does not exist",
         )
 
-    team_member_detail = team_member_service.get_by_team_id_and_email(db=db,
-                                                                      email=decoded_token['email'],
-                                                                      team_id=decoded_token['team_id'])
-
-    decoded_token["is_activated"] = True
+    team_member_detail = team_member_db_handler.load_by_column(db=db,
+                                                               column_name="id",
+                                                               value=decoded_token['id'])
+    activate = {"is_activated": True}
 
     return team_member_db_handler.update(db=db,
                                          db_obj=team_member_detail,
-                                         input_object=decoded_token)
+                                         input_object=activate)
+
+
+@team_member_router.patch("/teams/team-members/{id}/delete",
+                          response_model=DetailSchema)
+async def delete_team_member(
+    id: UUID4,
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer),
+) -> Any:
+
+    """
+    validate the token
+    check the current user role, owner or admin
+    If owner or admin, get the team member with member id from team member table
+    or raise exception
+    create a dict with key is_deleted and value True,
+        key deleted_by_id and value current user id
+    call the update method
+    """
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
+    await team_member_service.delete_member(decoded_token, id, db=db)
+
+
+@team_member_router.patch("/teams/team-members/decline-invitation",
+                          response_model=TeamMemberResponseSchema)
+async def decline_invitation(
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer),
+) -> Any:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
+    team_member_detail = team_member_db_handler.load_by_column(db=db,
+                                                               column_name="id",
+                                                               value=decoded_token['id'])
+
+    decline = {"is_declined": True}
+
+    return team_member_db_handler.update(db=db,
+                                         db_obj=team_member_detail,
+                                         input_object=decline)

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, TIMESTAMP, text, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, String, Boolean, ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -13,6 +13,8 @@ class Teams(Base, TimestampMixIn):
     team_name = Column(String, nullable=False)
     created_by_id = Column(UUID(as_uuid=True), ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
+    is_deleted = Column(Boolean, default=False, nullable=False)
+    deleted_by_id = Column(UUID(as_uuid=True), nullable=True)
 
     user = relationship("Users")
 
