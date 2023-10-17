@@ -46,16 +46,6 @@ def generate_password_reset_token(email: str) -> str:
     return encoded_jwt
 
 
-def verify_password_reset_token(token: str) -> str | None:
-    try:
-        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        return decoded_token["email"]
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.JWTError as e:
-        raise HTTPException(status_code=401, detail=f"JWT verification error: {str(e)}")
-
-
 def generate_random_oauth_password(length=20):
     rlength = (length * 3) // 4
     token = secrets.token_urlsafe(rlength)
@@ -70,7 +60,8 @@ def decode_token(token: str):
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
     except jwt.JWTError as e:
-        raise HTTPException(status_code=401, detail=f"JWT verification error: {str(e)}")
+        raise HTTPException(
+            status_code=401, detail=f"JWT verification error: {str(e)}")
 
 
 def get_user_detail(decoded_token: str, db):

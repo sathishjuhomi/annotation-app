@@ -28,7 +28,6 @@ class BaseDBHandler:
         return db_obj
 
     def update(self, db: Session, *, db_obj, input_object):
-        print(vars(db_obj))
         obj_data = jsonable_encoder(db_obj)
         if isinstance(input_object, dict):
             update_data = input_object
