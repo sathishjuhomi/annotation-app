@@ -76,7 +76,7 @@ def delete_team_member(
     """
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    team_member_service.delete_member(decoded_token, id, db=db)
+    return team_member_service.delete_member(decoded_token, id, db=db)
 
 
 @team_member_router.patch("/teams/team-members/decline-invitation",
