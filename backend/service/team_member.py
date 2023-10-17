@@ -1,6 +1,7 @@
 from typing import Optional
 import uuid
 from datetime import datetime
+from backend.db_handler.team_handler import team_db_handler
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from backend.utils.utils import create_access_token
@@ -84,6 +85,10 @@ class TeamMemberService():
 
             member_detail = request_payload.model_dump()
 
+            team = team_db_handler.load_by_column(
+                db=db, column_name="id", value=team_id)
+            team_name = team.team_name
+
             member = db.query(TeamMembers).filter_by(
                 team_id=team_id, email=member_detail["email"]).first()
             if member:
@@ -118,7 +123,7 @@ class TeamMemberService():
 
             # Get the email from the request payload and send an invitation email
             email = member_detail["email"]
-            await send_invitation_email(email_to=email, team_id=team_id,
+            await send_invitation_email(email_to=email, team_name=team_name,
                                         token=invitation_token)
 
             return {"detail": f"{email} invited successfully"}
