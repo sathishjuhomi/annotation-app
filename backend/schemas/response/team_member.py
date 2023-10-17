@@ -13,7 +13,7 @@ class TeamMemberResponseSchema(BaseModel):
     is_activated: bool
     is_declined: bool
 
-class AcceptDeclineInvitationSchema(BaseModel):
+class AcceptInvitationSchema(BaseModel):
     detail: DetailSchema
     team_member: TeamMemberResponseSchema
 
