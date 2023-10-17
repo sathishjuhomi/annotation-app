@@ -28,7 +28,6 @@ class BaseDBHandler:
         return db_obj
 
     def update(self, db: Session, *, db_obj, input_object):
-        print(vars(db_obj))
         obj_data = jsonable_encoder(db_obj)
         if isinstance(input_object, dict):
             update_data = input_object
@@ -53,9 +52,17 @@ class BaseDBHandler:
         column = getattr(self.model, column_name)
         return db.query(self.model).filter(column == value).all()
 
+    def load_all_by_columns(self, db: Session, filters: dict):
+        query = db.query(self.model)
+        for column_name, value in filters.items():
+            column = getattr(self.model, column_name)
+            query = query.filter(column == value)
+        return query.all()
+
     def bulk_update(self, db: Session, db_objs: list, input_data_list: list):
         if len(db_objs) != len(input_data_list):
-            raise ValueError("Length of 'objs' and 'update_data_list' must be the same.")
+            raise ValueError(
+                "Length of 'objs' and 'update_data_list' must be the same.")
 
         for obj, update_data in zip(db_objs, input_data_list):
             obj_data = jsonable_encoder(obj)
