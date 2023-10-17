@@ -8,7 +8,7 @@ export async function createTeam(formData: TeamsFormData) {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "token": `${storedAccessToken}`,
+        "authorization": `Bearer ${storedAccessToken}`,
       },
       body: JSON.stringify(body),
     });
@@ -22,7 +22,7 @@ export async function createTeam(formData: TeamsFormData) {
       method: "GET",
       headers: { 
         "Content-type": "application/json",
-        "token": `${storedAccessToken}`,
+        "authorization": `Bearer ${storedAccessToken}`,
      },
     });
     return res;
@@ -34,7 +34,7 @@ export async function createTeam(formData: TeamsFormData) {
         method: "GET",
         headers: {
             "Content-type": "application/json",
-            "token": `${storedAccessToken}`,
+            "authorization": `Bearer ${storedAccessToken}`,
         },
     });
     return res;
@@ -47,7 +47,7 @@ export async function updateTeam(teamId: string, formData:TeamsFormData) {
       method: "PATCH",
       headers: {
           "Content-type": "application/json",
-          "token": `${storedAccessToken}`,
+          "authorization": `Bearer ${storedAccessToken}`,
       },
       body: JSON.stringify(body),
   });
@@ -60,7 +60,7 @@ export async function deleteTeam(teamId:string){
     method: "PATCH",
     headers:{
       "content-type": "application/json",
-      "token": `${storedAccessToken}`,
+      "authorization": `Bearer ${storedAccessToken}`,
     }
   });
   return res;
@@ -82,7 +82,7 @@ export async function inviteATeamMember(teamId: string, formData: InviteATeamMem
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "token": `${storedAccessToken}`,
+        "authorization": `Bearer ${storedAccessToken}`,
       },
       body: JSON.stringify(body),
     });
