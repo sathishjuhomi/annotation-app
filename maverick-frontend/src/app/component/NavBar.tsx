@@ -42,9 +42,6 @@ export default function ResponsiveDrawer(props: Props) {
     const navigateToTeams = () => {
         router.push("/teams");
     };
-    const navigateToDashboard = () => {
-        router.push("/accept")
-    }
 
     const drawer = (
         <div>
@@ -62,9 +59,6 @@ export default function ResponsiveDrawer(props: Props) {
                         </ListItemButton>
                         <ListItemButton className="pl-4" onClick={navigateToTeams}>
                             <ListItemText primary="Teams" />
-                        </ListItemButton>
-                        <ListItemButton className="pl-4" onClick={navigateToDashboard}>
-                            <ListItemText primary="Dashboard" />
                         </ListItemButton>
                     </List>
                 </Collapse>

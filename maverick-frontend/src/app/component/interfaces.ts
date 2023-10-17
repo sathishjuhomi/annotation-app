@@ -87,3 +87,13 @@ export interface InviteATeamMemberFormData {
   admin: boolean;
   member: boolean;
 }
+
+export interface AcceptTeamInviteProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+}
