@@ -118,7 +118,8 @@ class TeamMemberService():
 
             # Get the email from the request payload and send an invitation email
             email = member_detail["email"]
-            await send_invitation_email(email_to=email, token=invitation_token)
+            await send_invitation_email(email_to=email, team_id=team_id,
+                                        token=invitation_token)
 
             return {"detail": f"{email} invited successfully"}
 
