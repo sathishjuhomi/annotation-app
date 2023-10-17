@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -12,8 +13,9 @@ import DialogActions from '@mui/material/DialogActions';
 import { CircularProgress, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { InviteATeamMemberProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
+import { useForm } from 'react-hook-form';
 
-export default function inviteTeamMember(
+export default function InviteTeamMember(
     {
         loading,
         showMessage,
@@ -35,21 +37,23 @@ export default function inviteTeamMember(
     const handleCloseInvite = () => {
         setOpen(false);
     };
-    const [state, setState] = React.useState({
-        owner: false,
-        admin: false,
-        member: true,
-    });
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.checked,
-        });
+    const initialRolesState = [
+        { name: "admin", checked: false },
+        { name: "member", checked: false },
+    ];
+    const { handleSubmit } = useForm();
+    
+    const [email, setMail] = React.useState("");
+    const [roles, setRoles] = React.useState(initialRolesState);
+
+    const handleChange = (name: any) => (event: any) => {
+        const updatedRoles = roles.map((role) =>
+            role.name === name ? { ...role, checked: event.target.checked } : role
+        );
+        setRoles(updatedRoles);
     };
 
-    const { owner, admin, member } = state;
-    // const error = [owner, admin, member].filter((v) => v).length !== 1;
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
@@ -65,9 +69,10 @@ export default function inviteTeamMember(
                         id="email"
                         label="Email Address"
                         name="email"
+                        autoComplete="email"
                         variant='outlined'
                         placeholder="Enter invite member's mail Id"
-                        {...register("email")}
+                        onChange={(e) => setMail(e.target.value)}
                         error={Boolean(errors?.email)}
                         helperText={errors?.email ? errors?.email.message : " "}
                     />
@@ -75,26 +80,21 @@ export default function inviteTeamMember(
                     <FormControl component="fieldset" variant="standard">
                         <FormLabel className="text-black font-bold">Assign roles</FormLabel>
                         <FormGroup>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={admin} onChange={handleChange} name="admin" />
-                                }
-                                label="Admin"
-                                // TO DO:
-                                {...register("admin")}
-                                error={Boolean(errors?.admin)}
-                                helperText={admin?.admin ? errors?.admin.message : " "}
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={member} onChange={handleChange} name="member" />
-                                }
-                                label="Member"
-                                // TO DO:
-                                {...register("member")}
-                                error={Boolean(errors?.member)}
-                                helperText={member?.member ? errors?.member.message : " "}
-                            />
+                            {roles.map((role) => (
+                                <FormControlLabel
+                                    key={role.name}
+                                    control={
+                                        <Checkbox
+                                            checked={role.checked}
+                                            onChange={handleChange(role.name)}
+                                            name={role.name} />
+                                    }
+                                    label={role.name}
+                                    {...register(role.name)}
+                                    error={Boolean(errors?.[role.name])}
+                                    helperText={errors[role.name] ? errors[role.name].message : " "}
+                                />
+                            ))}
                         </FormGroup>
                     </FormControl>
                 </DialogContent>
@@ -103,7 +103,16 @@ export default function inviteTeamMember(
                         className='text-white bg-primary'
                         variant='contained'
                         type='submit'
-                        onClick={formHandleSubmitInvite(onSubmit)}
+                        disabled={!email}
+                        onClick={handleSubmit((data) => {
+                              const formData = {
+                                email: email,
+                                roles: roles.filter((role) => role.checked).map((role) => role.name),
+                                admin: roles[0].checked,
+                                member: roles[1].checked
+                              };
+                              formHandleSubmitInvite(onSubmit(formData));
+                          })}
                     >
                         Send Invitation
                     </Button>
@@ -130,5 +139,5 @@ export default function inviteTeamMember(
                 </Box>
             ) : null}
         </div>
-    )
-};
+    );
+}
