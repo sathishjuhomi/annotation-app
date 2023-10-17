@@ -1,3 +1,4 @@
+from backend.schemas.response.user import DetailSchema
 from pydantic import BaseModel, UUID4, Field, EmailStr
 
 
@@ -11,5 +12,11 @@ class TeamMemberResponseSchema(BaseModel):
     })
     is_activated: bool
     is_declined: bool
+
+class AcceptDeclineInvitationSchema(BaseModel):
+    detail: DetailSchema
+    team_member: TeamMemberResponseSchema
+
+
     
 

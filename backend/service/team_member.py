@@ -85,46 +85,38 @@ class TeamMemberService():
 
             member_detail = request_payload.model_dump()
 
-            team = team_db_handler.load_by_column(
-                db=db, column_name="id", value=team_id)
+            team = team_db_handler.load_by_column(db=db, column_name="id", value=team_id)
             team_name = team.team_name
 
             member = db.query(TeamMembers).filter_by(
                 team_id=team_id, email=member_detail["email"]).first()
+            
             if member:
                 update_declined_flag = {
                     "is_declined": False, "invited_by_id": decoded_token["id"]}
-
-                team_member_db_handler.update(db=db,
-                                              db_obj=member,
-                                              input_object=update_declined_flag)
-
-                to_create_access_token = {
-                    'id': str(member.id), 'email': member_detail["email"]}
-
+                team_member_db_handler.update(db=db, db_obj=member, input_object=update_declined_flag)
             else:
                 id = uuid.uuid4()
-                # Create team member data for database insertion
+                team_member_data = self.add_team_member(
+                    id=id, team_id=team_id, email=member_detail["email"],
+                    invited_by_id=decoded_token["id"], role=member_detail["role"])
+                _ = team_member_db_handler.create(db=db, input_object=team_member_data)
 
-                team_member_data = self.add_team_member(id=id,
-                                                        team_id=team_id,
-                                                        email=member_detail["email"],
-                                                        invited_by_id=decoded_token["id"],
-                                                        role=member_detail["role"])
-                # Insert the team member data into the database
-                _ = team_member_db_handler.create(
-                    db=db, input_object=team_member_data)
-
-                to_create_access_token = {
-                    'id': str(id), 'email': member_detail["email"]}
+            to_create_access_token = {
+                'id': str(member.id if member else id),
+                'email': member_detail["email"]
+            }
 
             # Create an access token for the invitation
             invitation_token = create_access_token(to_create_access_token)
 
-            # Get the email from the request payload and send an invitation email
+            id = member.id if member else id  # Ensure 'id' is defined here
             email = member_detail["email"]
-            await send_invitation_email(email_to=email, team_name=team_name,
-                                        token=invitation_token)
+
+            # Send an invitation email
+            await send_invitation_email(team_member_id=id, team_name=team_name,
+                                        email_from=decoded_token["email"], email_to=email,
+                                        invite_token=invitation_token)
 
             return {"detail": f"{email} invited successfully"}
 
