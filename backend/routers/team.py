@@ -45,6 +45,7 @@ async def create_team(
     try:
         created_team= team_service.create_team(
             decoded_token, request_payload=request_payload, db=db)
+        print("created_team ", vars(created_team))
         # Add the creator as a team member if the team was successfully created
         id = uuid.uuid4()
         team_member_data = team_member_service.add_team_member(id=id,
@@ -56,6 +57,7 @@ async def create_team(
                                                                    "admin": True,
                                                                    "member": False},
                                                                is_activated=True)
+        print('team_member_data ', team_member_data)
         team_member_db_handler.create(db=db, input_object=team_member_data)
         return created_team
     except Exception as e:

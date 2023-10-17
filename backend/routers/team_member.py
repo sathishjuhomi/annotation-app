@@ -40,7 +40,7 @@ async def accept_invitation(
     token = authorization.credentials
     decoded_token = decode_token(token=token)
     user = get_user_detail(decoded_token=decoded_token, db=db)
-
+    print('user', user)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

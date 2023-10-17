@@ -154,6 +154,7 @@ class TeamMemberService():
             "deleted_by_id": decoded_token["id"],
             "t_delete": datetime.now()
         }
+        print('member_detail ', member_detail)
 
         team_member_db_handler.update(db=db,
                                       db_obj=team_member_detail,
