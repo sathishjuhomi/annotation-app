@@ -24,11 +24,5 @@ def get_db():
     try:
         yield db
         db.commit()
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Database operation failed: " + str(e)
-        )
     finally:
         db.close()
