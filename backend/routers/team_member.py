@@ -1,16 +1,17 @@
 from typing import Any
 from backend.db_handler.team_member_handler import team_member_db_handler
+from backend.db_handler.user_handler import user_db_handler
 from pydantic import UUID4
 import logging
 
-from backend.schemas.response.team_member import TeamMemberResponseSchema
+from backend.schemas.response.team_member import AcceptInvitationSchema
 from backend.schemas.response.user import DetailSchema
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 
-from backend.utils.utils import get_user_detail, decode_token
+from backend.utils.utils import decode_token
 from backend.schemas.request.team_member import TeamMemberSchema
 from backend.models.database import get_db
 from backend.service.team_member import team_member_service
@@ -19,6 +20,7 @@ logger = logging.getLogger(__name__)
 team_member_router = APIRouter(prefix="/api/v1", tags=["Team_Members"])
 
 bearer = HTTPBearer()
+
 
 @team_member_router.post("/teams/{team_id}/team-members/invite")
 async def invite_team_member(team_id: UUID4,
@@ -32,15 +34,20 @@ async def invite_team_member(team_id: UUID4,
 
 
 @team_member_router.patch("/teams/team-members/accept-invitation",
-                          response_model=TeamMemberResponseSchema | DetailSchema)
+                          response_model=AcceptInvitationSchema | DetailSchema)
 async def accept_invitation(
+    invite_token: str,
+    team_member_id: UUID4,
+    invitee_email: str,
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer),
 ) -> dict:
     token = authorization.credentials
-    decoded_token = decode_token(token=token)
-    user = get_user_detail(decoded_token=decoded_token, db=db)
-    print('user', user)
+    _ = decode_token(token=token)
+    _ = decode_token(token=invite_token)
+    user = user_db_handler.load_by_column(
+        db=db, column_name='email', value=invitee_email)
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -49,12 +56,36 @@ async def accept_invitation(
 
     team_member_detail = team_member_db_handler.load_by_column(db=db,
                                                                column_name="id",
-                                                               value=decoded_token['id'])
+                                                               value=team_member_id)
     activate = {"is_activated": True}
 
-    return team_member_db_handler.update(db=db,
-                                         db_obj=team_member_detail,
-                                         input_object=activate)
+    response = team_member_db_handler.update(db=db,
+                                             db_obj=team_member_detail,
+                                             input_object=activate)
+    return {"detail": f"{team_member_detail.team.team_name} team invitation accepted", "team_member": response}
+
+
+@team_member_router.patch("/teams/team-members/decline-invitation",
+                          response_model=DetailSchema)
+def decline_invitation(
+    invite_token: str,
+    team_member_id: UUID4,
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer),
+) -> dict:
+    token = authorization.credentials
+    _ = decode_token(token=token)
+    _ = decode_token(token=invite_token)
+    team_member_detail = team_member_db_handler.load_by_column(db=db,
+                                                               column_name="id",
+                                                               value=team_member_id)
+    print('team_member_detail ', team_member_detail)
+    decline = {"is_declined": True}
+
+    team_member_db_handler.update(db=db,
+                                  db_obj=team_member_detail,
+                                  input_object=decline)
+    return {"detail": f"{team_member_detail.team.team_name} team invitation declined"}
 
 
 @team_member_router.patch("/teams/team-members/{id}/delete",
@@ -64,7 +95,6 @@ def delete_team_member(
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer),
 ) -> Any:
-
     """
     validate the token
     check the current user role, owner or admin
@@ -77,22 +107,3 @@ def delete_team_member(
     token = authorization.credentials
     decoded_token = decode_token(token=token)
     return team_member_service.delete_member(decoded_token, id, db=db)
-
-
-@team_member_router.patch("/teams/team-members/decline-invitation",
-                          response_model=TeamMemberResponseSchema)
-async def decline_invitation(
-    db: Session = Depends(get_db),
-    authorization: str = Depends(bearer),
-) -> Any:
-    token = authorization.credentials
-    decoded_token = decode_token(token=token)
-    team_member_detail = team_member_db_handler.load_by_column(db=db,
-                                                               column_name="id",
-                                                               value=decoded_token['id'])
-
-    decline = {"is_declined": True}
-
-    return team_member_db_handler.update(db=db,
-                                         db_obj=team_member_detail,
-                                         input_object=decline)

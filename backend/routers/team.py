@@ -10,7 +10,6 @@ from backend.schemas.request.team import TeamSchema
 from backend.schemas.response.user import (
     DetailSchema)
 from backend.schemas.response.team import (TeamResponseSchema,
-                                           DeleteTeamResponseSchema,
                                            GetTeamsResponseSchema,
                                            GetTeamMembersByTeamIdResponseSchema)
 from backend.models.database import get_db
@@ -142,7 +141,7 @@ def get_teams(
 @team_router.patch(
     "/teams/{id}/delete",
     description="Delete a team by ID",
-    response_model=DeleteTeamResponseSchema,
+    response_model=DetailSchema,
     responses={
         status.HTTP_403_FORBIDDEN: {
             "description": "Only Owner or Admin can modify the team"
@@ -166,6 +165,5 @@ async def delete_team(
     deleted_team = await team_service.delete_teams(team=team, db=db, deleter_id=decoded_token["id"])
     # deleted_team = team_db_handler.delete(db=db, id=id)
     return {
-        "detail": "Team deleted successfully",
-        "deleted_team": deleted_team
+        "detail": f"{deleted_team.team_name} team deleted successfully"
     }

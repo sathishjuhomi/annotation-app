@@ -1,17 +1,16 @@
 from pydantic import BaseModel, UUID4, EmailStr
 from typing import List
-from backend.schemas.response.user import DetailSchema
 
 
 class TeamResponseSchema(BaseModel):
     id: UUID4
     team_name: str
     created_by_id: UUID4
-    is_deleted: bool
+    # is_deleted: bool
 
 
-class DeleteTeamResponseSchema(DetailSchema):
-    deleted_team: TeamResponseSchema
+# class DeleteTeamResponseSchema(DetailSchema):
+#     deleted_team: TeamResponseSchema
 
 
 class GetTeamsResponseSchema(BaseModel):
