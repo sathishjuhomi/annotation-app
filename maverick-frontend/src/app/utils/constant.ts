@@ -13,5 +13,6 @@ export const TEAM_CREATED_SUCCESSFULLY = "Team created successfully";
 export const CREATE_TEAM = "Create New Team";
 export const TEAM_UPDATED_SUCCESSFULLY = "Team updated successfully";
 export const TEAM_DELETED_SUCCESSFULLY = "Team deleted successfully";
+export const TEAM__MEMBER_DELETED_SUCCESSFULLY = "Team member deleted successfully";
 export const INVITED_SUCCESSFULLY = "Team member invited successfully";
 export const ROLES_REQUIRED = "Member requried for a team";

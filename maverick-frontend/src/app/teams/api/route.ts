@@ -8,7 +8,7 @@ export async function createTeam(formData: TeamsFormData) {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "token": `${storedAccessToken}`,
+        "authorization": `Bearer ${storedAccessToken}`,
       },
       body: JSON.stringify(body),
     });
@@ -22,7 +22,7 @@ export async function createTeam(formData: TeamsFormData) {
       method: "GET",
       headers: { 
         "Content-type": "application/json",
-        "token": `${storedAccessToken}`,
+        "authorization": `Bearer ${storedAccessToken}`,
      },
     });
     return res;
@@ -34,7 +34,7 @@ export async function createTeam(formData: TeamsFormData) {
         method: "GET",
         headers: {
             "Content-type": "application/json",
-            "token": `${storedAccessToken}`,
+            "authorization": `Bearer ${storedAccessToken}`,
         },
     });
     return res;
@@ -47,7 +47,7 @@ export async function updateTeam(teamId: string, formData:TeamsFormData) {
       method: "PATCH",
       headers: {
           "Content-type": "application/json",
-          "token": `${storedAccessToken}`,
+          "authorization": `Bearer ${storedAccessToken}`,
       },
       body: JSON.stringify(body),
   });
@@ -60,7 +60,7 @@ export async function deleteTeam(teamId:string){
     method: "PATCH",
     headers:{
       "content-type": "application/json",
-      "token": `${storedAccessToken}`,
+      "authorization": `Bearer ${storedAccessToken}`,
     }
   });
   return res;
@@ -82,9 +82,54 @@ export async function inviteATeamMember(teamId: string, formData: InviteATeamMem
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "token": `${storedAccessToken}`,
+        "authorization": `Bearer ${storedAccessToken}`,
       },
       body: JSON.stringify(body),
     });
+  return res;
+}
+
+export async function acceptTeamInvite( invite_token: any, team_member_id:any, invitee_email:any ) {
+  const accessToken = sessionStorage.getItem('access_token');
+  console.log("ACCESSTOKEN: ", accessToken)
+  const res = await fetch
+      (`http://127.0.0.1:8000/api/v1/teams/team-members/accept-invitation?invite_token=${invite_token}&team_member_id=${team_member_id}&invitee_email=${invitee_email}`,
+          {
+              method: "PATCH",
+              headers: {
+                  "Content-type": "application/json",
+                  "authorization": `Bearer ${accessToken}`,
+              },
+          });
+  return res;
+}
+
+export async function declineTeamInvite( invite_token: any, team_member_id:any ) {
+  const accessToken = sessionStorage.getItem('access_token');
+  console.log("ACCESSTOKEN: ", accessToken)
+  const res = await fetch
+      (`http://127.0.0.1:8000/api/v1/teams/team-members/decline-invitation?invite_token=${invite_token}&team_member_id=${team_member_id}`,
+          {
+              method: "PATCH",
+              headers: {
+                  "Content-type": "application/json",
+                  "authorization": `Bearer ${accessToken}`,
+              },
+          });
+  return res;
+}
+
+export async function deleteTeamMember( id:string ) {
+  const accessToken = sessionStorage.getItem('access_token');
+  console.log("ACCESSTOKEN: ", accessToken)
+  const res = await fetch
+      (`http://127.0.0.1:8000/api/v1/teams/team-members/${id}/delete`,
+          {
+              method: "PATCH",
+              headers: {
+                  "Content-type": "application/json",
+                  "authorization": `Bearer ${accessToken}`,
+              },
+          });
   return res;
 }

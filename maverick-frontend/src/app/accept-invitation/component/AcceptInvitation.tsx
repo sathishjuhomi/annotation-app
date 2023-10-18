@@ -6,7 +6,8 @@ import Box from "@mui/material/Box";
 import { AcceptTeamInviteProps } from "../../component/interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getMemberDetail } from "../api/route";
 
 export default function acceptTeamInvitation(
     {
@@ -16,7 +17,6 @@ export default function acceptTeamInvitation(
         message,
         messageColor,
         onSubmit,
-        formHandleSubmit,
     }: AcceptTeamInviteProps
 ) {
     const router = useRouter();
@@ -24,6 +24,10 @@ export default function acceptTeamInvitation(
         router.push("/docs/installation");
     };
 
+    const params = useSearchParams();
+    const invite_token = params.get('token')
+    const response = getMemberDetail( invite_token )
+    console.log("ReSPONSE_INVITAION_DETAILS: ", response)
     return (
         <Box className="flex">
             <NavBar></NavBar>
@@ -41,7 +45,7 @@ export default function acceptTeamInvitation(
                         type="submit"
                         className="text-white ml-5 bg-primary mb-2 mt-2"
                         variant="contained"
-                        onClick={formHandleSubmit(onSubmit)}
+                        onClick= {onSubmit}
                     >
                         Accept
                     </Button>

@@ -1,6 +1,5 @@
 "use client";
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
@@ -12,18 +11,18 @@ import Divider from '@mui/material/Divider';
 import { createTheme } from "@mui/material/styles";
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import DialogContentText from '@mui/material/DialogContentText/DialogContentText';
-import FolderIcon from '@mui/icons-material/Folder';
 import { TeamsProps } from '@/app/component/interfaces';
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from '@mui/material/CircularProgress';
-import Link from '@mui/material/Link';
 import CreateUpdateForm from './CreateUpdateForm';
+import VisibilityIcon from '@mui/icons-material/VisibilityRounded';
+import SwitchIcon from '@mui/icons-material/SwapHoriz';
+// import AcceptIcon from '@mui/icons-material/DoneOutline';
+import AcceptIcon from '@mui/icons-material/Check';
+import DeclineIcon from '@mui/icons-material/Cancel';
+import { useRouter } from "next/navigation";
+import { Fab } from '@mui/material';
+import { declineTeamInvite } from '../api/route';
 
 const defaultTheme = createTheme();
 
@@ -39,12 +38,15 @@ export default function TeamList(
     register,
     errors,
     teams,
+    acceptInviteTeam,
+    declineInviteTeam,
   }: TeamsProps
 ) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const router = useRouter();
 
   return (
     <Box className="mt-4 w-full mr-4">
@@ -84,21 +86,26 @@ export default function TeamList(
               <ListItemText className="mt-5 font-bold text-black">
                 {team.team_name}
               </ListItemText>
-              <Button
-                className="ml-24 mt-1 mb-1 mr-2 text-black"
-                variant="outlined"
+              <Fab
+                className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-white bg-tertiary' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
+                size="small"
+                onClick={team.is_activated === false ? acceptInviteTeam : declineInviteTeam}
               >
-                Switch
-              </Button>
-              <Button
-                className="ml-2 mt-1 mb-1 text-black"
-                variant="outlined"
-
+                {team.is_activated === true ? <SwitchIcon/> : <AcceptIcon/>}
+              </Fab>
+              <Fab
+                className={team.is_activated === true ? 'ml-1 mt-1 mb-1 text-white bg-primary' : 'ml-1 mt-1 mb-1 text-white bg-grey'}
+                size="small"
+                onClick={() => {
+                  if (team.is_activated === true) {
+                    router.push(`/teams/${team.team_id}`);
+                  } else {
+                    router.push('/teams');
+                  }
+                }}
               >
-                <Link href={`/teams/${team.team_id}`}>
-                  View
-                </Link>
-              </Button>
+                {team.is_activated === true ? <VisibilityIcon/> : <DeclineIcon/>}
+              </Fab>
             </ListItem>
             <Divider variant="inset" component="li" />
           </List>

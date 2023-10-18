@@ -12,16 +12,21 @@ const acceptTeamInvitation = () => {
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
-    const { handleSubmit } = useForm();
 
     const router = useRouter();
     const params = useSearchParams();
-    const token = params.get('token')
+    const invite_token = params.get('token')
+    const team_member_id = params.get('team_id')
+    const invitee_email = params.get('email_to')
+
+    console.log("invite_token", invite_token)
+    console.log("team_member_id", team_member_id)
+    console.log("emailinvite", invitee_email)
 
     const submit = async () => {
         setShowMessage(true);
         setLoading(true);
-        const response = await acceptTeamInvite(token)
+        const response = await acceptTeamInvite(invite_token, team_member_id,  invitee_email)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -50,7 +55,6 @@ const acceptTeamInvitation = () => {
         message={message}
         messageColor={messageColor}
         onSubmit={submit}
-        formHandleSubmit={handleSubmit}
         />
     )
 };

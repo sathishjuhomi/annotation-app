@@ -51,6 +51,8 @@ export interface TeamsProps {
   register: any;
   errors: any;
   teams: any;
+  acceptInviteTeam: any;
+  declineInviteTeam: any;
 }
 
 export interface CreateUpdateProps {
@@ -95,5 +97,4 @@ export interface AcceptTeamInviteProps {
   message: string;
   messageColor: string;
   onSubmit: any;
-  formHandleSubmit: any;
 }
