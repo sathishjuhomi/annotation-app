@@ -28,13 +28,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
 import { useRouter } from "next/navigation";
 
-const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
+const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
     const [loading, setLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("")
     const [teamMembers, setTeamMembers] = React.useState([])
+    
     useEffect(() => {
         getTeamAndTeamMembers(params.id)
             .then(async (res) => {

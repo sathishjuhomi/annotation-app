@@ -4,8 +4,8 @@ import * as Constants from "../utils/constant";
 import { useSearchParams } from 'next/navigation';
 import { acceptTeamInvite } from "./api/route";
 import AcceptInvitation from "./component/AcceptInvitation";
-import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { declineTeamInvite } from "../teams/api/route";
 
 const acceptTeamInvitation = () => {
     const [loading, setLoading] = React.useState(false);
@@ -16,23 +16,19 @@ const acceptTeamInvitation = () => {
     const router = useRouter();
     const params = useSearchParams();
     const invite_token = params.get('token')
-    const team_member_id = params.get('team_id')
-    const invitee_email = params.get('email_to')
 
     console.log("invite_token", invite_token)
-    console.log("team_member_id", team_member_id)
-    console.log("emailinvite", invitee_email)
 
     const submit = async () => {
         setShowMessage(true);
         setLoading(true);
-        const response = await acceptTeamInvite(invite_token, team_member_id,  invitee_email)
+        const response = await acceptTeamInvite(invite_token)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
                     setMessage(response.message);
                     setMessageColor(Constants.SUCCESS);
-                    router.push("/docs/installation");
+                    router.push("/teams");
                 } else {
                     const data = response.detail;
                     setMessage(data);
@@ -47,6 +43,34 @@ const acceptTeamInvitation = () => {
             });
     };
 
+    const invite_token_decline = params.get('token')
+
+    console.log("invite_token_decline", invite_token_decline)
+  
+    const declineInviteTeam = async () => {
+      setShowMessage(true);
+      setLoading(true);
+      const response = await declineTeamInvite(invite_token_decline)
+          .then(async (res) => {
+              const response = await res.json();
+              if (res.status === 200) {
+                  setMessage(response.message);
+                  setMessageColor(Constants.SUCCESS);
+                  router.push("/teams");
+              } else {
+                  const data = response.detail;
+                  setMessage(data);
+                  setMessageColor(Constants.ERROR);
+              }
+              setLoading(false);
+          })
+          .catch((error) => {
+              setMessage(error);
+              setLoading(false);
+              setMessageColor(Constants.ERROR);
+          });
+  };
+
     return (
         <AcceptInvitation
         loading={loading}
@@ -55,6 +79,7 @@ const acceptTeamInvitation = () => {
         message={message}
         messageColor={messageColor}
         onSubmit={submit}
+        declineInviteTeam={declineInviteTeam}
         />
     )
 };

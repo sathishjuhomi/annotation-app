@@ -73,17 +73,13 @@ const Teams = () => {
 
   const params = useSearchParams();
   const invite_token = params.get('token')
-  const team_member_id = params.get('team_id')
-  const invitee_email = params.get('email_to')
 
   console.log("invite_token", invite_token)
-  console.log("team_member_id", team_member_id)
-  console.log("emailinvite", invitee_email)
 
   const acceptInviteTeam = async () => {
       setShowMessage(true);
       setLoading(true);
-      const response = await acceptTeamInvite(invite_token, team_member_id,  invitee_email)
+      const response = await acceptTeamInvite(invite_token)
           .then(async (res) => {
               const response = await res.json();
               if (res.status === 200) {
@@ -105,15 +101,13 @@ const Teams = () => {
   };
   
   const invite_token_decline = params.get('invite_token')
-  const team_member_id_decline = params.get('team_member_id')
 
   console.log("invite_token_decline", invite_token_decline)
-  console.log("team_member_id_decline", team_member_id_decline)
 
   const declineInviteTeam = async () => {
     setShowMessage(true);
     setLoading(true);
-    const response = await declineTeamInvite(invite_token_decline, team_member_id_decline)
+    const response = await declineTeamInvite(invite_token_decline)
         .then(async (res) => {
             const response = await res.json();
             if (res.status === 200) {

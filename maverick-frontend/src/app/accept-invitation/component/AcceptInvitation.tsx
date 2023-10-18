@@ -8,6 +8,7 @@ import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getMemberDetail } from "../api/route";
+import { useEffect } from "react";
 
 export default function acceptTeamInvitation(
     {
@@ -17,17 +18,28 @@ export default function acceptTeamInvitation(
         message,
         messageColor,
         onSubmit,
+        declineInviteTeam,
     }: AcceptTeamInviteProps
 ) {
     const router = useRouter();
-    const handleDeclineClick = () => {
-        router.push("/docs/installation");
-    };
+    // const handleDeclineClick = () => {
+    //     router.push("/docs/installation");
+    // };
 
     const params = useSearchParams();
     const invite_token = params.get('token')
-    const response = getMemberDetail( invite_token )
-    console.log("ReSPONSE_INVITAION_DETAILS: ", response)
+    const [teamDetail, setTeamDetail] = React.useState(null)
+
+    useEffect(() => {
+        const response = getMemberDetail(invite_token)
+        .then(async (res) => {
+            const response = await res.json()
+            if (res.status === 200){
+                setTeamDetail(response)
+            }
+        })
+    }, []);
+
     return (
         <Box className="flex">
             <NavBar></NavBar>
@@ -35,10 +47,10 @@ export default function acceptTeamInvitation(
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - 240px)` } }}>
                 <Paper className="mt-4 ml-2 mr-2">
                     <br></br>
-                    <Typography className="text-black font-bold text-xl ml-5">Join the Team</Typography>
+                    <Typography className="text-black font-bold text-xl ml-5">Join the {teamDetail !== null ? teamDetail['team_name'] : ""}</Typography>
                     <br></br>
                     <Typography className="text-black ml-5">
-                        jayabharathi@juhomi.com invited you to the team
+                    {teamDetail !== null ? teamDetail['invited_by'] : ""} invited you to the team
                     </Typography>
                     <br></br>
                     <Button
@@ -52,7 +64,7 @@ export default function acceptTeamInvitation(
                     <Button
                         className="ml-5 mb-2 mt-2"
                         variant="outlined"
-                        onClick={handleDeclineClick}
+                        onClick={declineInviteTeam}
                     >
                         Decline
                     </Button>

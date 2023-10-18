@@ -97,4 +97,5 @@ export interface AcceptTeamInviteProps {
   message: string;
   messageColor: string;
   onSubmit: any;
+  declineInviteTeam: any;
 }
