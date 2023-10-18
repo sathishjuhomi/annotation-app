@@ -23,8 +23,6 @@ class BaseDBHandler:
         obj_in_data = jsonable_encoder(input_object)
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
         return db_obj
 
     def update(self, db: Session, *, db_obj, input_object):
@@ -37,14 +35,11 @@ class BaseDBHandler:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
         db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
         return db_obj
 
     def delete(self, db: Session, *, id: int):
         obj = db.query(self.model).get(id)
         db.delete(obj)
-        db.commit()
         return obj
 
     def load_all_by_column(self, db: Session, column_name: str, value: Any):
@@ -75,6 +70,3 @@ class BaseDBHandler:
                     setattr(obj, field, update_dict[field])
 
         db.add_all(db_objs)
-        db.commit()
-        for db_obj in db_objs:
-            db.refresh(db_obj)

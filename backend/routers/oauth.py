@@ -28,6 +28,7 @@ def oauth_sign_up(request_payload: UserSchema, db) -> Any:
         try:
             user = user_service.create_user(
                 request_payload=request_payload, db=db)
+            db.commit()
             logger.info("User created successfully: %s", user.email)
         except Exception as e:
             logger.error("Error creating user: %s", str(e))

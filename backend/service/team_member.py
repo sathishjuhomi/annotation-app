@@ -13,6 +13,7 @@ from backend.models.team_member import TeamMembers
 class TeamMemberService():
     @staticmethod
     def add_team_member(id, team_id, email, invited_by_id,
+                        invite_token: Optional[str],
                         role: dict,
                         is_activated: Optional[bool] = False,
                         is_declined: Optional[bool] = False):
@@ -21,6 +22,7 @@ class TeamMemberService():
             "team_id": team_id,
             "email": email,
             "invited_by_id": invited_by_id,
+            "invite_token": invite_token,
             "roles": role,
             "is_activated": is_activated,
             "is_declined": is_declined
@@ -85,38 +87,32 @@ class TeamMemberService():
 
             member_detail = request_payload.model_dump()
 
-            team = team_db_handler.load_by_column(db=db, column_name="id", value=team_id)
-            team_name = team.team_name
-
             member = db.query(TeamMembers).filter_by(
                 team_id=team_id, email=member_detail["email"]).first()
             
             if member:
                 update_declined_flag = {
                     "is_declined": False, "invited_by_id": decoded_token["id"]}
-                team_member_db_handler.update(db=db, db_obj=member, input_object=update_declined_flag)
+                response = team_member_db_handler.update(db=db, db_obj=member, input_object=update_declined_flag)
+                invitation_token = response.invite_token
             else:
                 id = uuid.uuid4()
+                to_create_access_token = {
+                    'id': str(id),
+                    'email': member_detail["email"]
+                }
+                # Create an access token for the invitation
+                invitation_token = create_access_token(to_create_access_token)
                 team_member_data = self.add_team_member(
                     id=id, team_id=team_id, email=member_detail["email"],
-                    invited_by_id=decoded_token["id"], role=member_detail["role"])
+                    invited_by_id=decoded_token["id"], invite_token=invitation_token,
+                      role=member_detail["role"])
                 _ = team_member_db_handler.create(db=db, input_object=team_member_data)
 
-            to_create_access_token = {
-                'id': str(member.id if member else id),
-                'email': member_detail["email"]
-            }
-
-            # Create an access token for the invitation
-            invitation_token = create_access_token(to_create_access_token)
-
-            id = member.id if member else id  # Ensure 'id' is defined here
             email = member_detail["email"]
 
             # Send an invitation email
-            await send_invitation_email(team_member_id=id, team_name=team_name,
-                                        email_from=decoded_token["email"], email_to=email,
-                                        invite_token=invitation_token)
+            await send_invitation_email(email_to=email, invite_token=invitation_token)
 
             return {"detail": f"{email} invited successfully"}
 
@@ -152,6 +148,7 @@ class TeamMemberService():
             "deleted_by_id": decoded_token["id"],
             "t_delete": datetime.now()
         }
+        print('member_detail ', member_detail)
 
         team_member_db_handler.update(db=db,
                                       db_obj=team_member_detail,
