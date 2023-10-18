@@ -5,9 +5,9 @@ from backend.utils.utils import PASSWORD_REST_TOKEN_EXPIRY
 from backend.utils.email_utils import conf, SERVER_HOST, EMAIL_TEMPLATES_DIR
 from pydantic import UUID4
 
-async def send_invitation_email(team_member_id: UUID4, team_name: str,email_from: str, email_to: str, invite_token: str) -> None:
+async def send_invitation_email(email_to: str, invite_token: str) -> None:
     valid_hours = PASSWORD_REST_TOKEN_EXPIRY / 60
-    link = f"{SERVER_HOST}/accept-invitation?token={invite_token}&team_member_id={team_member_id}&team_name={team_name}&email_from={email_from}&email_to={email_to}"
+    link = f"{SERVER_HOST}/teams/team-members/member-detail?token={invite_token}"
     env = Environment(loader=FileSystemLoader(EMAIL_TEMPLATES_DIR))
     template = env.get_template("accept_team_invitation.html")
     formatted_template = template.render(

@@ -28,6 +28,7 @@ def upgrade():
                               nullable=False),
                     sa.Column('email', sa.String(), nullable=False),
                     sa.Column('invited_by_id', sa.dialects.postgresql.UUID(as_uuid=True), nullable=True),
+                    sa.Column('invite_token', sa.String(), nullable=True),
                     sa.Column('roles', sa.JSON, nullable=False),
                     sa.Column('is_activated', sa.Boolean,
                               nullable=False, server_default='false'),

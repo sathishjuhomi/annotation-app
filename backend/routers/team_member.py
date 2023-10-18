@@ -4,7 +4,7 @@ from backend.db_handler.user_handler import user_db_handler
 from pydantic import UUID4
 import logging
 
-from backend.schemas.response.team_member import AcceptInvitationSchema
+from backend.schemas.response.team_member import AcceptInvitationSchema, MemberDetailSchema
 from backend.schemas.response.user import DetailSchema
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -33,20 +33,46 @@ async def invite_team_member(team_id: UUID4,
     return response
 
 
-@team_member_router.patch("/teams/team-members/accept-invitation",
-                          response_model=AcceptInvitationSchema | DetailSchema)
-async def accept_invitation(
+@team_member_router.post("/teams/team-members/member-detail",
+                         response_model=MemberDetailSchema | DetailSchema)
+def get_team_member_detail(
     invite_token: str,
-    team_member_id: UUID4,
-    invitee_email: str,
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer),
 ) -> dict:
     token = authorization.credentials
     _ = decode_token(token=token)
     _ = decode_token(token=invite_token)
+    team_member_detail = team_member_db_handler.load_by_column(db=db,
+                                                               column_name="invite_token",
+                                                               value=invite_token)
+    if not team_member_detail:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invalid Invite Token",
+        )
+
+    invited_by_id = team_member_detail.team.created_by_id
     user = user_db_handler.load_by_column(
-        db=db, column_name='email', value=invitee_email)
+        db=db, column_name='id', value=invited_by_id)
+    response = {"team_name": team_member_detail.team.team_name,
+                "invited_by": user.email,
+                "invite_token": invite_token}
+    return response
+
+
+@team_member_router.patch("/teams/team-members/accept-invitation",
+                          response_model=AcceptInvitationSchema | DetailSchema)
+async def accept_invitation(
+    invite_token: str,
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer),
+) -> dict:
+    token = authorization.credentials
+    _ = decode_token(token=token)
+    decoded_token = decode_token(token=invite_token)
+    user = user_db_handler.load_by_column(
+        db=db, column_name='email', value=decoded_token["email"])
 
     if not user:
         raise HTTPException(
@@ -56,29 +82,28 @@ async def accept_invitation(
 
     team_member_detail = team_member_db_handler.load_by_column(db=db,
                                                                column_name="id",
-                                                               value=team_member_id)
+                                                               value=decoded_token["id"])
     activate = {"is_activated": True}
 
     response = team_member_db_handler.update(db=db,
                                              db_obj=team_member_detail,
                                              input_object=activate)
-    return {"detail": f"{team_member_detail.team.team_name} team invitation accepted", "team_member": response}
+    return {"detail": f"{response.team.team_name} team invitation accepted", "team_member": response}
 
 
 @team_member_router.patch("/teams/team-members/decline-invitation",
                           response_model=DetailSchema)
 def decline_invitation(
     invite_token: str,
-    team_member_id: UUID4,
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer),
 ) -> dict:
     token = authorization.credentials
     _ = decode_token(token=token)
-    _ = decode_token(token=invite_token)
+    decoded_token = decode_token(token=invite_token)
     team_member_detail = team_member_db_handler.load_by_column(db=db,
                                                                column_name="id",
-                                                               value=team_member_id)
+                                                               value=decoded_token["id"])
     print('team_member_detail ', team_member_detail)
     decline = {"is_declined": True}
 

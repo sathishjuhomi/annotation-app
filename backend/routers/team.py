@@ -51,6 +51,7 @@ async def create_team(
                                                                team_id=created_team.id,
                                                                email=decoded_token["email"],
                                                                invited_by_id=None,
+                                                               invite_token=None,
                                                                role={
                                                                    "owner": True,
                                                                    "admin": True,

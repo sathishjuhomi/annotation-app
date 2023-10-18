@@ -13,6 +13,7 @@ class TeamMembers(Base, TimestampMixIn):
         "teams.id", ondelete="CASCADE"), nullable=False)
     email = Column(String, nullable=False)
     invited_by_id = Column(UUID(as_uuid=True), nullable=True)
+    invite_token = Column(String, nullable=True)
     roles = Column(JSON, nullable=False)
     is_activated = Column(Boolean, default=False)
     is_declined = Column(Boolean, default=False)
