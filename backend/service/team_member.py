@@ -1,7 +1,6 @@
 from typing import Optional
 import uuid
 from datetime import datetime
-from backend.db_handler.team_handler import team_db_handler
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from backend.utils.utils import create_access_token
@@ -89,11 +88,12 @@ class TeamMemberService():
 
             member = db.query(TeamMembers).filter_by(
                 team_id=team_id, email=member_detail["email"]).first()
-            
+
             if member:
                 update_declined_flag = {
                     "is_declined": False, "invited_by_id": decoded_token["id"]}
-                response = team_member_db_handler.update(db=db, db_obj=member, input_object=update_declined_flag)
+                response = team_member_db_handler.update(
+                    db=db, db_obj=member, input_object=update_declined_flag)
                 invitation_token = response.invite_token
             else:
                 id = uuid.uuid4()
@@ -106,8 +106,9 @@ class TeamMemberService():
                 team_member_data = self.add_team_member(
                     id=id, team_id=team_id, email=member_detail["email"],
                     invited_by_id=decoded_token["id"], invite_token=invitation_token,
-                      role=member_detail["role"])
-                _ = team_member_db_handler.create(db=db, input_object=team_member_data)
+                    role=member_detail["role"])
+                _ = team_member_db_handler.create(
+                    db=db, input_object=team_member_data)
 
             email = member_detail["email"]
 

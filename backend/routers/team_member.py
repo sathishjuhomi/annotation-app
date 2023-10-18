@@ -21,7 +21,6 @@ team_member_router = APIRouter(prefix="/api/v1", tags=["Team_Members"])
 
 bearer = HTTPBearer()
 
-
 @team_member_router.post("/teams/{team_id}/team-members/invite")
 async def invite_team_member(team_id: UUID4,
                              request_payload: TeamMemberSchema,
@@ -33,7 +32,7 @@ async def invite_team_member(team_id: UUID4,
     return response
 
 
-@team_member_router.post("/teams/team-members/member-detail",
+@team_member_router.get("/teams/team-members/member-detail",
                          response_model=MemberDetailSchema | DetailSchema)
 def get_team_member_detail(
     invite_token: str,

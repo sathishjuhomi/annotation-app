@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, Column, String, UniqueConstraint, text
+from sqlalchemy import Column, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 
 from backend.models.database import Base

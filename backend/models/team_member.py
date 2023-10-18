@@ -1,4 +1,4 @@
-from sqlalchemy import Column, TIMESTAMP, text, ForeignKey, Boolean, UniqueConstraint, String
+from sqlalchemy import Column, ForeignKey, Boolean, UniqueConstraint, String
 from sqlalchemy.dialects.postgresql import UUID, JSON
 from sqlalchemy.orm import relationship
 from backend.models.database import Base

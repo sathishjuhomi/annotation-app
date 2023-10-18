@@ -1,9 +1,8 @@
-from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
+from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader
-from backend.config import get_settings
 from backend.utils.utils import PASSWORD_REST_TOKEN_EXPIRY
 from backend.utils.email_utils import conf, SERVER_HOST, EMAIL_TEMPLATES_DIR
-from pydantic import UUID4
+
 
 async def send_invitation_email(email_to: str, invite_token: str) -> None:
     valid_hours = PASSWORD_REST_TOKEN_EXPIRY / 60
