@@ -48,6 +48,7 @@ export default function ResponsiveDrawer(props: Props) {
         router.push("/teams");
     };
     const navigateToSignin = () => {
+        sessionStorage.setItem('access_token', "");
         router.push("/signin");
     };
 
@@ -87,6 +88,9 @@ export default function ResponsiveDrawer(props: Props) {
         setAnchorEl(null);
     };
 
+    const email = sessionStorage.getItem("emailId");
+    const teamName = sessionStorage.getItem("teamName")
+
     return (
         <Box>
             <CssBaseline />
@@ -113,7 +117,7 @@ export default function ResponsiveDrawer(props: Props) {
                     </Typography>
                     <React.Fragment>
                         <Box className="ml-auto">
-                            <Tooltip title="Account settings">
+                            <Tooltip title={email}>
                                 <IconButton
                                     onClick={handleClickOpen}
                                     size="small"
@@ -122,7 +126,7 @@ export default function ResponsiveDrawer(props: Props) {
                                     aria-haspopup="true"
                                     aria-expanded={openmenu ? 'true' : undefined}
                                 >
-                                    <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                                    <Avatar className="font-bold">{email ? email[0].toUpperCase() : ""}</Avatar>
                                 </IconButton>
                             </Tooltip>
                         </Box>
@@ -131,17 +135,16 @@ export default function ResponsiveDrawer(props: Props) {
                             open={openmenu}
                             onClose={handleClose}
                             onClick={handleClose}>
-                            <MenuItem onClick={handleClose}>
-                                Profile
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                My account
-                            </MenuItem>
-                            <Divider />
+                            {teamName ?
+                                <Box>
+                                    <MenuItem onClick={handleClose}>
+                                        {teamName}
+                                    </MenuItem>
+                                    <Divider />
+                                </Box>
+                                : null
+                            }
                             <MenuItem onClick={navigateToSignin}>
-                                <ListItemIcon>
-                                    <Logout fontSize="small" />
-                                </ListItemIcon>
                                 Logout
                             </MenuItem>
                         </Menu>

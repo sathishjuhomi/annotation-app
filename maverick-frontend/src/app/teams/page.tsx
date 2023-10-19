@@ -35,8 +35,11 @@ const Teams = () => {
     const response = teamList()
       .then(async (res) => {
         const response = await res.json();
-        console.log("response", response)
         if (res.status === 200) {
+          const teamName = sessionStorage.getItem('teamName');
+          if (teamName === null) {
+            sessionStorage.setItem('teamName', response[0]['team_name'])
+          }
           setTeams(response);
         }
         setLoading(false);
@@ -53,7 +56,6 @@ const Teams = () => {
       .then(async (res) => {
         const response = await res.json();
         if (res.status === 201) {
-          console.log("Create team res", response);
           setMessage(Constants.TEAM_CREATED_SUCCESSFULLY);
           setMessageColor(Constants.SUCCESS);
           location.reload()

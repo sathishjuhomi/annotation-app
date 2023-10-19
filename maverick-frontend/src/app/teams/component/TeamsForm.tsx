@@ -45,7 +45,11 @@ export default function TeamList(
     setOpen(true);
   };
   const router = useRouter();
-
+  const teamNameValue = sessionStorage.getItem('teamName')
+  const onSwitchTeam = (teamName: string) => {
+    sessionStorage.setItem('teamName', teamName)
+    // location.reload()
+  };
   return (
     <Box className="mt-4 w-full mr-4">
       <Paper elevation={3} className="ml-2 mr-2">
@@ -84,16 +88,18 @@ export default function TeamList(
               <ListItemText className="mt-5 font-bold text-black">
                 {team.team_name}
               </ListItemText>
-              <Fab
-                className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-white bg-tertiary' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
-                size="small"
-                onClick={() => { 
-                  team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : null
-                }
-                }
-              >
-                {team.is_activated === true ? <SwitchIcon/> : <AcceptIcon/>}
-              </Fab>
+              {team.is_activated === true && team.team_name === teamNameValue ? null :
+                <Fab
+                  className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-white bg-tertiary' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
+                  size="small"
+                  onClick={() => {
+                    team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : onSwitchTeam(team.team_name)
+                  }
+                  }
+                >
+                  {team.is_activated === true ? <SwitchIcon /> : <AcceptIcon />}
+                </Fab>
+              }
               <Fab
                 className={team.is_activated === true ? 'ml-1 mt-1 mb-1 text-white bg-primary' : 'ml-1 mt-1 mb-1 text-white bg-grey'}
                 size="small"
@@ -105,7 +111,7 @@ export default function TeamList(
                   }
                 }}
               >
-                {team.is_activated === true ? <VisibilityIcon/> : <DeclineIcon/>}
+                {team.is_activated === true ? <VisibilityIcon /> : <DeclineIcon />}
               </Fab>
             </ListItem>
             <Divider variant="inset" component="li" />

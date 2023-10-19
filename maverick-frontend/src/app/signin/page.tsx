@@ -34,14 +34,15 @@ const SignIn = () => {
     await signIn(data)
       .then(async (res) => {
         const response = await res.json();
-        const data = response.detail;
+        const responseData = response.detail;
         if (res.status === 200) {
+          sessionStorage.setItem('emailId', data.email);
           setAccessToken(response);
-          setMessage(data);
+          setMessage(responseData);
           setMessageColor(Constants.SUCCESS);
           router.push("/docs/installation");
         } else {
-          setMessage(data);
+          setMessage(responseData);
           setMessageColor(Constants.ERROR);
         }
         setLoading(false);
