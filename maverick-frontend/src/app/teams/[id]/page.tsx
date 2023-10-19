@@ -114,10 +114,10 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
             });
     }
 
-    const handleDeleteTeamMember = async () => {
+    const handleDeleteTeamMember = async (teamMemberId : string ) => {
         setShowMessage(true);
         setLoading(true);
-        await deleteTeamMember(params.id)
+        await deleteTeamMember(teamMemberId)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -319,7 +319,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                                                     type="submit"
                                                     variant="contained"
                                                     className="bg-primary"
-                                                    onClick={handleDeleteTeamMember}
+                                                    onClick={() => handleDeleteTeamMember(teamMember['team_member_id'])}
                                                 >
                                                     Yes
                                                 </Button>
