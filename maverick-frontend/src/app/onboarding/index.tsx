@@ -20,61 +20,59 @@ export default function Onboarding() {
   };
 
   return (
-    <Box className="bg-grey display-flex">
+    <Box className="bg-white display-flex">
       <CssBaseline />
-      <AppBar component="nav">
+      <AppBar component="nav" className="bg-primary">
         <Toolbar>
-        <div className="flex-grow hidden sm:block">
-          <Typography
-            variant="h6"
-            component="div"
-            className="text-white sm-sm md-md lg-lg xl-xl"
-          >
-            Maverick
-          </Typography>
+          <div className="flex-grow hidden sm:block">
+            <Typography
+              variant="h6"
+              component="div"
+              className="text-white sm-sm md-md lg-lg xl-xl"
+            >
+              Maverick
+            </Typography>
           </div>
           <div className="hidden sm:block">
-          <Box>
-            <Button className="text-white" onClick={navigateToSignIn}>
-              Login
-            </Button>
-            <Button className="text-white" onClick={navigateToSignUp}>
-              Sign Up
-            </Button>
-          </Box>
+            <Box>
+              <Button className="text-white" onClick={navigateToSignIn}>
+                Login
+              </Button>
+              <Button className="text-white" onClick={navigateToSignUp}>
+                Sign Up
+              </Button>
+            </Box>
           </div>
         </Toolbar>
       </AppBar>
       <Box className="p-3" component="main">
         <Toolbar />
         <Typography
-          className="text-white font-bold mt-20"
+          className="text-black font-bold mt-20"
           variant="h2"
           gutterBottom
         >
           Build products faster
         </Typography>
         <div>
-        <Typography
-          sx={{ marginTop: "-20px" }}
-          className="text-white font-bold"
-          variant="h2"
-          gutterBottom
-        >
-          in Next.js and Python
-        </Typography>
+          <Typography
+            sx={{ marginTop: "-20px" }}
+            className="text-black font-bold"
+            variant="h2"
+            gutterBottom
+          >
+            in Next.js and Python
+          </Typography>
         </div>
-        <Typography
-          variant="h5"
-          gutterBottom
-          className="text-white mt-10"
-        >
+        <Typography variant="h5" gutterBottom className="text-black mt-10">
           Maverick is the best Next.js and Python SaaS template out there. Focus
           on your business, not on the boilerplate.
         </Typography>
         <br />
         <br />
-        <Button className="bg-primary text-white" variant="contained">Maverick your next app</Button>
+        <Button className="bg-primary text-white" variant="contained">
+          Maverick your next app
+        </Button>
         <br />
         <br />
       </Box>

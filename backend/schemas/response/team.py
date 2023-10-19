@@ -18,6 +18,7 @@ class GetTeamsResponseSchema(BaseModel):
     team_name: str
     is_activated: bool
     roles: dict
+    invite_token: str | None
 
 
 class GetTeamMembersByTeamId(BaseModel):
@@ -25,6 +26,7 @@ class GetTeamMembersByTeamId(BaseModel):
     email: EmailStr
     is_activated: bool
     roles: dict
+    invite_token: str | None
 
 
 class GetTeamMembersByTeamIdResponseSchema(BaseModel):

@@ -89,8 +89,8 @@ export default function TeamList(
               <Fab
                 className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-white bg-tertiary' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
                 size="small"
-                onClick={() => {
-                  team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : onDeclineTeamInvite(team.invite_token)
+                onClick={() => { 
+                  team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : null
                 }
                 }
               >
@@ -103,7 +103,7 @@ export default function TeamList(
                   if (team.is_activated === true) {
                     router.push(`/teams/${team.team_id}`);
                   } else {
-                    router.push('/teams');
+                    onDeclineTeamInvite(team.invite_token);
                   }
                 }}
               >

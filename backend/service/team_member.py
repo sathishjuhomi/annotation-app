@@ -45,6 +45,7 @@ class TeamMemberService():
                 "email": team_member.email,
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
+                "invite_token": team_member.invite_token,
             }
             for team_member in team_members
         ]

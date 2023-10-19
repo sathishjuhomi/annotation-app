@@ -80,7 +80,7 @@ const Teams = () => {
               if (res.status === 200) {
                   setMessage(response.message);
                   setMessageColor(Constants.SUCCESS);
-                  router.push("/teams");
+                  location.reload();
               } else {
                   const data = response.detail;
                   setMessage(data);
