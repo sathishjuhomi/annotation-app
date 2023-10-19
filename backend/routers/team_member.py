@@ -33,7 +33,7 @@ async def invite_team_member(team_id: UUID4,
     return response
 
 
-@team_member_router.post("/teams/team-members/{team_member_id}/resend-invite")
+@team_member_router.patch("/teams/team-members/{team_member_id}/resend-invite")
 async def reinvite_team_member(team_member_id: UUID4,
                                db: Session = Depends(get_db),
                                authorization: str = Depends(bearer)) -> Any:
