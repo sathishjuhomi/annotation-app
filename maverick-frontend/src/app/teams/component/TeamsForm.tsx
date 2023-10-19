@@ -17,12 +17,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import CreateUpdateForm from './CreateUpdateForm';
 import VisibilityIcon from '@mui/icons-material/VisibilityRounded';
 import SwitchIcon from '@mui/icons-material/SwapHoriz';
-// import AcceptIcon from '@mui/icons-material/DoneOutline';
 import AcceptIcon from '@mui/icons-material/Check';
 import DeclineIcon from '@mui/icons-material/Cancel';
 import { useRouter } from "next/navigation";
 import { Fab } from '@mui/material';
-import { declineTeamInvite } from '../api/route';
 
 const defaultTheme = createTheme();
 

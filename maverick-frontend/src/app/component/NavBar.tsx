@@ -12,8 +12,13 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Tooltip from '@mui/material/Tooltip';
+import Logout from '@mui/icons-material/Logout';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Collapse} from '@mui/material';
+import { Collapse, Menu } from '@mui/material';
 import { useRouter } from "next/navigation";
 
 const drawerWidth = 240;
@@ -42,6 +47,9 @@ export default function ResponsiveDrawer(props: Props) {
     const navigateToTeams = () => {
         router.push("/teams");
     };
+    const navigateToSignin = () => {
+        router.push("/signin");
+    };
 
     const drawer = (
         <div>
@@ -69,6 +77,16 @@ export default function ResponsiveDrawer(props: Props) {
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const openmenu = Boolean(anchorEl);
+    const handleClickOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Box>
             <CssBaseline />
@@ -93,6 +111,41 @@ export default function ResponsiveDrawer(props: Props) {
                     <Typography variant="h6" noWrap component="div" className="font-bold text-white">
                         Welcome to Maverick
                     </Typography>
+                    <React.Fragment>
+                        <Box className="ml-auto">
+                            <Tooltip title="Account settings">
+                                <IconButton
+                                    onClick={handleClickOpen}
+                                    size="small"
+                                    sx={{ ml: 2 }}
+                                    aria-controls={openmenu ? 'account-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openmenu ? 'true' : undefined}
+                                >
+                                    <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                        <Menu anchorEl={anchorEl}
+                            id="account-menu"
+                            open={openmenu}
+                            onClose={handleClose}
+                            onClick={handleClose}>
+                            <MenuItem onClick={handleClose}>
+                                Profile
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                My account
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem onClick={navigateToSignin}>
+                                <ListItemIcon>
+                                    <Logout fontSize="small" />
+                                </ListItemIcon>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </React.Fragment>
                 </Toolbar>
             </AppBar>
             <Box

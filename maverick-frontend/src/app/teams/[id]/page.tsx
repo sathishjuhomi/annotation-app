@@ -24,6 +24,7 @@ import { TeamsFormData } from "@/app/component/interfaces";
 import { InviteATeamMemberFormData } from "@/app/component/interfaces";
 import { updateTeam } from "../api/route";
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteTeamIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
 import { useRouter } from "next/navigation";
@@ -85,9 +86,20 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
     const handleClickOpenDelete = () => {
         setOpenDelete(true);
     };
+
     const handleCloseDelete = () => {
         setOpenDelete(false);
     };
+
+    const [openDeleteTeam, setOpenDeleteTeam] = React.useState(false);
+    const handleClickOpenDeleteTeam = () => {
+        setOpenDeleteTeam(true);
+    };
+
+    const handleCloseDeleteTeam = () => {
+        setOpenDeleteTeam(false);
+    };
+
     const router = useRouter();
     
     const handleDeleteTeam = async () => {
@@ -245,11 +257,11 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                         <Fab
                             size="small"
                             className="mr-1 mt-1 bg-grey text-white"
-                            onClick={handleClickOpenDelete}
+                            onClick={handleClickOpenDeleteTeam}
                         >
-                            <DeleteIcon />
+                            <DeleteTeamIcon />
                         </Fab>
-                        <Dialog open={openDelete} onClose={handleCloseDelete}>
+                        <Dialog open={openDeleteTeam} onClose={handleCloseDeleteTeam}>
                             <DialogContent>
                                 <DialogContentText className="text-black">
                                     Are you sure you want to delete the Team {teamName} ?
@@ -260,12 +272,13 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                                     type="submit"
                                     variant="contained"
                                     className="bg-primary"
+                                    // onClick={() => handleDeleteTeam(params.id)}
                                     onClick={handleDeleteTeam}
                                 >
                                     Yes
                                 </Button>
                                 <Button
-                                    onClick={handleCloseDelete}
+                                    onClick={handleCloseDeleteTeam}
                                     variant="outlined"
                                 >
                                     No
