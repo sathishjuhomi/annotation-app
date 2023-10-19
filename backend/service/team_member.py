@@ -121,6 +121,36 @@ class TeamMemberService():
         except Exception as e:
             return {"error": str(e)}
 
+    async def resend_invitation(self, team_member_id, decoded_token, db: Session):
+
+        try:
+            # Check if the inviter has 'owner' or 'admin' roles
+            self.role_validation(decoded_token, db)
+
+            team_member = team_member_db_handler.load_by_column(
+                db=db, column_name="id", value=team_member_id)
+
+            if team_member:
+                to_create_access_token = {
+                    'id': str(team_member.id),
+                    'email': team_member.email
+                }
+                # Create an access token for the invitation
+                invitation_token = create_access_token(to_create_access_token)
+
+                update_invite_token = {
+                    "invite_token": invitation_token, "invited_by_id": decoded_token["id"]}
+                _ = team_member_db_handler.update(
+                    db=db, db_obj=team_member, input_object=update_invite_token)
+
+            # Send an invitation email
+            await send_invitation_email(email_to=team_member.email, invite_token=invitation_token)
+
+            return {"detail": f"{team_member.email} invited successfully"}
+
+        except Exception as e:
+            return {"error": str(e)}
+
     def delete_member(self, decoded_token, id, db):
         """
         validate the token
