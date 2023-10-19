@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import {createOrUpdateTeamSchema } from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Constants from "../utils/constant";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { TeamsFormData } from "./../component/interfaces";
 import { createTeam, teamList, acceptTeamInvite,declineTeamInvite } from "./api/route";
 
@@ -71,15 +71,10 @@ const Teams = () => {
       });
   };
 
-  const params = useSearchParams();
-  const invite_token = params.get('token')
-
-  console.log("invite_token", invite_token)
-
-  const acceptInviteTeam = async () => {
+  const onAcceptTeamInvite = async (inviteToken : any) => {
       setShowMessage(true);
       setLoading(true);
-      const response = await acceptTeamInvite(invite_token)
+      const response = await acceptTeamInvite(inviteToken)
           .then(async (res) => {
               const response = await res.json();
               if (res.status === 200) {
@@ -100,14 +95,11 @@ const Teams = () => {
           });
   };
   
-  const invite_token_decline = params.get('invite_token')
 
-  console.log("invite_token_decline", invite_token_decline)
-
-  const declineInviteTeam = async () => {
+  const onDeclineTeamInvite = async (inviteToken : any) => {
     setShowMessage(true);
     setLoading(true);
-    const response = await declineTeamInvite(invite_token_decline)
+    const response = await declineTeamInvite(inviteToken)
         .then(async (res) => {
             const response = await res.json();
             if (res.status === 200) {
@@ -143,8 +135,8 @@ const Teams = () => {
           register={register}
           errors={errors}
           teams={teams}
-          acceptInviteTeam={acceptInviteTeam}
-          declineInviteTeam={declineInviteTeam}
+          onAcceptTeamInvite={onAcceptTeamInvite}
+          onDeclineTeamInvite={onDeclineTeamInvite}
           />
       </Box>
     </Box>

@@ -8,8 +8,7 @@ export async function createTeam(formData: TeamsFormData) {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        // "authorization": `Bearer ${storedAccessToken}`,
-        "token": `${accessToken}`
+        "authorization": `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
     });
@@ -23,8 +22,7 @@ export async function createTeam(formData: TeamsFormData) {
       method: "GET",
       headers: { 
         "Content-type": "application/json",
-        // "authorization": `Bearer ${storedAccessToken}`,
-        "token": `${accessToken}`
+        "authorization": `Bearer ${accessToken}`,
      },
     });
     return res;
@@ -36,8 +34,7 @@ export async function createTeam(formData: TeamsFormData) {
         method: "GET",
         headers: {
             "Content-type": "application/json",
-            // "authorization": `Bearer ${storedAccessToken}`,
-            "token": `${accessToken}`
+            "authorization": `Bearer ${accessToken}`,
         },
     });
     return res;
@@ -50,8 +47,7 @@ export async function updateTeam(teamId: string, formData:TeamsFormData) {
       method: "PATCH",
       headers: {
           "Content-type": "application/json",
-          // "authorization": `Bearer ${accessToken}`,
-          "token": `${accessToken}`
+          "authorization": `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
   });
@@ -64,8 +60,7 @@ export async function deleteTeam(teamId:string){
     method: "PATCH",
     headers:{
       "content-type": "application/json",
-      // "authorization": `Bearer ${storedAccessToken}`,
-      "token": `${accessToken}`
+      "authorization": `Bearer ${accessToken}`,
     }
   });
   return res;
@@ -102,8 +97,7 @@ export async function acceptTeamInvite( invite_token : any ) {
               method: "PATCH",
               headers: {
                   "Content-type": "application/json",
-                  // "authorization": `Bearer ${accessToken}`,
-                  "token": `${accessToken}`
+                  "authorization": `Bearer ${accessToken}`,
               },
           });
   return res;
@@ -119,7 +113,6 @@ export async function declineTeamInvite( invite_token: any ) {
               headers: {
                   "Content-type": "application/json",
                   "authorization": `Bearer ${accessToken}`,
-                  // "token": `${accessToken}`
               },
           });
   return res;

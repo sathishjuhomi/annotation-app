@@ -38,8 +38,8 @@ export default function TeamList(
     register,
     errors,
     teams,
-    acceptInviteTeam,
-    declineInviteTeam,
+    onAcceptTeamInvite,
+    onDeclineTeamInvite,
   }: TeamsProps
 ) {
   const [open, setOpen] = React.useState(false);
@@ -89,7 +89,10 @@ export default function TeamList(
               <Fab
                 className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-white bg-tertiary' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
                 size="small"
-                onClick={team.is_activated === false ? acceptInviteTeam : declineInviteTeam}
+                onClick={() => {
+                  team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : onDeclineTeamInvite(team.invite_token)
+                }
+                }
               >
                 {team.is_activated === true ? <SwitchIcon/> : <AcceptIcon/>}
               </Fab>

@@ -51,8 +51,8 @@ export interface TeamsProps {
   register: any;
   errors: any;
   teams: any;
-  acceptInviteTeam: any;
-  declineInviteTeam: any;
+  onAcceptTeamInvite: any;
+  onDeclineTeamInvite: any;
 }
 
 export interface CreateUpdateProps {

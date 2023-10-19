@@ -3,8 +3,8 @@ import logging
 from backend.db_handler.team_member_handler import team_member_db_handler
 from pydantic import UUID4
 import uuid
-
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi.security import HTTPBearer
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.schemas.request.team import TeamSchema
 from backend.schemas.response.user import (
@@ -20,6 +20,8 @@ from backend.utils.utils import decode_token
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 
+bearer = HTTPBearer()
+
 
 @team_router.post(
     "/teams",
@@ -34,17 +36,17 @@ team_router = APIRouter(prefix="/api/v1", tags=["Teams"])
 )
 async def create_team(
     request_payload: TeamSchema,
-    token: str = Header(),
+    authorization: str = Depends(bearer),
     db: Session = Depends(get_db)
 ):
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
     team_service.get_team(
         db, name=request_payload.team_name)
 
     try:
-        created_team= team_service.create_team(
+        created_team = team_service.create_team(
             decoded_token, request_payload=request_payload, db=db)
-        print("created_team ", vars(created_team))
         # Add the creator as a team member if the team was successfully created
         id = uuid.uuid4()
         team_member_data = team_member_service.add_team_member(id=id,
@@ -57,7 +59,6 @@ async def create_team(
                                                                    "admin": True,
                                                                    "member": False},
                                                                is_activated=True)
-        print('team_member_data ', team_member_data)
         team_member_db_handler.create(db=db, input_object=team_member_data)
         return created_team
     except Exception as e:
@@ -89,9 +90,10 @@ async def create_team(
 def update_team(
     id: UUID4,
     request_payload: TeamSchema,
-    token: str = Header(),
+    authorization: str = Depends(bearer),
     db: Session = Depends(get_db)
 ):
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
     team_member_service.role_validation(decoded_token, db)
     team = team_service.get_team(db, id=id, name=request_payload.team_name)
@@ -110,9 +112,10 @@ def update_team(
 )
 def get_team_by_id(
     id: UUID4,
-    token: str = Header(),
+    authorization: str = Depends(bearer),
     db: Session = Depends(get_db)
 ):
+    token = authorization.credentials
     _ = decode_token(token=token)
 
     team = team_service.get_team(db, id=id)
@@ -132,9 +135,10 @@ def get_team_by_id(
     }
 )
 def get_teams(
-    token: str = Header(),
+    authorization: str = Depends(bearer),
     db: Session = Depends(get_db)
 ):
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
     return team_service.get_teams_for_current_user(decoded_token, db)
 
@@ -154,9 +158,10 @@ def get_teams(
 )
 async def delete_team(
     id: UUID4,
-    token: str = Header(),
+    authorization: str = Depends(bearer),
     db: Session = Depends(get_db)
 ):
+    token = authorization.credentials
     decoded_token = decode_token(token=token)
     # Check if the inviter has 'owner' or 'admin' roles
     team_member_service.role_validation(decoded_token, db)
