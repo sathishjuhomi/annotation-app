@@ -21,6 +21,7 @@ import AcceptIcon from '@mui/icons-material/Check';
 import DeclineIcon from '@mui/icons-material/Cancel';
 import { useRouter } from "next/navigation";
 import { Fab } from '@mui/material';
+import { useEffect } from 'react';
 
 const defaultTheme = createTheme();
 
@@ -45,10 +46,12 @@ export default function TeamList(
     setOpen(true);
   };
   const router = useRouter();
-  const teamNameValue = sessionStorage.getItem('teamName')
+
+  // const teamNameValue = sessionStorage.getItem('teamName')
+  const teamNameValue = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('teamName') : null;
   const onSwitchTeam = (teamName: string) => {
     sessionStorage.setItem('teamName', teamName)
-    // location.reload()
+    location.reload()
   };
   return (
     <Box className="mt-4 w-full mr-4">
@@ -83,14 +86,14 @@ export default function TeamList(
           <List>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar className="bg-tertiary">{team.team_name[0]}</Avatar>
+                <Avatar className="bg-grey">{team.team_name[0]}</Avatar>
               </ListItemAvatar>
               <ListItemText className="mt-5 font-bold text-black">
                 {team.team_name}
               </ListItemText>
               {team.is_activated === true && team.team_name === teamNameValue ? null :
                 <Fab
-                  className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-white bg-tertiary' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
+                  className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-black bg-white' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
                   size="small"
                   onClick={() => {
                     team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : onSwitchTeam(team.team_name)

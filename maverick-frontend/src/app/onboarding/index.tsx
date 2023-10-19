@@ -15,7 +15,7 @@ export default function Onboarding() {
     router.push("/signin");
   };
 
-  const navigateToSignUp= () => {
+  const navigateToSignUp = () => {
     router.push("/signup");
   };
 
@@ -48,11 +48,11 @@ export default function Onboarding() {
       <Box className="p-3" component="main">
         <Toolbar />
         <Typography
-          className="text-black font-bold mt-20"
+          className="text-black font-bold mt-10"
           variant="h2"
           gutterBottom
         >
-          Build products faster
+          Accelerate product development
         </Typography>
         <div>
           <Typography
@@ -65,8 +65,8 @@ export default function Onboarding() {
           </Typography>
         </div>
         <Typography variant="h5" gutterBottom className="text-black mt-10">
-          Maverick is the best Next.js and Python SaaS template out there. Focus
-          on your business, not on the boilerplate.
+          Maverick stands out as the top Next.js and Python SaaS template available.
+          Concentrate on your business, not on the initial setup and repetitive tasks.
         </Typography>
         <br />
         <br />

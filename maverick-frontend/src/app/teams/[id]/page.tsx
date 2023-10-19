@@ -227,13 +227,13 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                     <br></br>
                     <ListItem alignItems="flex-start">
                         <ListItemAvatar>
-                            <Avatar className="bg-tertiary">{teamName[0]}</Avatar>
+                            <Avatar className="bg-grey">{teamName[0]}</Avatar>
                         </ListItemAvatar>
                         <Typography className="mt-5 text-black text-xl font-bold">
                             {teamName}
                         </Typography>
                         <Fab
-                            className="ml-auto mt-1 mb-1 mr-2 text-white bg-primary"
+                            className="ml-auto mt-1 mb-1 mr-4 text-white bg-primary"
                             color="primary"
                             size="small"
                             onClick={handleClickOpen}
@@ -256,7 +256,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                         />
                         <Fab
                             size="small"
-                            className="mr-1 mt-1 bg-grey text-white"
+                            className="mr-1 mt-1 bg-white text-black"
                             onClick={handleClickOpenDeleteTeam}
                         >
                             <DeleteTeamIcon />
@@ -308,14 +308,14 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                                     <TableCell className="text-base" align="right">
                                         <Fab
                                             size="small"
-                                            className="mr-1 mt-1 mr-2 bg-primary text-white"
+                                            className="mr-1 mt-1 mr-4 bg-primary text-white"
                                             color="primary"
                                         >
                                             <EditIcon />
                                         </Fab>
                                         <Fab
                                             size="small"
-                                            className="mr-1 mt-1 bg-grey text-white"
+                                            className="mr-1 mt-1 bg-white text-black"
                                             onClick={handleClickOpenDelete}
                                         >
                                             <DeleteIcon />
@@ -350,7 +350,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                     </Table>
                     <br></br>
                     <Button
-                        className="ml-3 mt-1 mb-4 text-white font-bold bg-tertiary"
+                        className="ml-3 mt-1 mb-4 text-white font-bold bg-black"
                         variant="contained"
                         onClick={handleClickOpenInvite}
                     >

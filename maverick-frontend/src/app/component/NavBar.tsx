@@ -20,6 +20,7 @@ import Logout from '@mui/icons-material/Logout';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Collapse, Menu } from '@mui/material';
 import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
 
 const drawerWidth = 240;
 
@@ -88,8 +89,17 @@ export default function ResponsiveDrawer(props: Props) {
         setAnchorEl(null);
     };
 
-    const email = sessionStorage.getItem("emailId");
-    const teamName = sessionStorage.getItem("teamName")
+    // const email = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('emailId') : "jbha@gmail.com";
+    // const teamName = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('teamName') : "";
+    
+    const [email, setEmail] = React.useState("")
+    const [teamName, setTeamName] = React.useState("")
+    useEffect(() => {
+        const emailId = String(sessionStorage.getItem('emailId'));
+        const teamNameValue = String(sessionStorage.getItem('teamName'))
+        setEmail(emailId)
+        setTeamName(teamNameValue)
+      }, []);
 
     return (
         <Box>
