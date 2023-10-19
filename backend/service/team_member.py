@@ -61,6 +61,7 @@ class TeamMemberService():
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only Owner or Admin can modify the team"
             )
+        return team_member
 
     @staticmethod
     async def delete_team_members(db, team_id, deleter_id):
@@ -83,7 +84,7 @@ class TeamMemberService():
 
         try:
             # Check if the inviter has 'owner' or 'admin' roles
-            self.role_validation(decoded_token, db)
+            _ = self.role_validation(decoded_token, db)
 
             member_detail = request_payload.model_dump()
 
@@ -121,7 +122,7 @@ class TeamMemberService():
                 team_member_data = self.add_team_member(
                     id=id, team_id=team_id, email=member_detail["email"],
                     invited_by_id=decoded_token["id"], invite_token=invitation_token,
-                    role=member_detail["role"])
+                    role=member_detail["roles"])
                 _ = team_member_db_handler.create(
                     db=db, input_object=team_member_data)
 
@@ -139,7 +140,7 @@ class TeamMemberService():
 
         try:
             # Check if the inviter has 'owner' or 'admin' roles
-            self.role_validation(decoded_token, db)
+            _ = self.role_validation(decoded_token, db)
 
             team_member = team_member_db_handler.load_by_column(
                 db=db, column_name="id", value=team_member_id)
@@ -176,7 +177,7 @@ class TeamMemberService():
         call the update method
         """
         # Check if the inviter has 'owner' or 'admin' roles
-        self.role_validation(decoded_token, db)
+        _ = self.role_validation(decoded_token, db)
         team_member_detail = team_member_db_handler.load_by_column(
             db=db, column_name="id", value=id)
 
@@ -201,6 +202,39 @@ class TeamMemberService():
                                       input_object=member_detail)
 
         return {"detail": f"{email} deleted successfully"}
+
+    def update_team_member_role(self, db, team_member_id, request_payload, decoded_token):
+        signed_user = self.role_validation(decoded_token, db)
+        member_role = request_payload.model_dump()
+        team_member_detail = team_member_db_handler.load_by_column(db=db,
+                                                                   column_name="id",
+                                                                   value=team_member_id)
+
+        if (signed_user.roles['admin'] or signed_user.roles['member']) and not signed_user.roles['owner']:
+            if team_member_detail.roles['owner']:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Admin or Member can't change the privilege of team owner",
+                )
+
+        if signed_user.roles["owner"]:
+            if member_role["roles"]["owner"] or member_role["roles"]["owner"] == False:
+                team_member_db_handler.update(db=db,
+                                              db_obj=team_member_detail,
+                                              input_object=member_role)
+                return {"detail": f"{team_member_detail.email} role updated successfully"}
+
+        if signed_user.roles["admin"]:
+            if member_role["roles"]["owner"] == False:
+                team_member_db_handler.update(db=db,
+                                              db_obj=team_member_detail,
+                                              input_object=member_role)
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Only owner can give owner privilege to team members",
+                )
+            return {"detail": f"{team_member_detail.email} role updated successfully"}
 
 
 team_member_service = TeamMemberService()

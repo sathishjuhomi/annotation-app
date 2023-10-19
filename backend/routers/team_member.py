@@ -12,7 +12,7 @@ from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 
 from backend.utils.utils import decode_token
-from backend.schemas.request.team_member import TeamMemberSchema
+from backend.schemas.request.team_member import MemberRoleSchema, TeamMemberSchema
 from backend.models.database import get_db
 from backend.service.team_member import team_member_service
 
@@ -142,3 +142,19 @@ def delete_team_member(
     token = authorization.credentials
     decoded_token = decode_token(token=token)
     return team_member_service.delete_member(decoded_token, id, db=db)
+
+
+@team_member_router.patch("/teams/team-members/{team_member_id}/update-role",
+                          response_model=DetailSchema)
+def update_team_member_role(
+    team_member_id: UUID4,
+    request_payload: MemberRoleSchema,
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer),
+) -> Any:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
+    return team_member_service.update_team_member_role(team_member_id=team_member_id,
+                                                       request_payload=request_payload,
+                                                       decoded_token=decoded_token,
+                                                       db=db)
