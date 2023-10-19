@@ -272,7 +272,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                                     type="submit"
                                     variant="contained"
                                     className="bg-primary"
-                                    // onClick={() => handleDeleteTeam(params.id)}
                                     onClick={handleDeleteTeam}
                                 >
                                     Yes

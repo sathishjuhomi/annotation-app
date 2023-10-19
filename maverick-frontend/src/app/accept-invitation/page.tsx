@@ -17,8 +17,6 @@ const acceptTeamInvitation = () => {
     const params = useSearchParams();
     const invite_token = params.get('token')
 
-    console.log("invite_token", invite_token)
-
     const submit = async () => {
         setShowMessage(true);
         setLoading(true);
@@ -44,8 +42,6 @@ const acceptTeamInvitation = () => {
     };
 
     const invite_token_decline = params.get('token')
-
-    console.log("invite_token_decline", invite_token_decline)
   
     const declineInviteTeam = async () => {
       setShowMessage(true);

@@ -22,9 +22,6 @@ export default function acceptTeamInvitation(
     }: AcceptTeamInviteProps
 ) {
     const router = useRouter();
-    // const handleDeclineClick = () => {
-    //     router.push("/docs/installation");
-    // };
 
     const params = useSearchParams();
     const invite_token = params.get('token')

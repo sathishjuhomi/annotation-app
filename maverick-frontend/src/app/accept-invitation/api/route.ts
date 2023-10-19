@@ -1,6 +1,5 @@
 export async function acceptTeamInvite( invite_token: any) {
     const accessToken = sessionStorage.getItem('access_token');
-    console.log("ACCESSTOKEN: ", accessToken)
     const res = await fetch
         (`http://127.0.0.1:8000/api/v1/teams/team-members/accept-invitation?invite_token=${invite_token}`,
             {
