@@ -91,11 +91,25 @@ class TeamMemberService():
                 team_id=team_id, email=member_detail["email"]).first()
 
             if member:
-                update_declined_flag = {
-                    "is_declined": False, "invited_by_id": decoded_token["id"]}
-                response = team_member_db_handler.update(
-                    db=db, db_obj=member, input_object=update_declined_flag)
-                invitation_token = response.invite_token
+                # Common logic for both is_declined and is_deleted flags
+                to_create_access_token = {
+                    'id': str(member.id), 'email': member.email}
+                invitation_token = create_access_token(to_create_access_token)
+
+                update_flag = {}
+                if member.is_declined:
+                    update_flag = {
+                        "is_declined": False, "invited_by_id": decoded_token["id"], "invite_token": invitation_token}
+                elif member.is_deleted:
+                    update_flag = {
+                        "is_deleted": False, "invited_by_id": decoded_token["id"],
+                        "invite_token": invitation_token, "deleted_by_id": None,
+                        "t_delete": None}
+
+                if update_flag:
+                    response = team_member_db_handler.update(
+                        db=db, db_obj=member, input_object=update_flag)
+                    invitation_token = response.invite_token
             else:
                 id = uuid.uuid4()
                 to_create_access_token = {
