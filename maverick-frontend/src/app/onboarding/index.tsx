@@ -35,10 +35,14 @@ export default function Onboarding() {
           </div>
           <div className="hidden sm:block">
             <Box>
-              <Button className="text-white" onClick={navigateToSignIn}>
+              <Button className="text-white mr-2" onClick={navigateToSignIn}>
                 Login
               </Button>
-              <Button className="text-white" onClick={navigateToSignUp}>
+              <Button 
+              className="text-black bg-white hover:bg-lightgrey" 
+              onClick={navigateToSignUp}
+              variant="contained"
+              >
                 Sign Up
               </Button>
             </Box>
@@ -70,7 +74,7 @@ export default function Onboarding() {
         </Typography>
         <br />
         <br />
-        <Button className="bg-primary text-white" variant="contained">
+        <Button className="bg-primary text-white hover:bg-lightblack" variant="contained">
           Maverick your next app
         </Button>
         <br />

@@ -76,7 +76,7 @@ export default function Signin({
               fullWidth
               onClick={formHandleSubmit(onSubmit)}
               variant="contained"
-              className="bg-primary mb-2 mt-3"
+              className="bg-primary mb-2 mt-3 hover:bg-lightblack"
             >
               Sign in
             </Button>
@@ -99,7 +99,7 @@ export default function Signin({
               fullWidth
               variant="contained"
               onClick={handleOauth}
-              className= 'bg-secondary mb-2 mt-3'
+              className= 'bg-secondary mb-2 mt-3 hover:bg-lightblack'
             >
               Sign in with Google
             </Button>

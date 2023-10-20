@@ -59,7 +59,7 @@ export default function acceptTeamInvitation(
                         Accept
                     </Button>
                     <Button
-                        className="ml-5 mb-2 mt-2"
+                        className="ml-5 mb-2 mt-2 text-black border-black"
                         variant="outlined"
                         onClick={declineInviteTeam}
                     >

@@ -25,7 +25,7 @@ const SignIn = () => {
   
   const setAccessToken = (response:any) => {
     const accessToken = response.access_token;
-    sessionStorage.setItem('access_token', accessToken);
+    localStorage.setItem('access_token', accessToken);
   };
 
   const submit = async (data: FormData) => {
@@ -36,7 +36,7 @@ const SignIn = () => {
         const response = await res.json();
         const responseData = response.detail;
         if (res.status === 200) {
-          sessionStorage.setItem('emailId', data.email);
+          localStorage.setItem('emailId', data.email);
           setAccessToken(response);
           setMessage(responseData);
           setMessageColor(Constants.SUCCESS);

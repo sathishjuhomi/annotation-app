@@ -92,7 +92,7 @@ export default function SignUp({
               type="submit"
               fullWidth
               variant="contained"
-              className="bg-primary mb-2 mt-3"
+              className="bg-primary mb-2 mt-3 hover:bg-lightblack"
             >
               Sign Up
             </Button>

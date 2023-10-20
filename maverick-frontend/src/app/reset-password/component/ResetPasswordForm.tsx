@@ -74,7 +74,7 @@ export default function ResetPassword({
               type="submit"
               fullWidth
               variant="contained"
-              className="bg-primary mb-2 mt-3"
+              className="bg-primary mb-2 mt-3 hover:bg-lightblack"
             >
               Reset Password
             </Button>

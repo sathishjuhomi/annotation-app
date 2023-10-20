@@ -16,7 +16,8 @@ const config: Config = {
       grey: "#303030",
       white: "#FFFFFF",
       green: "#008000",
-     
+      lightblack: "#1a1a1a",
+      lightgrey: "#f2f2f2",
     },
     screens: {
       sm: "320px",

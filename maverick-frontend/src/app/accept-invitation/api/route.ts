@@ -1,5 +1,5 @@
 export async function acceptTeamInvite( invite_token: any) {
-    const accessToken = sessionStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_token');
     const res = await fetch
         (`http://127.0.0.1:8000/api/v1/teams/team-members/accept-invitation?invite_token=${invite_token}`,
             {
@@ -13,7 +13,7 @@ export async function acceptTeamInvite( invite_token: any) {
 }
 
 export async function getMemberDetail( invite_token : any ) {
-    const storedAccessToken = sessionStorage.getItem('access_token');
+    const storedAccessToken = localStorage.getItem('access_token');
     const res = await fetch(`http://127.0.0.1:8000/api/v1/teams/team-members/member-detail?invite_token=${invite_token}`, {
       method: "GET",
       headers: { 

@@ -6,6 +6,7 @@ import { acceptTeamInvite } from "./api/route";
 import AcceptInvitation from "./component/AcceptInvitation";
 import { useRouter } from "next/navigation";
 import { declineTeamInvite } from "../teams/api/route";
+import {useEffect} from 'react';
 
 const acceptTeamInvitation = () => {
     const [loading, setLoading] = React.useState(false);
@@ -15,12 +16,19 @@ const acceptTeamInvitation = () => {
 
     const router = useRouter();
     const params = useSearchParams();
-    const invite_token = params.get('token')
+    const inviteToken = params.get('token');
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token')
+        if (accessToken === null){
+            router.push('/signin')
+        }
+      }, []);
 
     const submit = async () => {
         setShowMessage(true);
         setLoading(true);
-        const response = await acceptTeamInvite(invite_token)
+        const response = await acceptTeamInvite(inviteToken)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -41,12 +49,12 @@ const acceptTeamInvitation = () => {
             });
     };
 
-    const invite_token_decline = params.get('token')
+    const inviteTokenDecline = params.get('token')
   
     const declineInviteTeam = async () => {
       setShowMessage(true);
       setLoading(true);
-      const response = await declineTeamInvite(invite_token_decline)
+      const response = await declineTeamInvite(inviteTokenDecline)
           .then(async (res) => {
               const response = await res.json();
               if (res.status === 200) {
@@ -66,6 +74,7 @@ const acceptTeamInvitation = () => {
               setMessageColor(Constants.ERROR);
           });
   };
+
 
     return (
         <AcceptInvitation

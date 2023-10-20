@@ -36,9 +36,9 @@ const Teams = () => {
       .then(async (res) => {
         const response = await res.json();
         if (res.status === 200) {
-          const teamName = sessionStorage.getItem('teamName');
+          const teamName = localStorage.getItem('teamName');
           if (teamName === null) {
-            sessionStorage.setItem('teamName', response[0]['team_name'])
+            localStorage.setItem('teamName', response[0]['team_name'])
           }
           setTeams(response);
         }

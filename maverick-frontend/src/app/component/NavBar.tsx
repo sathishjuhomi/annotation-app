@@ -14,9 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Tooltip from '@mui/material/Tooltip';
-import Logout from '@mui/icons-material/Logout';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Collapse, Menu } from '@mui/material';
 import { useRouter } from "next/navigation";
@@ -49,7 +47,7 @@ export default function ResponsiveDrawer(props: Props) {
         router.push("/teams");
     };
     const navigateToSignin = () => {
-        sessionStorage.setItem('access_token', "");
+        localStorage.setItem('access_token', "");
         router.push("/signin");
     };
 
@@ -89,14 +87,11 @@ export default function ResponsiveDrawer(props: Props) {
         setAnchorEl(null);
     };
 
-    // const email = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('emailId') : "jbha@gmail.com";
-    // const teamName = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('teamName') : "";
-    
     const [email, setEmail] = React.useState("")
     const [teamName, setTeamName] = React.useState("")
     useEffect(() => {
-        const emailId = String(sessionStorage.getItem('emailId'));
-        const teamNameValue = String(sessionStorage.getItem('teamName'))
+        const emailId = String(localStorage.getItem('emailId'));
+        const teamNameValue = String(localStorage.getItem('teamName'))
         setEmail(emailId)
         setTeamName(teamNameValue)
       }, []);
@@ -145,14 +140,13 @@ export default function ResponsiveDrawer(props: Props) {
                             open={openmenu}
                             onClose={handleClose}
                             onClick={handleClose}>
-                            {teamName ?
+                            {teamName !== 'null' &&
                                 <Box>
                                     <MenuItem onClick={handleClose}>
                                         {teamName}
                                     </MenuItem>
                                     <Divider />
                                 </Box>
-                                : null
                             }
                             <MenuItem onClick={navigateToSignin}>
                                 Logout

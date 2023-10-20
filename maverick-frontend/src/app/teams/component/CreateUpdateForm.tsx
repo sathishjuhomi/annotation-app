@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import DialogContentText from '@mui/material/DialogContentText/DialogContentText';
 import FolderIcon from '@mui/icons-material/Folder';
-import { CreateUpdateProps} from '@/app/component/interfaces';
+import { CreateUpdateProps } from '@/app/component/interfaces';
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
@@ -38,9 +38,9 @@ export default function CreateOrUpdateForm(
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{teamTitle}</DialogTitle>
+                <DialogTitle className='font-bold text-black'>{teamTitle}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText id="alert-dialog-description" className='text-black'>
                         You can collaborate and share with others by {teamTitle === Constants.CREATE_TEAM ? "creating" : "updating"} new team.
                     </DialogContentText>
                 </DialogContent>
@@ -50,6 +50,7 @@ export default function CreateOrUpdateForm(
                             <TextField
                                 autoFocus
                                 required
+                                className='border-black'
                                 margin="dense"
                                 id="teamname"
                                 label="Team Name"
@@ -68,8 +69,10 @@ export default function CreateOrUpdateForm(
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button className="text-black hover:bg-lightgrey" onClick={handleClose}>Cancel</Button>
                     <Button
+                        className='text-white hover:bg-lightblack bg-black'
+                        variant='contained'
                         type="submit"
                         onClick={formHandleSubmit(onSubmit)}
                     >
@@ -91,5 +94,5 @@ export default function CreateOrUpdateForm(
                 </Box>
             ) : null}
         </div >
-  )
+    )
 }

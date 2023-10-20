@@ -100,7 +100,7 @@ export default function InviteTeamMember(
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        className='text-white bg-primary'
+                        className='text-white bg-primary hover:bg-lightblack'
                         variant='contained'
                         type='submit'
                         disabled={!email}

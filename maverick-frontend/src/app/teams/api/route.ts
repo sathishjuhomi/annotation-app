@@ -2,7 +2,7 @@ import { TeamsFormData } from "../../component/interfaces";
 import { InviteATeamMemberFormData } from "../../component/interfaces"
 
 export async function createTeam(formData: TeamsFormData) {
-    const accessToken = sessionStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_token');
     const body = { team_name: formData.teamname };
     const res = await fetch("http://127.0.0.1:8000/api/v1/teams", {
       method: "POST",
@@ -17,7 +17,7 @@ export async function createTeam(formData: TeamsFormData) {
   }
 
   export async function teamList() {
-    const accessToken = sessionStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_token');
     const res = await fetch("http://127.0.0.1:8000/api/v1/teams", {
       method: "GET",
       headers: { 
@@ -29,7 +29,7 @@ export async function createTeam(formData: TeamsFormData) {
   }
 
   export async function getTeamAndTeamMembers(teamId: string) {
-    const accessToken = sessionStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_token');
     const res = await fetch(`http://127.0.0.1:8000/api/v1/teams/${teamId}`, {
         method: "GET",
         headers: {
@@ -41,7 +41,7 @@ export async function createTeam(formData: TeamsFormData) {
 }
 
 export async function updateTeam(teamId: string, formData:TeamsFormData) {
-  const accessToken = sessionStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   const body = { team_name: formData.teamname };
   const res = await fetch(`http://127.0.0.1:8000/api/v1/teams/${teamId}`, {
       method: "PATCH",
@@ -55,7 +55,7 @@ export async function updateTeam(teamId: string, formData:TeamsFormData) {
 }
 
 export async function deleteTeam(teamId:string){
-  const accessToken = sessionStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   const res = await fetch(`http://127.0.01:8000/api/v1/teams/${teamId}/delete`,{
     method: "PATCH",
     headers:{
@@ -67,7 +67,7 @@ export async function deleteTeam(teamId:string){
 }
 
 export async function inviteATeamMember(teamId: string, formData: InviteATeamMemberFormData) {
-  const accessToken = sessionStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   const body = {
     email: formData.email,
     role: {
@@ -89,7 +89,7 @@ export async function inviteATeamMember(teamId: string, formData: InviteATeamMem
 }
 
 export async function acceptTeamInvite( invite_token : any ) {
-  const accessToken = sessionStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   console.log("ACCESSTOKEN: ", accessToken)
   const res = await fetch
       (`http://127.0.0.1:8000/api/v1/teams/team-members/accept-invitation?invite_token=${invite_token}`,
@@ -104,7 +104,7 @@ export async function acceptTeamInvite( invite_token : any ) {
 }
 
 export async function declineTeamInvite( invite_token: any ) {
-  const accessToken = sessionStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   console.log("ACCESSTOKEN: ", accessToken)
   const res = await fetch
       (`http://127.0.0.1:8000/api/v1/teams/team-members/decline-invitation?invite_token=${invite_token}`,
@@ -119,7 +119,7 @@ export async function declineTeamInvite( invite_token: any ) {
 }
 
 export async function deleteTeamMember( id:string ) {
-  const accessToken = sessionStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   console.log("ACCESSTOKEN: ", accessToken)
   const res = await fetch
       (`http://127.0.0.1:8000/api/v1/teams/team-members/${id}/delete`,

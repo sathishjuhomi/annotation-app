@@ -21,7 +21,6 @@ import AcceptIcon from '@mui/icons-material/Check';
 import DeclineIcon from '@mui/icons-material/Cancel';
 import { useRouter } from "next/navigation";
 import { Fab } from '@mui/material';
-import { useEffect } from 'react';
 
 const defaultTheme = createTheme();
 
@@ -47,10 +46,9 @@ export default function TeamList(
   };
   const router = useRouter();
 
-  // const teamNameValue = sessionStorage.getItem('teamName')
-  const teamNameValue = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('teamName') : null;
+  const teamNameValue = typeof localStorage !== 'undefined' ? localStorage.getItem('teamName') : null;
   const onSwitchTeam = (teamName: string) => {
-    sessionStorage.setItem('teamName', teamName)
+    localStorage.setItem('teamName', teamName)
     location.reload()
   };
   return (
@@ -62,7 +60,7 @@ export default function TeamList(
           <Button
             size="small"
             variant="contained"
-            className="text-white bg-primary mr-4"
+            className="text-white bg-primary mr-4 hover:bg-lightblack"
             onClick={handleClickOpen}
           >
             Create Team
@@ -93,7 +91,10 @@ export default function TeamList(
               </ListItemText>
               {team.is_activated === true && team.team_name === teamNameValue ? null :
                 <Fab
-                  className={team.is_activated === true ? 'ml-18 mt-1 mb-1 mr-6 text-black bg-white' : 'ml-18 mt-1 mb-1 mr-6 text-black bg-green'}
+                  className={
+                    team.is_activated === true 
+                    ? 'ml-18 mt-1 mb-1 mr-6 text-black bg-white border border-1 border-solid border-black hover:bg-lightgrey' 
+                    : 'ml-18 mt-1 mb-1 mr-6 text-black bg-white border border-1 border-solid border-black hover:bg-lightgrey'}
                   size="small"
                   onClick={() => {
                     team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : onSwitchTeam(team.team_name)
@@ -104,7 +105,11 @@ export default function TeamList(
                 </Fab>
               }
               <Fab
-                className={team.is_activated === true ? 'ml-1 mt-1 mb-1 text-white bg-primary' : 'ml-1 mt-1 mb-1 text-white bg-grey'}
+                className={
+                  team.is_activated === true 
+                  ? 'ml-1 mt-1 mb-1 text-white bg-primary border border-1 border-solid border-black hover:bg-lightblack' 
+                  : 'ml-1 mt-1 mb-1 text-white bg-grey border border-1 border-solid border-black hover:bg-lightblack'
+                }
                 size="small"
                 onClick={() => {
                   if (team.is_activated === true) {
