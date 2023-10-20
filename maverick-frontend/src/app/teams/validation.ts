@@ -28,3 +28,20 @@ export const inviteTeamMemberSchema = yup.object().shape({
             (roles) => roles.some((role) => role.checked)
         ),
 });
+
+export const updateTeamMemberSchema = yup.object().shape({
+    roles: yup
+        .array()
+        .of(
+            yup.object().shape({
+                name: yup.string(), 
+                checked: yup.boolean(), 
+            })
+        )
+        .required(Constants.ROLES_REQUIRED)
+        .test(
+            "at-least-one-role",
+            "Select at least one role",
+            (roles) => roles.some((role) => role.checked)
+        ),
+});

@@ -99,3 +99,25 @@ export interface AcceptTeamInviteProps {
   onSubmit: any;
   declineInviteTeam: any;
 }
+
+export interface UpdateATeamMemberProps{
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmitRoles: any;
+  formHandleSubmitRoles: any;
+  register: any;
+  errors: any;
+  openUpdate: boolean;
+  setOpenUpdate: any;
+  // teamId: any;
+  // teamMemberId: any;
+}
+
+export interface UpdateATeamMemberFormData {
+  admin: boolean;
+  member: boolean;
+  owner: boolean;
+}
