@@ -146,7 +146,7 @@ def delete_team_member(
     """
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    return team_member_service.delete_member(decoded_token,team_id, team_member_id, db=db)
+    return team_member_service.delete_member(decoded_token, team_id, team_member_id, db=db)
 
 
 @team_member_router.patch("/teams/{team_id}/team-members/{team_member_id}/update-role",
