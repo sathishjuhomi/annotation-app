@@ -33,13 +33,17 @@ async def invite_team_member(team_id: UUID4,
     return response
 
 
-@team_member_router.patch("/teams/team-members/{team_member_id}/resend-invite")
-async def reinvite_team_member(team_member_id: UUID4,
+@team_member_router.patch("/teams/{team_id}/team-members/{team_member_id}/resend-invite")
+async def reinvite_team_member(team_id: UUID4,
+                               team_member_id: UUID4,
                                db: Session = Depends(get_db),
                                authorization: str = Depends(bearer)) -> Any:
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    response = await team_member_service.resend_invitation(team_member_id, decoded_token, db=db)
+    response = await team_member_service.resend_invitation(team_id=team_id,
+                                                           team_member_id=team_member_id,
+                                                           decoded_token=decoded_token,
+                                                           db=db)
     return response
 
 
@@ -123,10 +127,11 @@ def decline_invitation(
     return {"detail": f"{team_member_detail.team.team_name} team invitation declined"}
 
 
-@team_member_router.patch("/teams/team-members/{id}/delete",
+@team_member_router.patch("/teams/{team_id}/team-members/{team_member_id}/delete",
                           response_model=DetailSchema)
 def delete_team_member(
-    id: UUID4,
+    team_id: UUID4,
+    team_member_id: UUID4,
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer),
 ) -> Any:
@@ -141,12 +146,13 @@ def delete_team_member(
     """
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    return team_member_service.delete_member(decoded_token, id, db=db)
+    return team_member_service.delete_member(decoded_token,team_id, team_member_id, db=db)
 
 
-@team_member_router.patch("/teams/team-members/{team_member_id}/update-role",
+@team_member_router.patch("/teams/{team_id}/team-members/{team_member_id}/update-role",
                           response_model=DetailSchema)
 def update_team_member_role(
+    team_id: UUID4,
     team_member_id: UUID4,
     request_payload: MemberRoleSchema,
     db: Session = Depends(get_db),
@@ -154,7 +160,8 @@ def update_team_member_role(
 ) -> Any:
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    return team_member_service.update_team_member_role(team_member_id=team_member_id,
+    return team_member_service.update_team_member_role(team_id=team_id,
+                                                       team_member_id=team_member_id,
                                                        request_payload=request_payload,
                                                        decoded_token=decoded_token,
                                                        db=db)

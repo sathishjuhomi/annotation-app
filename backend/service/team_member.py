@@ -51,12 +51,12 @@ class TeamMemberService():
         return team_members_details
 
     @staticmethod
-    def role_validation(decoded_token, db: Session):
-        team_member = team_member_db_handler.load_by_column(
-            db=db, column_name="email", value=decoded_token["email"])
-
+    def role_validation(filters: dict, db: Session):
+        team_member = team_member_db_handler.load_all_by_columns(
+            db=db, filters=filters)
         # Check if the inviter has 'owner' or 'admin' roles
-        if not (team_member.roles['owner'] or team_member.roles['admin']):
+        if ((team_member[0].roles['owner'] == False) or 
+            (team_member[0].roles['admin'] == False)):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only Owner or Admin can modify the team"
@@ -84,7 +84,9 @@ class TeamMemberService():
 
         try:
             # Check if the inviter has 'owner' or 'admin' roles
-            _ = self.role_validation(decoded_token, db)
+            filters = {"email": decoded_token["email"],
+                       "team_id": str(team_id)}
+            _ = self.role_validation(filters=filters, db=db)
 
             member_detail = request_payload.model_dump()
 
@@ -136,11 +138,13 @@ class TeamMemberService():
         except Exception as e:
             return {"error": str(e)}
 
-    async def resend_invitation(self, team_member_id, decoded_token, db: Session):
+    async def resend_invitation(self,team_id, team_member_id, decoded_token, db: Session):
 
         try:
+            filters = {"email": decoded_token["email"],
+                "team_id": str(team_id)}
             # Check if the inviter has 'owner' or 'admin' roles
-            _ = self.role_validation(decoded_token, db)
+            _ = self.role_validation(filters=filters, db=db)
 
             team_member = team_member_db_handler.load_by_column(
                 db=db, column_name="id", value=team_member_id)
@@ -166,7 +170,7 @@ class TeamMemberService():
         except Exception as e:
             return {"error": str(e)}
 
-    def delete_member(self, decoded_token, id, db):
+    def delete_member(self, decoded_token, team_id, team_member_id, db):
         """
         validate the token
         check the current user role, owner or admin
@@ -177,9 +181,11 @@ class TeamMemberService():
         call the update method
         """
         # Check if the inviter has 'owner' or 'admin' roles
-        _ = self.role_validation(decoded_token, db)
+        filters = {"email": decoded_token["email"],
+                    "team_id": str(team_id)}
+        _ = self.role_validation(filters=filters, db=db)
         team_member_detail = team_member_db_handler.load_by_column(
-            db=db, column_name="id", value=id)
+            db=db, column_name="id", value=team_member_id)
 
         email = team_member_detail.email
 
@@ -203,8 +209,10 @@ class TeamMemberService():
 
         return {"detail": f"{email} deleted successfully"}
 
-    def update_team_member_role(self, db, team_member_id, request_payload, decoded_token):
-        signed_user = self.role_validation(decoded_token, db)
+    def update_team_member_role(self, db, team_id, team_member_id, request_payload, decoded_token):
+        filters = {"email": decoded_token["email"],
+                    "team_id": str(team_id)}
+        signed_user = self.role_validation(filters=filters, db=db)
         member_role = request_payload.model_dump()
         team_member_detail = team_member_db_handler.load_by_column(db=db,
                                                                    column_name="id",
