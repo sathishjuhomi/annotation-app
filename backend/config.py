@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     MAIL_SERVER: str
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
-    FRONTEND_SERVER_HOST:str
+    FRONTEND_SERVER_HOST: str
 
     # store the values in .env file
     model_config = SettingsConfigDict(env_file=ENV_FILE_PATH)
