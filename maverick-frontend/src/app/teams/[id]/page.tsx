@@ -126,10 +126,10 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
             });
     }
 
-    const handleDeleteTeamMember = async (teamMemberId : string ) => {
+    const handleDeleteTeamMember = async (teamId: string, teamMemberId: string ) => {
         setShowMessage(true);
         setLoading(true);
-        await deleteTeamMember(teamMemberId)
+        await deleteTeamMember(teamId, teamMemberId)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -271,7 +271,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                                 <Button
                                     type="submit"
                                     variant="contained"
-                                    className="bg-primary"
+                                    className="text-white bg-primary hover:bg-lightblack"
                                     onClick={handleDeleteTeam}
                                 >
                                     Yes
@@ -279,6 +279,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                                 <Button
                                     onClick={handleCloseDeleteTeam}
                                     variant="outlined"
+                                    className="text-black border border-1 border-solid border-black hover:bg-lightgrey"
                                 >
                                     No
                                 </Button>
@@ -330,14 +331,15 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string}}) => {
                                                 <Button
                                                     type="submit"
                                                     variant="contained"
-                                                    className="bg-primary"
-                                                    onClick={() => handleDeleteTeamMember(teamMember['team_member_id'])}
+                                                    className="text-white bg-primary hover:bg-lightblack"
+                                                    onClick={() => handleDeleteTeamMember(params.id,teamMember['team_member_id'])}
                                                 >
                                                     Yes
                                                 </Button>
                                                 <Button
                                                     onClick={handleCloseDelete}
                                                     variant="outlined"
+                                                    className="text-black border border-1 border-solid border-black"
                                                 >
                                                     No
                                                 </Button>

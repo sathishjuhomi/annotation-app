@@ -52,14 +52,14 @@ export default function acceptTeamInvitation(
                     <br></br>
                     <Button
                         type="submit"
-                        className="text-white ml-5 bg-primary mb-2 mt-2"
+                        className="text-white ml-5 bg-primary mb-2 mt-2 hover:bg-lightblack"
                         variant="contained"
                         onClick= {onSubmit}
                     >
                         Accept
                     </Button>
                     <Button
-                        className="ml-5 mb-2 mt-2 text-black border-black"
+                        className="ml-5 mb-2 mt-2 text-black border-black hover:bg-lightgrey"
                         variant="outlined"
                         onClick={declineInviteTeam}
                     >

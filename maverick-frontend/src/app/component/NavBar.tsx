@@ -39,11 +39,26 @@ export default function ResponsiveDrawer(props: Props) {
         setOpen(!open);
     };
 
+    const [navBar, setNavBar] = React.useState("Installation")
+    const [email, setEmail] = React.useState("")
+    const [teamName, setTeamName] = React.useState("")
+    useEffect(() => {
+        const emailId = String(localStorage.getItem('emailId'));
+        const teamNameValue = String(localStorage.getItem('teamName'));
+        const navBarValue = String(localStorage.getItem('navBar'));
+        console.log(navBarValue)
+        setEmail(emailId)
+        setTeamName(teamNameValue)
+        setNavBar(navBarValue)
+    }, []);
+
     const router = useRouter();
     const navigateToInstallation = () => {
+        localStorage.setItem('navBar', 'Installation')
         router.push("/docs/installation");
     };
     const navigateToTeams = () => {
+        localStorage.setItem('navBar', 'Teams')
         router.push("/teams");
     };
     const navigateToSignin = () => {
@@ -62,14 +77,26 @@ export default function ResponsiveDrawer(props: Props) {
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItemButton className="pl-4" onClick={navigateToInstallation}>
+                        <ListItemButton
+                            className={navBar === "Installation" || navBar === "null" ?
+                                "pl-4 bg-lightgrey"
+                                :
+                                "pl-4"
+                            }
+                            onClick={navigateToInstallation}>
                             <ListItemText primary="Installation" />
-                        </ListItemButton>
-                        <ListItemButton className="pl-4" onClick={navigateToTeams}>
-                            <ListItemText primary="Teams" />
                         </ListItemButton>
                     </List>
                 </Collapse>
+                <ListItemButton
+                    className={navBar === "Teams" ?
+                        "pl-4 bg-lightgrey"
+                        :
+                        "pl-4"
+                    }
+                    onClick={navigateToTeams}>
+                    <ListItemText primary="Teams" />
+                </ListItemButton>
             </List>
             <Divider />
         </div>
@@ -86,15 +113,6 @@ export default function ResponsiveDrawer(props: Props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const [email, setEmail] = React.useState("")
-    const [teamName, setTeamName] = React.useState("")
-    useEffect(() => {
-        const emailId = String(localStorage.getItem('emailId'));
-        const teamNameValue = String(localStorage.getItem('teamName'))
-        setEmail(emailId)
-        setTeamName(teamNameValue)
-      }, []);
 
     return (
         <Box>
