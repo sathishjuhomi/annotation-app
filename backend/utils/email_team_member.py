@@ -1,12 +1,12 @@
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader
 from backend.utils.utils import PASSWORD_REST_TOKEN_EXPIRY
-from backend.utils.email_utils import conf, SERVER_HOST, EMAIL_TEMPLATES_DIR
+from backend.utils.email_utils import conf, FRONTEND_SERVER_HOST, EMAIL_TEMPLATES_DIR
 
 
 async def send_invitation_email(email_to: str, invite_token: str) -> None:
     valid_hours = PASSWORD_REST_TOKEN_EXPIRY / 60
-    link = f"{SERVER_HOST}/teams/team-members/member-detail?token={invite_token}"
+    link = f"{FRONTEND_SERVER_HOST}/accept-invitation?token={invite_token}"
     env = Environment(loader=FileSystemLoader(EMAIL_TEMPLATES_DIR))
     template = env.get_template("accept_team_invitation.html")
     formatted_template = template.render(

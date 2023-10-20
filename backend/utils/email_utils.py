@@ -18,13 +18,13 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True,
 )
-SERVER_HOST = settings.SERVER_HOST
+FRONTEND_SERVER_HOST = settings.FRONTEND_SERVER_HOST
 EMAIL_TEMPLATES_DIR = settings.EMAIL_TEMPLATES_DIR
 
 
 async def send_reset_password_email(email_to: str, token: str) -> None:
     valid_hours = PASSWORD_REST_TOKEN_EXPIRY / 60
-    link = f"{SERVER_HOST}/reset-password?token={token}"
+    link = f"{FRONTEND_SERVER_HOST}/reset-password?token={token}"
     env = Environment(loader=FileSystemLoader(EMAIL_TEMPLATES_DIR))
     template = env.get_template("reset_password.html")
     formatted_template = template.render(
