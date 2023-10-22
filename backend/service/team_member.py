@@ -219,21 +219,21 @@ class TeamMemberService():
                                                                    column_name="id",
                                                                    value=team_member_id)
 
-        if (signed_user.roles['admin'] or signed_user.roles['member']) and not signed_user.roles['owner']:
+        if (signed_user[0].roles['admin'] or signed_user[0].roles['member']) and not signed_user[0].roles['owner']:
             if team_member_detail.roles['owner']:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail="Admin or Member can't change the privilege of team owner",
                 )
 
-        if signed_user.roles["owner"]:
+        if signed_user[0].roles["owner"]:
             if member_role["roles"]["owner"] or member_role["roles"]["owner"] == False:
                 team_member_db_handler.update(db=db,
                                               db_obj=team_member_detail,
                                               input_object=member_role)
                 return {"detail": f"{team_member_detail.email} role updated successfully"}
 
-        if signed_user.roles["admin"]:
+        if signed_user[0].roles["admin"]:
             if member_role["roles"]["owner"] == False:
                 team_member_db_handler.update(db=db,
                                               db_obj=team_member_detail,
