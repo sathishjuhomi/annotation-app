@@ -10,7 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
-import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMember } from "../api/route";
+import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole } from "../api/route";
 import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, ListItemAvatar } from "@mui/material";
 import ListItem from '@mui/material/ListItem';
 import * as Constants from "../../utils/constant";
@@ -20,7 +20,7 @@ import InviteTeamMember from "../component/InviteTeamMemberForm";
 import { useForm } from "react-hook-form";
 import { createOrUpdateTeamSchema, inviteTeamMemberSchema, updateTeamMemberSchema } from "../validation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TeamsFormData } from "@/app/component/interfaces";
+import { TeamsFormData, UpdateATeamMemberFormData } from "@/app/component/interfaces";
 import { InviteATeamMemberFormData } from "@/app/component/interfaces";
 import { updateTeam } from "../api/route";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -28,7 +28,7 @@ import DeleteTeamIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
 import { useRouter } from "next/navigation";
-import UpdateATeamMember from "../component/UpdateForm";
+import UpdateATeamMember from "../component/UpdateRolesForm";
 
 const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [loading, setLoading] = React.useState(false);
@@ -156,6 +156,9 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const handleClickOpenUpdateMember = () => {
         setOpenUpdateMember(true)
     }
+    // const handleClickCloseUpdate = () => {
+    //     setOpenUpdateMember(false);
+    // };
 
     const { register: updateTeamMemberRegister,
         handleSubmit: updateTeamMember,
@@ -164,14 +167,17 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
         { resolver: yupResolver(updateTeamMemberSchema) }
     )
 
-    const onUpdateTeamMember = async (teamId: any, teamMemberId: any) => {
+    const onUpdateTeamMember = async (teamId: string, teamMemberId: string, data: UpdateATeamMemberFormData) => {
         setShowMessage(true);
         setLoading(true);
-        await updateTeamMember(teamId, teamMemberId)
+        console.log("Team_ID: ", teamId)
+        console.log("TeamMemberID: ", teamMemberId)
+        console.log("DAta: ",data)
+        await updateTeamMemberRole(teamId, teamMemberId, data)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
-                    setMessage(Constants.TEAM__MEMBER_DELETED_SUCCESSFULLY);
+                    setMessage(Constants.TEAM__MEMBER_UPDATED_SUCCESSFULLY);
                     setMessageColor(Constants.SUCCESS);
                     location.reload();
                 } else {
@@ -350,7 +356,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                             className="mr-1 mt-1 mr-4 bg-primary text-white border border-2 border-solid border-black hover:bg-lightblack"
                                             color="primary"
                                             onClick= { handleClickOpenUpdateMember}
-                                            // onClick={() => onUpdateTeamMember(params.id, teamMember['team_member_id'])}
                                         >
                                             <EditIcon />
                                             <UpdateATeamMember
@@ -363,10 +368,10 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                                 formHandleSubmitRoles={updateTeamMember}
                                                 register={updateTeamMemberRegister}
                                                 errors={updateTeamMemberErrors}
-                                                openUpdate={openUpdateMember}
-                                                setOpenUpdate={setOpenUpdateMember}
-                                                // teamId={params.id}
-                                                // teamMemberId={teamMember['team_member_id']}
+                                                open={openUpdateMember}
+                                                setOpen={setOpenUpdateMember}
+                                                teamId={params.id}
+                                                teamMemberId={teamMember['team_member_id']}
                                             />
                                         </Fab>
                                         <Fab

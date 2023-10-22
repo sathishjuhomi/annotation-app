@@ -120,7 +120,6 @@ export async function declineTeamInvite(invite_token: any) {
 
 export async function deleteTeamMember(team_id: string, team_member_id: string) {
   const accessToken = localStorage.getItem('access_token');
-  console.log("ACCESSTOKEN: ", accessToken)
   const res = await fetch
     (`http://127.0.0.1:8000/api/v1/teams/${team_id}/team-members/${team_member_id}/delete`,
       {
@@ -133,7 +132,7 @@ export async function deleteTeamMember(team_id: string, team_member_id: string) 
   return res;
 }
 
-export async function updateTeamMember(team_id: any, team_member_id: any, formData: UpdateATeamMemberFormData) {
+export async function updateTeamMemberRole(team_id: string, team_member_id: string, formData: UpdateATeamMemberFormData) {
   const accessToken = localStorage.getItem('access_token');
   const body = {
     roles: {

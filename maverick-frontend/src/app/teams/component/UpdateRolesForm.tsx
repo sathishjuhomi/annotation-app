@@ -10,10 +10,11 @@ import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
-import { CircularProgress, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { InviteATeamMemberProps, UpdateATeamMemberProps } from '@/app/component/interfaces';
+import { CircularProgress, DialogContent, DialogTitle, FormHelperText } from '@mui/material';
+import { UpdateATeamMemberProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
 import { useForm } from 'react-hook-form';
+import { useRouter } from "next/navigation";
 
 export default function UpdateATeamMember(
     {
@@ -26,22 +27,31 @@ export default function UpdateATeamMember(
         formHandleSubmitRoles,
         register,
         errors,
-        openUpdate,
-        setOpenUpdate,
-        // teamId,
-        // teamMemberId,
+        open,
+        setOpen,
+        teamId,
+        teamMemberId,
     }: UpdateATeamMemberProps
 
 ) {
 
+    // const [openUpdate, setOpenUpdate] = React.useState(false);
+    // const handleopenUpdate = () => {
+    //     setOpenUpdate(false);
+    //   };
+
     const handleCloseUpdate = () => {
-        setOpenUpdate(false);
+        setOpen(false);
     };
 
+    const handleClose = () => {
+        setOpen(false)
+    }
+
     const initialRolesState = [
+        { name: "owner", checked: false },
         { name: "admin", checked: false },
         { name: "member", checked: false },
-        { name: "owner", checked: false },
     ];
     const { handleSubmit } = useForm();
     const [roles, setRoles] = React.useState(initialRolesState);
@@ -53,33 +63,50 @@ export default function UpdateATeamMember(
         setRoles(updatedRoles);
     };
 
+    const router = useRouter();
+    const navigateToTeams = () => {
+        router.push("/teams");
+    };
     return (
         <div>
-            <Dialog open={openUpdate} onClose={handleCloseUpdate}>
+            <Dialog open={open} onClose={handleCloseUpdate}>
                 <DialogTitle>Update User</DialogTitle>
                 <DialogContent>
                     <FormControl component="fieldset" variant="standard">
                         <FormLabel className="text-black font-bold">Assign roles</FormLabel>
                         <FormGroup>
                             {roles.map((role) => (
-                                <FormControlLabel
+                                <FormControl
                                     key={role.name}
-                                    control={
-                                        <Checkbox
-                                            checked={role.checked}
-                                            onChange={handleChange(role.name)}
-                                            name={role.name} />
-                                    }
-                                    label={role.name}
-                                    {...register(role.name)}
-                                    error={Boolean(errors?.[role.name])}
-                                    helperText={errors[role.name] ? errors[role.name].message : " "}
-                                />
+                                    error={Boolean(errors?.[role.name])} // Move error handling to FormControl
+                                >
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={role.checked}
+                                                onChange={handleChange(role.name)}
+                                                name={role.name}
+                                            />
+                                        }
+                                        label={role.name}
+                                        {...register(role.name)}
+                                    />
+                                    <FormHelperText>
+                                        {errors[role.name] ? errors[role.name].message : ' '}
+                                    </FormHelperText>
+                                </FormControl>
                             ))}
                         </FormGroup>
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
+                    <Button
+                        className='text-black mr-2 border-black hover:bg-lightgrey'
+                        variant='outlined'
+                        onClick={navigateToTeams}
+                    >
+                        Cancel
+                    </Button>
                     <Button
                         disabled={!roles}
                         className='text-white bg-primary hover:bg-lightblack'
@@ -88,20 +115,14 @@ export default function UpdateATeamMember(
                         onClick={handleSubmit((data) => {
                             const formData = {
                                 roles: roles.filter((role) => role.checked).map((role) => role.name),
-                                admin: roles[0].checked,
-                                member: roles[1].checked
+                                owner: roles[0].checked,
+                                admin: roles[1].checked,
+                                member: roles[2].checked,
                             };
-                            formHandleSubmitRoles(onSubmitRoles(formData));
+                            formHandleSubmitRoles(onSubmitRoles(teamId, teamMemberId, formData));
                         })}
                     >
                         Update Role
-                    </Button>
-                    <Button
-                        className='text-black mr-2 border-black hover:bg-lightgrey'
-                        variant='outlined'
-                        onClick={handleCloseUpdate}
-                    >
-                        Cancel
                     </Button>
                 </DialogActions>
             </Dialog>

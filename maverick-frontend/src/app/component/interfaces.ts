@@ -110,10 +110,10 @@ export interface UpdateATeamMemberProps{
   formHandleSubmitRoles: any;
   register: any;
   errors: any;
-  openUpdate: boolean;
-  setOpenUpdate: any;
-  // teamId: any;
-  // teamMemberId: any;
+  open: boolean;
+  setOpen: any;
+  teamId: string;
+  teamMemberId: string;
 }
 
 export interface UpdateATeamMemberFormData {
