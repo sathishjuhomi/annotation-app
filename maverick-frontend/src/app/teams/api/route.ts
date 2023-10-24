@@ -136,11 +136,14 @@ export async function updateTeamMemberRole(team_id: string, team_member_id: stri
   const accessToken = localStorage.getItem('access_token');
   const body = {
     roles: {
+      owner: formData.owner,
       admin: formData.admin,
       member: formData.member,
-      owner: formData.owner,
     }
   }
+  console.log("ROLES ROUTE: ", body.roles)
+  console.log("ROUTE TEAMID: ",team_id)
+  console.log("ROUTER TEAMMEMBER: ", team_member_id)
   const res = await fetch
     (`http://127.0.0.1:8000/api/v1/teams/${team_id}/team-members/${team_member_id}/update-role`,
       {

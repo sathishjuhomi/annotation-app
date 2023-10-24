@@ -1,7 +1,6 @@
 "use client"
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
@@ -35,18 +34,11 @@ export default function UpdateATeamMember(
 
 ) {
 
-    // const [openUpdate, setOpenUpdate] = React.useState(false);
-    // const handleopenUpdate = () => {
-    //     setOpenUpdate(false);
-    //   };
+    console.log("FORM TEAMMEMBERID: ", teamMemberId)
 
     const handleCloseUpdate = () => {
         setOpen(false);
     };
-
-    const handleClose = () => {
-        setOpen(false)
-    }
 
     const initialRolesState = [
         { name: "owner", checked: false },
@@ -65,8 +57,9 @@ export default function UpdateATeamMember(
 
     const router = useRouter();
     const navigateToTeams = () => {
-        router.push("/teams");
+        location.reload();
     };
+
     return (
         <div>
             <Dialog open={open} onClose={handleCloseUpdate}>
@@ -78,7 +71,7 @@ export default function UpdateATeamMember(
                             {roles.map((role) => (
                                 <FormControl
                                     key={role.name}
-                                    error={Boolean(errors?.[role.name])} // Move error handling to FormControl
+                                    error={Boolean(errors?.[role.name])}
                                 >
                                     <FormControlLabel
                                         control={
