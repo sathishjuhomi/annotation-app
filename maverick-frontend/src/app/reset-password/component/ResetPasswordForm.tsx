@@ -31,7 +31,7 @@ export default function ResetPassword({
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box className="mt-8 flex flex-col items-center">
-          <Typography className="text-black font-bold" component="h1" variant="h5">
+          <Typography className="text-black font-bold mt-4" component="h1" variant="h5">
             Reset Password
           </Typography>
           <br />
@@ -74,13 +74,13 @@ export default function ResetPassword({
               type="submit"
               fullWidth
               variant="contained"
-              className="bg-primary mb-2 mt-3 hover:bg-lightblack"
+              className="bg-blue mb-2 mt-3 hover:bg-lightblue"
             >
               Reset Password
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signin" variant="body2">
+                <Link href="/signin" variant="body2" className="text-black">
                   Sign in
                 </Link>
               </Grid>

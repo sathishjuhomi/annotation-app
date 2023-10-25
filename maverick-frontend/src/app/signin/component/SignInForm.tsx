@@ -34,7 +34,7 @@ export default function Signin({
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box className="mt-8 flex flex-col items-center">
-          <Avatar className="bg-tertiary m-1">
+          <Avatar className="bg-blue m-1">
             <LockOutlinedIcon />
           </Avatar>
           <Typography className="text-black font-bold" component="h1" variant="h5">
@@ -76,18 +76,18 @@ export default function Signin({
               fullWidth
               onClick={formHandleSubmit(onSubmit)}
               variant="contained"
-              className="bg-primary mb-2 mt-3 hover:bg-lightblack"
+              className="bg-blue mb-2 mt-3 hover:bg-lightblue"
             >
               Sign in
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/forgot-password" variant="body2">
+                <Link href="/forgot-password" variant="body2" className="text-black">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link href="/signup" variant="body2" className="text-black">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
@@ -99,7 +99,7 @@ export default function Signin({
               fullWidth
               variant="contained"
               onClick={handleOauth}
-              className= 'bg-secondary mb-2 mt-3 hover:bg-lightblack'
+              className= 'bg-red mb-2 mt-3 hover:bg-lightred'
             >
               Sign in with Google
             </Button>

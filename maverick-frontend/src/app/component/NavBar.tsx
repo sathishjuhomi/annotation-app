@@ -122,7 +122,7 @@ export default function ResponsiveDrawer(props: Props) {
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-                    background: "#000000"
+                    background: "#19256b"
                 }}
             >
                 <Toolbar>
@@ -149,7 +149,7 @@ export default function ResponsiveDrawer(props: Props) {
                                     aria-haspopup="true"
                                     aria-expanded={openmenu ? 'true' : undefined}
                                 >
-                                    <Avatar className="font-bold">{email ? email[0].toUpperCase() : ""}</Avatar>
+                                    <Avatar className="font-bold bg-white text-black">{email ? email[0].toUpperCase() : ""}</Avatar>
                                 </IconButton>
                             </Tooltip>
                         </Box>

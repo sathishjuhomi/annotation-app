@@ -31,7 +31,7 @@ export default function ForgotPassword({
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box className="mt-8 flex flex-col items-center">
-          <Typography className="text-black font-bold" component="h1" variant="h5">
+          <Typography className="text-black font-bold mt-4" component="h1" variant="h5">
             Forgot Password
           </Typography>
           <br />
@@ -49,18 +49,17 @@ export default function ForgotPassword({
                 helperText={errors?.email ? errors?.email.message : " "}
               />
             </Grid>
-
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              className="bg-primary mb-2 mt-3 hover:bg-lightblack"
+              className="bg-blue mb-2 mt-3 hover:bg-lightblue"
             >
               Forgot Password
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/signin" variant="body2">
+                <Link href="/signin" variant="body2" className="text-black">
                   {"Back to Sign In"}
                 </Link>
               </Grid>

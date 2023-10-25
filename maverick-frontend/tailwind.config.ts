@@ -9,15 +9,19 @@ const config: Config = {
   theme: {
     colors: {
       black: "#000000",
-      // primary: "#1565c0",
+      blue: '#19256b',
       primary: "#000000",
-      secondary: "#dc2626",
+      red: "#bd2426",
+      lightred: "#de373a",
       tertiary: "#9c27b0",
       grey: "#303030",
       white: "#FFFFFF",
-      green: "#008000",
+      green: "#068932",
+      yellow: "#f3f578",
+      lightgreen: "#0fb847",
       lightblack: "#1a1a1a",
       lightgrey: "#f2f2f2",
+      lightblue: "#374491",
     },
     screens: {
       sm: "320px",

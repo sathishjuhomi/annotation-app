@@ -60,7 +60,7 @@ export default function TeamList(
           <Button
             size="small"
             variant="contained"
-            className="text-white bg-primary mr-4 hover:bg-lightblack"
+            className="text-white bg-green mr-4 hover:bg-lightgreen"
             onClick={handleClickOpen}
           >
             Create Team

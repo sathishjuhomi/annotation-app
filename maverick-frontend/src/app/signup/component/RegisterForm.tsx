@@ -33,7 +33,7 @@ export default function SignUp({
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box className="mt-8 flex flex-col items-center">
-          <Avatar className="bg-tertiary m-1">
+          <Avatar className="bg-blue m-1">
             <LockOutlinedIcon />
           </Avatar>
           <Typography className="text-black font-bold" component="h1" variant="h5">
@@ -92,13 +92,13 @@ export default function SignUp({
               type="submit"
               fullWidth
               variant="contained"
-              className="bg-primary mb-2 mt-3 hover:bg-lightblack"
+              className="bg-blue mb-2 mt-3 hover:bg-lightblue"
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signin" variant="body2">
+                <Link href="/signin" variant="body2" className="text-black">
                   Already have an account? Sign in
                 </Link>
               </Grid>
