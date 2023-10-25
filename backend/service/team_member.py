@@ -137,7 +137,10 @@ class TeamMemberService():
             return {"detail": f"{email} invited successfully"}
 
         except Exception as e:
-            return {"error": str(e)}
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"{str(e)}"
+            )
 
     async def resend_invitation(self, team_id, team_member_id, decoded_token, db: Session):
 
@@ -169,7 +172,10 @@ class TeamMemberService():
             return {"detail": f"{team_member.email} invited successfully"}
 
         except Exception as e:
-            return {"error": str(e)}
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"{str(e)}"
+            )
 
     def delete_member(self, decoded_token, team_id, team_member_id, db):
         """
