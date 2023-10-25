@@ -11,7 +11,7 @@ import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
 import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole } from "../api/route";
-import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, ListItemAvatar } from "@mui/material";
+import { Avatar, CircularProgress, DialogContent, DialogContentText, DialogTitle, ListItemAvatar } from "@mui/material";
 import ListItem from '@mui/material/ListItem';
 import * as Constants from "../../utils/constant";
 import Snackbar from "@/app/component/Snackbar";
@@ -28,6 +28,15 @@ import DeleteTeamIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
 import { useRouter } from "next/navigation";
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText'
+import Checkbox from '@mui/material/Checkbox';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
 import UpdateATeamMember from "../component/UpdateRolesForm";
 
 const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
@@ -38,6 +47,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [teamName, setTeamName] = React.useState("")
     const [teamMembers, setTeamMembers] = React.useState([])
 
+    console.log("PAGE TEAM MEMBERS: ", teamMembers)
     useEffect(() => {
         getTeamAndTeamMembers(params.id)
             .then(async (res) => {
@@ -79,9 +89,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
     };
 
     const [openDelete, setOpenDelete] = React.useState(false);
@@ -156,9 +163,28 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const handleClickOpenUpdateMember = () => {
         setOpenUpdateMember(true)
     }
-    // const handleClickCloseUpdate = () => {
-    //     setOpenUpdateMember(false);
-    // };
+    const handleClickCloseUpdate = () => {
+        setOpenUpdateMember(false);
+    };
+
+    const initialRolesState = [
+        { name: "owner", checked: false },
+        { name: "admin", checked: false },
+        { name: "member", checked: false },
+    ];
+    const { handleSubmit } = useForm();
+    const [roles, setRoles] = React.useState(initialRolesState);
+
+    const handleChange = (name: any) => (event: any) => {
+        const updatedRoles = roles.map((role) =>
+            role.name === name ? { ...role, checked: event.target.checked } : role
+        );
+        setRoles(updatedRoles);
+    };
+
+    const navigateToTeams = () => {
+        location.reload();
+    };
 
     const { register: updateTeamMemberRegister,
         handleSubmit: updateTeamMember,
@@ -167,19 +193,19 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
         { resolver: yupResolver(updateTeamMemberSchema) }
     )
 
-    const onUpdateTeamMember = async (teamId: string, teamMemberId: string, data: UpdateATeamMemberFormData) => {
+    const onSubmitRoles = async (teamId: string, teamMemberId: string, data: UpdateATeamMemberFormData) => {
         setShowMessage(true);
         setLoading(true);
         console.log("Team_ID: ", teamId)
         console.log("TeamMemberID: ", teamMemberId)
-        console.log("DAta: ",data)
+        console.log("DAta: ", data)
         await updateTeamMemberRole(teamId, teamMemberId, data)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
                     setMessage(Constants.TEAM__MEMBER_UPDATED_SUCCESSFULLY);
                     setMessageColor(Constants.SUCCESS);
-                    location.reload();
+                    // location.reload();
                 } else {
                     const data = response.detail;
                     setMessage(data);
@@ -355,24 +381,82 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                             size="small"
                                             className="mr-1 mt-1 mr-4 bg-primary text-white border border-2 border-solid border-black hover:bg-lightblack"
                                             color="primary"
-                                            onClick= { handleClickOpenUpdateMember}
+                                            onClick={handleClickOpenUpdateMember}
                                         >
                                             <EditIcon />
-                                            <UpdateATeamMember
-                                                loading={loading}
-                                                showMessage={showMessage}
-                                                setShowMessage={setShowMessage}
-                                                message={message}
-                                                messageColor={messageColor}
-                                                onSubmitRoles={onUpdateTeamMember}
-                                                formHandleSubmitRoles={updateTeamMember}
-                                                register={updateTeamMemberRegister}
-                                                errors={updateTeamMemberErrors}
-                                                open={openUpdateMember}
-                                                setOpen={setOpenUpdateMember}
-                                                teamId={params.id}
-                                                teamMemberId={teamMember['team_member_id']}
-                                            />
+                                            <div>
+                                                <Dialog open={openUpdateMember} onClose={handleClickCloseUpdate}>
+                                                    <DialogTitle>Update User</DialogTitle>
+                                                    <DialogContent>
+                                                        <FormControl component="fieldset" variant="standard">
+                                                            <FormLabel className="text-black font-bold">Assign roles</FormLabel>
+                                                            <FormGroup>
+                                                                {roles.map((role) => (
+                                                                    <FormControl
+                                                                        key={role.name}
+                                                                        //error={Boolean(updateTeamMemberErrors?.[role.name])} // Move error handling to FormControl
+                                                                    >
+                                                                        <FormControlLabel
+                                                                            control={
+                                                                                <Checkbox
+                                                                                    checked={role.checked}
+                                                                                    onChange={handleChange(role.name)}
+                                                                                    name={role.name}
+                                                                                />
+                                                                            }
+                                                                            label={role.name}
+                                                                            // {...updateTeamMemberRegister(role.name)}
+                                                                        />
+                                                                        <FormHelperText>
+                                                                            {/* {errors[role.name] ? errors[role.name].message : ' '} */}
+                                                                        </FormHelperText>
+                                                                    </FormControl>
+                                                                ))}
+                                                            </FormGroup>
+                                                        </FormControl>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button
+                                                            className='text-black mr-2 border-black hover:bg-lightgrey'
+                                                            variant='outlined'
+                                                            onClick={navigateToTeams}
+                                                        >
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            disabled={!roles}
+                                                            className='text-white bg-primary hover:bg-lightblack'
+                                                            variant='contained'
+                                                            type='submit'
+                                                            onClick={handleSubmit((data) => {
+                                                                const formData = {
+                                                                    roles: roles.filter((role) => role.checked).map((role) => role.name),
+                                                                    owner: roles[0].checked,
+                                                                    admin: roles[1].checked,
+                                                                    member: roles[2].checked,
+                                                                };
+                                                                (onSubmitRoles(params.id, teamMember['team_member_id'], formData));
+                                                                console.log("DIALOGUE TEAM MEMBER Id: ", teamMember['team_member_id'])                                    
+                                                            })}
+                                                        >
+                                                            Update Role
+                                                        </Button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                                {message !== "" ? (
+                                                    <Snackbar
+                                                        showMessage={showMessage}
+                                                        setShowMessage={setShowMessage}
+                                                        message={message}
+                                                        messageColor={messageColor}
+                                                    />
+                                                ) : null}
+                                                {loading ? (
+                                                    <Box>
+                                                        <CircularProgress />
+                                                    </Box>
+                                                ) : null}
+                                            </div>
                                         </Fab>
                                         <Fab
                                             size="small"
