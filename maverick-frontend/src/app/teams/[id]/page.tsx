@@ -271,14 +271,13 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     <br></br>
                     <ListItem alignItems="flex-start">
                         <ListItemAvatar>
-                            <Avatar className="bg-grey">{teamName[0]}</Avatar>
+                            <Avatar className="bg-black">{teamName[0]}</Avatar>
                         </ListItemAvatar>
                         <Typography className="mt-5 text-black text-xl font-bold">
                             {teamName}
                         </Typography>
                         <Fab
-                            className="ml-auto mt-1 mb-1 mr-4 text-white bg-primary border border-2 border-solid border-black hover:bg-lightblack"
-                            color="primary"
+                            className="ml-auto mt-1 mb-1 mr-4 text-white bg-edit border border-1 border-solid border-lightgrey hover:bg-lightblack"
                             size="small"
                             onClick={handleClickOpen}
                         >
@@ -300,7 +299,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                         />
                         <Fab
                             size="small"
-                            className="mr-1 mt-1 bg-white text-lightblack border border-1 border-solid border-black hover:bg-lightgrey"
+                            className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover:bg-lightgrey"
                             onClick={handleClickOpenDeleteTeam}
                         >
                             <DeleteTeamIcon />
@@ -315,7 +314,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                 <Button
                                     type="submit"
                                     variant="contained"
-                                    className="text-white bg-primary hover:bg-lightblack"
+                                    className="text-white bg-edit hover:bg-lightblack"
                                     onClick={handleDeleteTeam}
                                 >
                                     Yes
@@ -323,7 +322,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                 <Button
                                     onClick={handleCloseDeleteTeam}
                                     variant="outlined"
-                                    className="text-black border border-1 border-solid border-black hover:bg-lightgrey"
+                                    className="text-black border-black hover:bg-lightgrey"
                                 >
                                     No
                                 </Button>
@@ -353,8 +352,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                     <TableCell className="text-base" align="right">
                                         <Fab
                                             size="small"
-                                            className="mr-1 mt-1 mr-4 bg-primary text-white border border-2 border-solid border-black hover:bg-lightblack"
-                                            color="primary"
+                                            className="mr-1 mt-1 mr-4 bg-edit text-white border border-1 border-solid border-lightgrey hover:bg-lightblack"
                                             onClick= { handleClickOpenUpdateMember}
                                         >
                                             <EditIcon />
@@ -376,7 +374,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                         </Fab>
                                         <Fab
                                             size="small"
-                                            className="mr-1 mt-1 bg-white text-lightblack border border-1 border-solid border-black hover:bg-lightgrey"
+                                            className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover:bg-lightgrey"
                                             onClick={handleClickOpenDelete}
                                         >
                                             <DeleteIcon />
@@ -391,7 +389,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                                 <Button
                                                     type="submit"
                                                     variant="contained"
-                                                    className="text-white bg-primary hover:bg-lightblack"
+                                                    className="text-white bg-edit hover:bg-lightblack"
                                                     onClick={() => handleDeleteTeamMember(params.id, teamMember['team_member_id'])}
                                                 >
                                                     Yes
@@ -412,7 +410,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     </Table>
                     <br></br>
                     <Button
-                        className="ml-3 mt-1 mb-4 text-white font-bold bg-black hover:bg-lightblack"
+                        className="ml-3 mt-1 mb-4 text-white font-bold bg-green hover:bg-lightgreen"
                         variant="contained"
                         onClick={handleClickOpenInvite}
                     >

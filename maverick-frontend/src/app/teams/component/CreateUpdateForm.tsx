@@ -62,16 +62,18 @@ export default function CreateOrUpdateForm(
                                 helperText={errors?.teamname ? errors?.teamname.message : " "}
                             />
                             <Button className="mr-1 text-black">
-                                <FolderIcon className="mr-1 text-black" />
+                                <FolderIcon className="mr-1 text-code" />
                                 File Upload for avatar
                             </Button>
                         </Grid>
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button className="text-black hover:bg-lightgrey" onClick={handleClose}>Cancel</Button>
+                    <Button 
+                    className="text-black hover:bg-lightgrey border-black" 
+                    onClick={handleClose}>Cancel</Button>
                     <Button
-                        className='text-white hover:bg-lightblack bg-black'
+                        className='text-white bg-edit hover:bg-lightblack'
                         variant='contained'
                         type="submit"
                         onClick={formHandleSubmit(onSubmit)}

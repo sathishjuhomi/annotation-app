@@ -38,12 +38,12 @@ export default function Install() {
         </Typography>
         <br></br>
         <Box>
-          <Paper className="bg-yellow" elevation={3}>
+          <Paper className="bg-black" elevation={3}>
             <Typography
               variant="caption"
               display="block"
               gutterBottom
-              className="text-black pl-10"
+              className="text-white pl-10"
             >
               git clone git@github.com:juhomi/maverick.git my-app
             </Typography>
@@ -51,7 +51,7 @@ export default function Install() {
               variant="caption"
               display="block"
               gutterBottom
-              className="text-black pl-10"
+              className="text-white pl-10"
             >
               cd my-app
             </Typography>
@@ -59,7 +59,7 @@ export default function Install() {
               variant="caption"
               display="block"
               gutterBottom
-              className="text-black pl-10"
+              className="text-white pl-10"
             >
               git remote rename origin maverick
             </Typography>
@@ -82,16 +82,16 @@ export default function Install() {
         <br></br>
         <Typography className="text-black">
           We can then set origin to point to our new repository and push the
-          code up to it.
+          black up to it.
         </Typography>
         <br></br>
         <Box>
-          <Paper className="bg-yellow" elevation={3}>
+          <Paper className="bg-black" elevation={3}>
             <Typography
               variant="caption"
               display="block"
               gutterBottom
-              className="text-black pl-10"
+              className="text-white pl-10"
             >
               git remote add origin
               git@github.com:your-account/your-new-repo.git
@@ -100,7 +100,7 @@ export default function Install() {
               variant="caption"
               display="block"
               gutterBottom
-              className="text-black pl-10"
+              className="text-white pl-10"
             >
               git push -u origin main
             </Typography>
@@ -116,12 +116,12 @@ export default function Install() {
         </Typography>
         <br></br>
         <Box>
-          <Paper className="bg-yellow" elevation={3}>
+          <Paper className="bg-black" elevation={3}>
             <Typography
               variant="caption"
               display="block"
               gutterBottom
-              className="text-black pl-10"
+              className="text-white pl-10"
             >
               git fetch maverick
             </Typography>
@@ -129,7 +129,7 @@ export default function Install() {
               variant="caption"
               display="block"
               gutterBottom
-              className="text-black pl-10"
+              className="text-white pl-10"
             >
               git merge maverick/main
             </Typography>

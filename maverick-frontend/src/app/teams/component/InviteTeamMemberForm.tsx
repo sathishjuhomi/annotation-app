@@ -100,7 +100,7 @@ export default function InviteTeamMember(
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        className='text-white bg-primary hover:bg-lightblack'
+                        className='text-white bg-edit border border-1 border-solid border-black hover:bg-lightblack'
                         variant='contained'
                         type='submit'
                         disabled={!email}
@@ -117,7 +117,7 @@ export default function InviteTeamMember(
                         Send Invitation
                     </Button>
                     <Button
-                        className='text-black mr-2'
+                        className='text-black mr-2 border border-1 border-solid border-black'
                         variant='outlined'
                         onClick={handleCloseInvite}
                     >

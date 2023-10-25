@@ -53,7 +53,7 @@ export default function ForgotPassword({
               type="submit"
               fullWidth
               variant="contained"
-              className="bg-blue mb-2 mt-3 hover:bg-lightblue"
+              className="bg-black mb-2 mt-3 hover:bg-lightblack"
             >
               Forgot Password
             </Button>

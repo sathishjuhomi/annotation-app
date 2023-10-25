@@ -22,7 +22,7 @@ export default function Onboarding() {
   return (
     <Box className="bg-white display-flex">
       <CssBaseline />
-      <AppBar component="nav" className="bg-blue">
+      <AppBar component="nav" className="bg-black">
         <Toolbar>
           <div className="flex-grow hidden sm:block">
             <Typography
@@ -74,7 +74,7 @@ export default function Onboarding() {
         </Typography>
         <br />
         <br />
-        <Button className="bg-blue text-white hover:bg-lightblack" variant="contained">
+        <Button className="bg-edit text-white hover:bg-lightblack" variant="contained">
           Maverick your next app
         </Button>
         <br />

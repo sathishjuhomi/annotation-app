@@ -102,7 +102,7 @@ export default function UpdateATeamMember(
                     </Button>
                     <Button
                         disabled={!roles}
-                        className='text-white bg-primary hover:bg-lightblack'
+                        className='text-white bg-edit hover:bg-lightblack'
                         variant='contained'
                         type='submit'
                         onClick={handleSubmit((data) => {

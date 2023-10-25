@@ -84,7 +84,7 @@ export default function TeamList(
           <List>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar className="bg-grey">{team.team_name[0]}</Avatar>
+                <Avatar className="bg-black">{team.team_name[0]}</Avatar>
               </ListItemAvatar>
               <ListItemText className="mt-5 font-bold text-black">
                 {team.team_name}
@@ -93,8 +93,8 @@ export default function TeamList(
                 <Fab
                   className={
                     team.is_activated === true 
-                    ? 'ml-18 mt-1 mb-1 mr-6 text-black bg-white border border-1 border-solid border-black hover:bg-lightgrey' 
-                    : 'ml-18 mt-1 mb-1 mr-6 text-black bg-white border border-1 border-solid border-black hover:bg-lightgrey'}
+                    ? 'ml-18 mt-1 mb-1 mr-6 text-edit bg-white border border-3 border-solid border-lightgrey hover:bg-lightgrey' 
+                    : 'ml-18 mt-1 mb-1 mr-6 text-edit bg-white border border-3 border-solid border-lightgrey hover:bg-lightgrey'}
                   size="small"
                   onClick={() => {
                     team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : onSwitchTeam(team.team_name)
@@ -107,8 +107,8 @@ export default function TeamList(
               <Fab
                 className={
                   team.is_activated === true 
-                  ? 'ml-1 mt-1 mb-1 text-white bg-primary border border-1 border-solid border-black hover:bg-lightblack' 
-                  : 'ml-1 mt-1 mb-1 text-white bg-grey border border-1 border-solid border-black hover:bg-lightblack'
+                  ? 'ml-1 mt-1 mb-1 text-white bg-edit border border-1 border-solid border-lightblack hover:bg-lightgrey' 
+                  : 'ml-1 mt-1 mb-1 text-white bg-edit border border-1 border-solid border-lightblack hover:bg-lightgrey'
                 }
                 size="small"
                 onClick={() => {
