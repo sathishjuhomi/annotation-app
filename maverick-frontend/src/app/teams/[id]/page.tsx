@@ -37,6 +37,8 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("")
     const [teamMembers, setTeamMembers] = React.useState([])
+    const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState(null);
+    const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
 
     useEffect(() => {
         getTeamAndTeamMembers(params.id)
@@ -84,15 +86,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
         setOpen(false);
     };
 
-    const [openDelete, setOpenDelete] = React.useState(false);
-    const handleClickOpenDelete = () => {
-        setOpenDelete(true);
-    };
-
-    const handleCloseDelete = () => {
-        setOpenDelete(false);
-    };
-
     const [openDeleteTeam, setOpenDeleteTeam] = React.useState(false);
     const handleClickOpenDeleteTeam = () => {
         setOpenDeleteTeam(true);
@@ -128,9 +121,19 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
             });
     }
 
-    const handleDeleteTeamMember = async (teamId: string, teamMemberId: string) => {
+    const [openDeleteConfirmationDialog, setOpenDeleteConfirmationDialog] = React.useState(false);
+
+    const handleCloseDelete = () => {
+        setOpenDeleteConfirmationDialog(false);
+    };
+
+    const handleClickOpenDelete = (teamId: string, teamMemberId: any) => {
+        setSelectedTeamMemberIdForDelete(teamMemberId);
+        setOpenDeleteConfirmationDialog(true);
+    };
+
+    const handleDeleteTeamMember = async (teamId: string, teamMemberId: any) => {
         setShowMessage(true);
-        setLoading(true);
         await deleteTeamMember(teamId, teamMemberId)
             .then(async (res) => {
                 const response = await res.json();
@@ -153,12 +156,11 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     }
 
     const [openUpdateMember, setOpenUpdateMember] = React.useState(false);
-    const handleClickOpenUpdateMember = () => {
-        setOpenUpdateMember(true)
-    }
-    // const handleClickCloseUpdate = () => {
-    //     setOpenUpdateMember(false);
-    // };
+
+    const handleClickOpenUpdateMember = (teamId: string, teamMemberId: any) => {
+        setSelectedTeamMemberIdForEdit(teamMemberId);
+        setOpenUpdateMember(true);
+    };
 
     const { register: updateTeamMemberRegister,
         handleSubmit: updateTeamMember,
@@ -170,9 +172,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const onUpdateTeamMember = async (teamId: string, teamMemberId: string, data: UpdateATeamMemberFormData) => {
         setShowMessage(true);
         setLoading(true);
-        console.log("Team_ID: ", teamId)
-        console.log("TeamMemberID: ", teamMemberId)
-        console.log("DAta: ",data)
         await updateTeamMemberRole(teamId, teamMemberId, data)
             .then(async (res) => {
                 const response = await res.json();
@@ -239,7 +238,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
 
     const onInviteTeamMember = async (data: InviteATeamMemberFormData) => {
         setShowMessage(true);
-        setLoading(true);
         await inviteATeamMember(params.id, data)
             .then(async (res) => {
                 const response = await res.json();
@@ -253,11 +251,9 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     setMessage(data);
                     setMessageColor(Constants.ERROR);
                 }
-                setLoading(false);
             })
             .catch((error) => {
                 setMessage(error);
-                setLoading(false);
                 setMessageColor(Constants.ERROR);
             });
     };
@@ -352,62 +348,64 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                     <TableCell className="text-base" align="right">
                                         <Fab
                                             size="small"
-                                            className="mr-1 mt-1 mr-4 bg-edit text-white border border-1 border-solid border-lightgrey hover:bg-lightblack"
-                                            onClick= { handleClickOpenUpdateMember}
+                                            className="mr-1 mt-1 mr-4 bg-edit text-white border border-1 border-solid border-lightgrey hover-bg-lightblack"
+                                            onClick={() => handleClickOpenUpdateMember(params.id, teamMember['team_member_id'])}
                                         >
                                             <EditIcon />
-                                            <UpdateATeamMember
-                                                loading={loading}
-                                                showMessage={showMessage}
-                                                setShowMessage={setShowMessage}
-                                                message={message}
-                                                messageColor={messageColor}
-                                                onSubmitRoles={onUpdateTeamMember}
-                                                formHandleSubmitRoles={updateTeamMember}
-                                                register={updateTeamMemberRegister}
-                                                errors={updateTeamMemberErrors}
-                                                open={openUpdateMember}
-                                                setOpen={setOpenUpdateMember}
-                                                teamId={params.id}
-                                                teamMemberId={teamMember['team_member_id']}
-                                            />
+
                                         </Fab>
                                         <Fab
                                             size="small"
-                                            className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover:bg-lightgrey"
-                                            onClick={handleClickOpenDelete}
+                                            className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover-bg-lightgrey"
+                                            onClick={() => handleClickOpenDelete(params.id, teamMember['team_member_id'])}
                                         >
                                             <DeleteIcon />
                                         </Fab>
-                                        <Dialog open={openDelete} onClose={handleCloseDelete}>
-                                            <DialogContent>
-                                                <DialogContentText className="text-black">
-                                                    Are you sure you want to delete the person from {teamName} ?
-                                                </DialogContentText>
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button
-                                                    type="submit"
-                                                    variant="contained"
-                                                    className="text-white bg-edit hover:bg-lightblack"
-                                                    onClick={() => handleDeleteTeamMember(params.id, teamMember['team_member_id'])}
-                                                >
-                                                    Yes
-                                                </Button>
-                                                <Button
-                                                    onClick={handleCloseDelete}
-                                                    variant="outlined"
-                                                    className="text-black border border-1 border-solid border-black"
-                                                >
-                                                    No
-                                                </Button>
-                                            </DialogActions>
-                                        </Dialog>
                                     </TableCell>
                                 </TableRow>
                             ))}
+
                         </TableBody>
                     </Table>
+                    <Dialog open={openDeleteConfirmationDialog} onClose={handleCloseDelete}>
+                        <DialogContent>
+                            <DialogContentText className="text-black">
+                                Are you sure you want to delete the person from {teamName} ?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                className="text-white bg-edit hover-bg-lightblack"
+                                onClick={() => handleDeleteTeamMember(params.id, selectedTeamMemberIdForDelete)}
+                            >
+                                Yes
+                            </Button>
+                            <Button
+                                onClick={handleCloseDelete}
+                                variant="outlined"
+                                className="text-black border border-1 border-solid border-black hover-bg-lightgrey"
+                            >
+                                No
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <UpdateATeamMember
+                        loading={loading}
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        message={message}
+                        messageColor={messageColor}
+                        onSubmitRoles={onUpdateTeamMember}
+                        formHandleSubmitRoles={updateTeamMember}
+                        register={updateTeamMemberRegister}
+                        errors={updateTeamMemberErrors}
+                        open={openUpdateMember}
+                        setOpen={setOpenUpdateMember}
+                        teamId={params.id}
+                        teamMemberId={selectedTeamMemberIdForEdit}
+                    />
                     <br></br>
                     <Button
                         className="ml-3 mt-1 mb-4 text-white font-bold bg-green hover:bg-lightgreen"
@@ -417,7 +415,6 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                         Invite A Member
                     </Button>
                     <InviteTeamMember
-                        loading={loading}
                         showMessage={showMessage}
                         setShowMessage={setShowMessage}
                         message={message}
@@ -444,7 +441,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     </Box>
                 ) : null}
             </Box>
-        </Box>
+        </Box >
     );
 };
 export default ViewTeamAndTeamMembers

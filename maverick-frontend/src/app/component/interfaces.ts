@@ -70,8 +70,8 @@ export interface CreateUpdateProps {
   teamTitle: string;
 }
 
-export interface InviteATeamMemberProps{
-  loading: boolean;
+export interface InviteATeamMemberProps {
+  // loading: boolean;
   showMessage: boolean;
   setShowMessage: any;
   message: string;
@@ -100,7 +100,7 @@ export interface AcceptTeamInviteProps {
   declineInviteTeam: any;
 }
 
-export interface UpdateATeamMemberProps{
+export interface UpdateATeamMemberProps {
   loading: boolean;
   showMessage: boolean;
   setShowMessage: any;
@@ -113,7 +113,7 @@ export interface UpdateATeamMemberProps{
   open: boolean;
   setOpen: any;
   teamId: string;
-  teamMemberId: string;
+  teamMemberId: any;
 }
 
 export interface UpdateATeamMemberFormData {

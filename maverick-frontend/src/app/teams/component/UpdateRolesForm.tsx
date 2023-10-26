@@ -34,8 +34,6 @@ export default function UpdateATeamMember(
 
 ) {
 
-    console.log("FORM TEAMMEMBERID: ", teamMemberId)
-
     const handleCloseUpdate = () => {
         setOpen(false);
     };
@@ -59,7 +57,6 @@ export default function UpdateATeamMember(
     const navigateToTeams = () => {
         location.reload();
     };
-
     return (
         <div>
             <Dialog open={open} onClose={handleCloseUpdate}>
@@ -105,7 +102,7 @@ export default function UpdateATeamMember(
                         className='text-white bg-edit hover:bg-lightblack'
                         variant='contained'
                         type='submit'
-                        onClick={handleSubmit((data) => {
+                        onClick={handleSubmit(() => {
                             const formData = {
                                 roles: roles.filter((role) => role.checked).map((role) => role.name),
                                 owner: roles[0].checked,

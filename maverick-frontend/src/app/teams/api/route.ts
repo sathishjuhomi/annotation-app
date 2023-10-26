@@ -90,7 +90,6 @@ export async function inviteATeamMember(teamId: string, formData: InviteATeamMem
 
 export async function acceptTeamInvite(invite_token: any) {
   const accessToken = localStorage.getItem('access_token');
-  console.log("ACCESSTOKEN: ", accessToken)
   const res = await fetch
     (`http://127.0.0.1:8000/api/v1/teams/team-members/accept-invitation?invite_token=${invite_token}`,
       {
@@ -105,7 +104,6 @@ export async function acceptTeamInvite(invite_token: any) {
 
 export async function declineTeamInvite(invite_token: any) {
   const accessToken = localStorage.getItem('access_token');
-  console.log("ACCESSTOKEN: ", accessToken)
   const res = await fetch
     (`http://127.0.0.1:8000/api/v1/teams/team-members/decline-invitation?invite_token=${invite_token}`,
       {
@@ -141,9 +139,6 @@ export async function updateTeamMemberRole(team_id: string, team_member_id: stri
       member: formData.member,
     }
   }
-  console.log("ROLES ROUTE: ", body.roles)
-  console.log("ROUTE TEAMID: ",team_id)
-  console.log("ROUTER TEAMMEMBER: ", team_member_id)
   const res = await fetch
     (`http://127.0.0.1:8000/api/v1/teams/${team_id}/team-members/${team_member_id}/update-role`,
       {

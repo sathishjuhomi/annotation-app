@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 
 export default function InviteTeamMember(
     {
-        loading,
+        // loading,
         showMessage,
         setShowMessage,
         message,
@@ -133,11 +133,11 @@ export default function InviteTeamMember(
                     messageColor={messageColor}
                 />
             ) : null}
-            {loading ? (
+            {/* {loading ? (
                 <Box>
                     <CircularProgress />
                 </Box>
-            ) : null}
+            ) : null} */}
         </div>
     );
 }

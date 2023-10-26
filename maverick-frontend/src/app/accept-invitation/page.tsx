@@ -23,7 +23,7 @@ const acceptTeamInvitation = () => {
         console.log("Acess token invite page: ", accessToken);
         if (accessToken === null || accessToken === "") {
             console.log("Acess token invite page inside if: ", accessToken);
-            router.push("/signin");
+            router.push("/signup");
         };
     }, []);
 
