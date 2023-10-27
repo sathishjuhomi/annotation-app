@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import UpdateATeamMember from "../component/UpdateRolesForm";
 
 const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
+    const id = params.id;
     const [loading, setLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -41,7 +42,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
 
     useEffect(() => {
-        getTeamAndTeamMembers(params.id)
+        getTeamAndTeamMembers(id)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -49,7 +50,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                     const teamMembers = response.team_members;
                     setTeamName(teamNameValue);
                     setTeamMembers(teamMembers);
-                    router.push(`/teams/${params.id}`);
+                    router.push(`/teams/${id}`);
                 } else {
                     const data = response.detail;
                     setMessage(data);
@@ -100,7 +101,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const handleDeleteTeam = async () => {
         setShowMessage(true);
         setLoading(true);
-        await deleteTeam(params.id)
+        await deleteTeam(id)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -210,7 +211,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const submit = async (data: TeamsFormData) => {
         setShowMessage(true);
         setLoading(true);
-        await updateTeam(params.id, data)
+        await updateTeam(id, data)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -238,7 +239,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
 
     const onInviteTeamMember = async (data: InviteATeamMemberFormData) => {
         setShowMessage(true);
-        await inviteATeamMember(params.id, data)
+        await inviteATeamMember(id, data)
             .then(async (res) => {
                 const response = await res.json();
                 if (res.status === 200) {
@@ -349,7 +350,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                         <Fab
                                             size="small"
                                             className="mr-1 mt-1 mr-4 bg-edit text-white border border-1 border-solid border-lightgrey hover-bg-lightblack"
-                                            onClick={() => handleClickOpenUpdateMember(params.id, teamMember['team_member_id'])}
+                                            onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'])}
                                         >
                                             <EditIcon />
 
@@ -357,7 +358,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                         <Fab
                                             size="small"
                                             className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover-bg-lightgrey"
-                                            onClick={() => handleClickOpenDelete(params.id, teamMember['team_member_id'])}
+                                            onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'])}
                                         >
                                             <DeleteIcon />
                                         </Fab>
@@ -378,7 +379,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                                 type="submit"
                                 variant="contained"
                                 className="text-white bg-edit hover-bg-lightblack"
-                                onClick={() => handleDeleteTeamMember(params.id, selectedTeamMemberIdForDelete)}
+                                onClick={() => handleDeleteTeamMember(id, selectedTeamMemberIdForDelete)}
                             >
                                 Yes
                             </Button>
@@ -403,7 +404,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
                         errors={updateTeamMemberErrors}
                         open={openUpdateMember}
                         setOpen={setOpenUpdateMember}
-                        teamId={params.id}
+                        teamId={id}
                         teamMemberId={selectedTeamMemberIdForEdit}
                     />
                     <br></br>
