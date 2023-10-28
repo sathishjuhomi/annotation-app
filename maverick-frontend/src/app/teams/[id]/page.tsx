@@ -41,45 +41,41 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState(null);
     const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
 
-    useEffect(() => {
-        getTeamAndTeamMembers(id)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    const teamNameValue = response.team["team_name"];
-                    const teamMembers = response.team_members;
-                    setTeamName(teamNameValue);
-                    setTeamMembers(teamMembers);
-                    router.push(`/teams/${id}`);
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                setMessage(error);
-                setLoading(false);
-                setMessageColor(Constants.ERROR);
-            });
-    }, []);
+    // useEffect(() => {
+    //     getTeamAndTeamMembers(id)
+    //         .then(async (res) => {
+    //             const response = await res.json();
+    //             if (res.status === 200) {
+    //                 const teamNameValue = response.team["team_name"];
+    //                 const teamMembers = response.team_members;
+    //                 setTeamName(teamNameValue);
+    //                 setTeamMembers(teamMembers);
+    //                 router.push(`/teams/${id}`);
+    //             } else {
+    //                 const data = response.detail;
+    //                 setMessage(data);
+    //                 setMessageColor(Constants.ERROR);
+    //             }
+    //             setLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             setMessage(error);
+    //             setLoading(false);
+    //             setMessageColor(Constants.ERROR);
+    //         });
+    // }, []);
 
-  // Fetch the showTeams data using the getServerSideProps function
-//   useEffect(() => {
-//     async function fetchData() {
-//       const { props } = await getTeamAndTeamMembers(id);
-//       setTeams(props.teams);
-//       if (props.teams.status === 200) {
-//         const teamName = localStorage.getItem('teamName');
-//         if (teamName === null) {
-//           localStorage.setItem('teamName', props.teams[0]['team_name'])
-//         }
-//         setTeams(props.teams);
-//       }
-//     }
-//       fetchData();
-//     }, []);
+    // Fetch the showTeams data using the getServerSideProps function
+    useEffect(() => {
+        async function fetchData() {
+            const { props } = await getTeamAndTeamMembers(id);
+            const teamNameValue = props.teamMembers.team["team_name"];
+            const teamMembers = props.teamMembers.team_members;
+            setTeamName(teamNameValue);
+            setTeamMembers(teamMembers);
+        }
+        fetchData();
+    }, []);
 
     const getTeamMemberRoles = (role: any) => {
         const roleNames = []

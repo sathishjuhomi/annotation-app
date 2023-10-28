@@ -31,7 +31,6 @@ export async function teamList() {
      teams: data
     }
   };
-  // return res;
 }
 
 export async function getTeamAndTeamMembers(teamId: string) {
@@ -43,7 +42,12 @@ export async function getTeamAndTeamMembers(teamId: string) {
       "authorization": `Bearer ${accessToken}`,
     },
   });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      teamMembers: data
+     }
+  };
 }
 
 export async function updateTeam(teamId: string, formData: TeamsFormData) {

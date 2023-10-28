@@ -36,6 +36,7 @@ const Teams = () => {
   //   const response = teamList()
   //     .then(async (res) => {
   //       const response = await res.json();
+  //       console.log("status: ",res)
   //       if (res.status === 200) {
   //         const teamName = localStorage.getItem('teamName');
   //         if (teamName === null) {
@@ -56,13 +57,10 @@ const Teams = () => {
     async function fetchData() {
       const { props } = await teamList();
       setTeams(props.teams);
-      if (props.teams.status === 200) {
-        const teamName = localStorage.getItem('teamName');
+      const teamName = localStorage.getItem('teamName');
         if (teamName === null) {
           localStorage.setItem('teamName', props.teams[0]['team_name'])
         }
-        setTeams(props.teams);
-      }
     }
       fetchData();
     }, []);
