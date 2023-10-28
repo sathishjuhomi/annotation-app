@@ -25,7 +25,13 @@ export async function teamList() {
       "authorization": `Bearer ${accessToken}`,
     },
   });
-  return res;
+  const data = await res.json();
+  return{
+    props: {
+     teams: data
+    }
+  };
+  // return res;
 }
 
 export async function getTeamAndTeamMembers(teamId: string) {

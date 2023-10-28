@@ -6,12 +6,13 @@ import NavBar from "../component/NavBar";
 import Box from "@mui/material/Box";
 import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
-import {createOrUpdateTeamSchema } from "./validation";
+import { createOrUpdateTeamSchema } from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Constants from "../utils/constant";
 import { useRouter } from "next/navigation";
 import { TeamsFormData } from "./../component/interfaces";
-import { createTeam, teamList, acceptTeamInvite,declineTeamInvite } from "./api/route";
+import { createTeam, teamList, acceptTeamInvite, declineTeamInvite } from "./api/route";
+
 
 const defaultTheme = createTheme();
 
@@ -29,25 +30,42 @@ const Teams = () => {
     resolver: yupResolver(createOrUpdateTeamSchema),
   });
   const router = useRouter();
- 
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const response = teamList()
+  //     .then(async (res) => {
+  //       const response = await res.json();
+  //       if (res.status === 200) {
+  //         const teamName = localStorage.getItem('teamName');
+  //         if (teamName === null) {
+  //           localStorage.setItem('teamName', response[0]['team_name'])
+  //         }
+  //         setTeams(response);
+  //       }
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+
+  // Fetch the showTeams data using the getServerSideProps function
   useEffect(() => {
-    setLoading(true);
-    const response = teamList()
-      .then(async (res) => {
-        const response = await res.json();
-        if (res.status === 200) {
-          const teamName = localStorage.getItem('teamName');
-          if (teamName === null) {
-            localStorage.setItem('teamName', response[0]['team_name'])
-          }
-          setTeams(response);
+    async function fetchData() {
+      const { props } = await teamList();
+      setTeams(props.teams);
+      if (props.teams.status === 200) {
+        const teamName = localStorage.getItem('teamName');
+        if (teamName === null) {
+          localStorage.setItem('teamName', props.teams[0]['team_name'])
         }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-      });
-  }, []);
+        setTeams(props.teams);
+      }
+    }
+      fetchData();
+    }, []);
 
   const submit = async (data: TeamsFormData) => {
     setShowMessage(true);
@@ -73,54 +91,54 @@ const Teams = () => {
       });
   };
 
-  const onAcceptTeamInvite = async (inviteToken : any) => {
-      setShowMessage(true);
-      setLoading(true);
-      const response = await acceptTeamInvite(inviteToken)
-          .then(async (res) => {
-              const response = await res.json();
-              if (res.status === 200) {
-                  setMessage(response.message);
-                  setMessageColor(Constants.SUCCESS);
-                  location.reload();
-              } else {
-                  const data = response.detail;
-                  setMessage(data);
-                  setMessageColor(Constants.ERROR);
-              }
-              setLoading(false);
-          })
-          .catch((error) => {
-              setMessage(error);
-              setLoading(false);
-              setMessageColor(Constants.ERROR);
-          });
+  const onAcceptTeamInvite = async (inviteToken: any) => {
+    setShowMessage(true);
+    setLoading(true);
+    const response = await acceptTeamInvite(inviteToken)
+      .then(async (res) => {
+        const response = await res.json();
+        if (res.status === 200) {
+          setMessage(response.message);
+          setMessageColor(Constants.SUCCESS);
+          location.reload();
+        } else {
+          const data = response.detail;
+          setMessage(data);
+          setMessageColor(Constants.ERROR);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        setMessage(error);
+        setLoading(false);
+        setMessageColor(Constants.ERROR);
+      });
   };
-  
 
-  const onDeclineTeamInvite = async (inviteToken : any) => {
+
+  const onDeclineTeamInvite = async (inviteToken: any) => {
     setShowMessage(true);
     setLoading(true);
     const response = await declineTeamInvite(inviteToken)
-        .then(async (res) => {
-            const response = await res.json();
-            if (res.status === 200) {
-                setMessage(response.message);
-                setMessageColor(Constants.SUCCESS);
-                location.reload();
-            } else {
-                const data = response.detail;
-                setMessage(data);
-                setMessageColor(Constants.ERROR);
-            }
-            setLoading(false);
-        })
-        .catch((error) => {
-            setMessage(error);
-            setLoading(false);
-            setMessageColor(Constants.ERROR);
-        });
-};
+      .then(async (res) => {
+        const response = await res.json();
+        if (res.status === 200) {
+          setMessage(response.message);
+          setMessageColor(Constants.SUCCESS);
+          location.reload();
+        } else {
+          const data = response.detail;
+          setMessage(data);
+          setMessageColor(Constants.ERROR);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        setMessage(error);
+        setLoading(false);
+        setMessageColor(Constants.ERROR);
+      });
+  };
   return (
     <Box className="flex">
       <NavBar></NavBar>
@@ -139,7 +157,7 @@ const Teams = () => {
           teams={teams}
           onAcceptTeamInvite={onAcceptTeamInvite}
           onDeclineTeamInvite={onDeclineTeamInvite}
-          />
+        />
       </Box>
     </Box>
   );

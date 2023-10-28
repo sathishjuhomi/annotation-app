@@ -65,6 +65,22 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
             });
     }, []);
 
+  // Fetch the showTeams data using the getServerSideProps function
+//   useEffect(() => {
+//     async function fetchData() {
+//       const { props } = await getTeamAndTeamMembers(id);
+//       setTeams(props.teams);
+//       if (props.teams.status === 200) {
+//         const teamName = localStorage.getItem('teamName');
+//         if (teamName === null) {
+//           localStorage.setItem('teamName', props.teams[0]['team_name'])
+//         }
+//         setTeams(props.teams);
+//       }
+//     }
+//       fetchData();
+//     }, []);
+
     const getTeamMemberRoles = (role: any) => {
         const roleNames = []
         if (role['owner'] === true) {
