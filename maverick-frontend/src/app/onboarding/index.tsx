@@ -20,37 +20,36 @@ export default function Onboarding() {
   };
 
   return (
-    <Box className="bg-white display-flex">
+    <Box className="bg-white display-flex bg-lightgrey">
       <CssBaseline />
-      <AppBar component="nav" className="bg-black">
+      {/* <AppBar component="nav" className="bg-lightgrey"> */}
         <Toolbar>
           <div className="flex-grow hidden sm:block">
             <Typography
               variant="h6"
               component="div"
-              className="text-white sm-sm md-md lg-lg xl-xl"
+              className="text-green sm-sm md-md lg-lg xl-xl"
             >
               Maverick
             </Typography>
           </div>
           <div className="hidden sm:block">
             <Box>
-              <Button className="text-white mr-2 hover:bg-lightblack" onClick={navigateToSignIn}>
+              <Button className="text-black mr-2 hover:bg-lightgrey" onClick={navigateToSignIn}>
                 Log In
               </Button>
               <Button 
               className="text-black bg-white hover:bg-lightgrey" 
               onClick={navigateToSignUp}
-              variant="contained"
               >
                 Sign Up
               </Button>
             </Box>
           </div>
         </Toolbar>
-      </AppBar>
+      {/* </AppBar> */}
       <Box className="p-3" component="main">
-        <Toolbar />
+        {/* <Toolbar /> */}
         <Typography
           className="text-black font-bold mt-10"
           variant="h2"
@@ -74,11 +73,11 @@ export default function Onboarding() {
         </Typography>
         <br />
         <br />
-        <Button className="bg-edit text-white hover:bg-lightblack" variant="contained">
+        {/* <Button className="bg-edit text-white hover:bg-lightblack" variant="contained">
           Maverick your next app
         </Button>
         <br />
-        <br />
+        <br /> */}
       </Box>
     </Box>
   );

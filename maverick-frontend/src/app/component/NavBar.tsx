@@ -67,10 +67,10 @@ export default function ResponsiveDrawer(props: Props) {
     };
 
     const drawer = (
-        <div>
+        <div className='bg-grey'>
             <Toolbar />
             <Divider />
-            <List>
+            <List className='bg-grey'>
                 <ListItemButton onClick={handleClick}>
                     <ListItemText primary="Get Started" />
                     {open ? <ExpandLess /> : <ExpandMore />}
@@ -117,14 +117,14 @@ export default function ResponsiveDrawer(props: Props) {
     return (
         <Box>
             <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{
+            <Box 
+            className="bg-grey"
+            position="fixed"
+            sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-                    background: "#000000"
-                }}
-            >
+                    background: "#FFFFFF"
+                }}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -133,9 +133,8 @@ export default function ResponsiveDrawer(props: Props) {
                         onClick={handleDrawerToggle}
                         className="mr-2 hidden sm:block"
                     >
-                        <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div" className="font-bold text-white">
+                    <Typography variant="h6" noWrap component="div" className="font-bold text-black">
                         Welcome to Maverick
                     </Typography>
                     <React.Fragment>
@@ -149,7 +148,8 @@ export default function ResponsiveDrawer(props: Props) {
                                     aria-haspopup="true"
                                     aria-expanded={openmenu ? 'true' : undefined}
                                 >
-                                    <Avatar className="font-bold bg-white text-black">{email ? email[0].toUpperCase() : ""}</Avatar>
+                                    <Typography className="text-black">{email ? email : ""}</Typography>
+                                    {/* <Avatar className="font-bold bg-white text-black">{email ? email[0].toUpperCase() : ""}</Avatar> */}
                                 </IconButton>
                             </Tooltip>
                         </Box>
@@ -172,8 +172,9 @@ export default function ResponsiveDrawer(props: Props) {
                         </Menu>
                     </React.Fragment>
                 </Toolbar>
-            </AppBar>
+            </Box>
             <Box
+                className='bg-grey'
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
                 // TO do: className="w-full sm:w-{your-sm-width} flex-shrink-0"
@@ -182,6 +183,7 @@ export default function ResponsiveDrawer(props: Props) {
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                 <Drawer
                     container={container}
+                    className='bg-grey'
                     variant="temporary"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
@@ -197,6 +199,7 @@ export default function ResponsiveDrawer(props: Props) {
                 </Drawer>
                 <Drawer
                     variant="permanent"
+                    className='bg-grey'
                     sx={{
                         display: { xs: 'none', sm: 'block' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },

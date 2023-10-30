@@ -38,7 +38,7 @@ export default function Install() {
         </Typography>
         <br></br>
         <Box>
-          <Paper className="bg-black" elevation={3}>
+          <Paper className="bg-git" elevation={3}>
             <Typography
               variant="caption"
               display="block"
@@ -74,7 +74,7 @@ export default function Install() {
           variant="outlined"
           target="_blank"
           href="https://github.com/new"
-          className="text-black"
+          className="text-white bg-green "
         >
           Github
         </Button>
@@ -86,7 +86,7 @@ export default function Install() {
         </Typography>
         <br></br>
         <Box>
-          <Paper className="bg-black" elevation={3}>
+          <Paper className="bg-git" elevation={3}>
             <Typography
               variant="caption"
               display="block"
@@ -116,7 +116,7 @@ export default function Install() {
         </Typography>
         <br></br>
         <Box>
-          <Paper className="bg-black" elevation={3}>
+          <Paper className="bg-git" elevation={3}>
             <Typography
               variant="caption"
               display="block"
