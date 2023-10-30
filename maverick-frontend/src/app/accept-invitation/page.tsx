@@ -19,9 +19,7 @@ const acceptTeamInvitation = () => {
 
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
-        console.log("Acess token invite page: ", accessToken);
         if (accessToken === null || accessToken === "") {
-            console.log("Acess token invite page inside if: ", accessToken);
             router.push("/signup");
         };
     }, []);
@@ -30,7 +28,6 @@ const acceptTeamInvitation = () => {
         setShowMessage(true);
         setLoading(true);
         const {props} = await acceptTeamInvite(inviteToken)
-        console.log(props.acceptInvite)
         try{
               const data = props.acceptInvite.detail;
               setMessage(data);

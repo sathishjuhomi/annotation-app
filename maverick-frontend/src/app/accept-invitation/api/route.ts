@@ -9,7 +9,6 @@ export async function getMemberDetail(invite_token: any) {
             "authorization": `Bearer ${storedAccessToken}`,
         },
     });
-    // return res;
     const data = await res.json();
     console.log("data: ",data)
     return {
