@@ -2,10 +2,9 @@
 import * as React from "react";
 import * as Constants from "../utils/constant";
 import { useSearchParams } from 'next/navigation';
-import { acceptTeamInvite } from "./api/route";
 import AcceptInvitation from "./component/AcceptInvitation";
 import { useRouter } from "next/navigation";
-import { declineTeamInvite } from "../teams/api/route";
+import { acceptTeamInvite, declineTeamInvite } from "../teams/api/route";
 import { useEffect } from 'react';
 
 const acceptTeamInvitation = () => {
@@ -27,56 +26,44 @@ const acceptTeamInvitation = () => {
         };
     }, []);
 
-    const submit = async () => {
+    const onAcceptTeamInvite = async (inviteToken: any) => {
         setShowMessage(true);
         setLoading(true);
-        const response = await acceptTeamInvite(inviteToken)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    setMessage(response.message);
-                    setMessageColor(Constants.SUCCESS);
-                    router.push("/teams");
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                setMessage(error);
-                setLoading(false);
-                setMessageColor(Constants.ERROR);
-            });
-    };
+        const {props} = await acceptTeamInvite(inviteToken)
+        console.log(props.acceptInvite)
+        try{
+              const data = props.acceptInvite.detail;
+              setMessage(data);
+              setMessageColor(Constants.SUCCESS);
+              router.push("/teams");
+            setLoading(false);
+          } catch (error) {
+            const data = props.acceptInvite.detail;
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+            console.error('Error fetching data:', error);
+          }
+      };
 
     const inviteTokenDecline = params.get('token')
 
-    const declineInviteTeam = async () => {
+    const onDeclineTeamInvite = async (inviteToken: any) => {
         setShowMessage(true);
         setLoading(true);
-        const response = await declineTeamInvite(inviteTokenDecline)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    setMessage(response.message);
-                    setMessageColor(Constants.SUCCESS);
-                    router.push("/teams");
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                setMessage(error);
-                setLoading(false);
-                setMessageColor(Constants.ERROR);
-            });
-    };
-
+        const {props} = await declineTeamInvite(inviteToken)
+        try{
+              const data = props.declineInvite.detail;
+              setMessage(data);
+              setMessageColor(Constants.SUCCESS);
+              router.push("/teams");
+            setLoading(false);
+          } catch (error) {
+            const data = props.declineInvite.detail;
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+            console.error('Error fetching data:', error);
+          }
+      };
 
     return (
         <AcceptInvitation
@@ -85,8 +72,8 @@ const acceptTeamInvitation = () => {
             setShowMessage={setShowMessage}
             message={message}
             messageColor={messageColor}
-            onSubmit={submit}
-            declineInviteTeam={declineInviteTeam}
+            onSubmit={onAcceptTeamInvite}
+            declineInviteTeam={onDeclineTeamInvite}
         />
     )
 };

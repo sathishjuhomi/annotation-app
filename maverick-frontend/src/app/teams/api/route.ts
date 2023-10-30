@@ -12,8 +12,12 @@ export async function createTeam(formData: TeamsFormData) {
     },
     body: JSON.stringify(body),
   });
-
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      create: data
+    }
+  };
 }
 
 export async function teamList() {
@@ -26,9 +30,9 @@ export async function teamList() {
     },
   });
   const data = await res.json();
-  return{
+  return {
     props: {
-     teams: data
+      teams: data
     }
   };
 }
@@ -46,7 +50,7 @@ export async function getTeamAndTeamMembers(teamId: string) {
   return {
     props: {
       teamMembers: data
-     }
+    }
   };
 }
 
@@ -61,7 +65,12 @@ export async function updateTeam(teamId: string, formData: TeamsFormData) {
     },
     body: JSON.stringify(body),
   });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      update: data
+    }
+  };
 }
 
 export async function deleteTeam(teamId: string) {
@@ -73,7 +82,12 @@ export async function deleteTeam(teamId: string) {
       "authorization": `Bearer ${accessToken}`,
     }
   });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      delete: data
+    }
+  };
 }
 
 export async function inviteATeamMember(teamId: string, formData: InviteATeamMemberFormData) {
@@ -95,7 +109,12 @@ export async function inviteATeamMember(teamId: string, formData: InviteATeamMem
       },
       body: JSON.stringify(body),
     });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      inviteMember: data
+    }
+  };
 }
 
 export async function acceptTeamInvite(invite_token: any) {
@@ -109,7 +128,12 @@ export async function acceptTeamInvite(invite_token: any) {
           "authorization": `Bearer ${accessToken}`,
         },
       });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      acceptInvite: data
+    }
+  };
 }
 
 export async function declineTeamInvite(invite_token: any) {
@@ -123,7 +147,12 @@ export async function declineTeamInvite(invite_token: any) {
           "authorization": `Bearer ${accessToken}`,
         },
       });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      declineInvite: data
+    }
+  };
 }
 
 export async function deleteTeamMember(team_id: string, team_member_id: string) {
@@ -137,7 +166,12 @@ export async function deleteTeamMember(team_id: string, team_member_id: string) 
           "authorization": `Bearer ${accessToken}`,
         },
       });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      deleteMember: data
+    }
+  };
 }
 
 export async function updateTeamMemberRole(team_id: string, team_member_id: string, formData: UpdateATeamMemberFormData) {
@@ -159,5 +193,10 @@ export async function updateTeamMemberRole(team_id: string, team_member_id: stri
         },
         body: JSON.stringify(body),
       });
-  return res;
+  const data = await res.json();
+  return {
+    props: {
+      updateMember: data
+    }
+  };
 }

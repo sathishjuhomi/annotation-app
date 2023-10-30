@@ -41,41 +41,50 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState(null);
     const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
 
-    // useEffect(() => {
-    //     getTeamAndTeamMembers(id)
-    //         .then(async (res) => {
-    //             const response = await res.json();
-    //             if (res.status === 200) {
-    //                 const teamNameValue = response.team["team_name"];
-    //                 const teamMembers = response.team_members;
-    //                 setTeamName(teamNameValue);
-    //                 setTeamMembers(teamMembers);
-    //                 router.push(`/teams/${id}`);
-    //             } else {
-    //                 const data = response.detail;
-    //                 setMessage(data);
-    //                 setMessageColor(Constants.ERROR);
-    //             }
-    //             setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             setMessage(error);
-    //             setLoading(false);
-    //             setMessageColor(Constants.ERROR);
-    //         });
-    // }, []);
-
-    // Fetch the showTeams data using the getServerSideProps function
+// Fetch the showTeams data using the getServerSideProps function
     useEffect(() => {
         async function fetchData() {
             const { props } = await getTeamAndTeamMembers(id);
-            const teamNameValue = props.teamMembers.team["team_name"];
-            const teamMembers = props.teamMembers.team_members;
-            setTeamName(teamNameValue);
-            setTeamMembers(teamMembers);
+            try {
+                const teamNameValue = props.teamMembers.team["team_name"];
+                const teamMembers = props.teamMembers.team_members;
+                setTeamName(teamNameValue);
+                setTeamMembers(teamMembers);
+            } catch (error) {
+                const data = props.teamMembers.detail;
+                setMessage(data);
+                setMessageColor(Constants.ERROR);
+                console.error('Error fetching data:', error);
+            }
         }
         fetchData();
     }, []);
+
+
+// Create or Update Team Name
+
+    const submit = async (data: TeamsFormData) => {
+        setShowMessage(true);
+        setLoading(true);
+        const { props } = await updateTeam(id, data)
+        try {
+            if (((Object.keys(props.update).length) > 1)) {
+                setMessage(Constants.TEAM_UPDATED_SUCCESSFULLY);
+                setMessageColor(Constants.SUCCESS);
+                location.reload();
+            } else {
+                const data = props.update.detail;
+                setMessage(data);
+                setMessageColor(Constants.ERROR);
+            }
+            setLoading(false);
+        } catch (error) {
+            const data = props.update.detail;
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+            console.error('Error fetching data:', error);
+        }
+    };
 
     const getTeamMemberRoles = (role: any) => {
         const roleNames = []
@@ -95,9 +104,8 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const handleClickOpen = () => {
         setOpen(true);
     };
-    const handleClose = () => {
-        setOpen(false);
-    };
+
+// Delete Team
 
     const [openDeleteTeam, setOpenDeleteTeam] = React.useState(false);
     const handleClickOpenDeleteTeam = () => {
@@ -113,26 +121,72 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const handleDeleteTeam = async () => {
         setShowMessage(true);
         setLoading(true);
-        await deleteTeam(id)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
-                    setMessageColor(Constants.SUCCESS);
-                    router.push('/teams');
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                setMessage(error);
-                setLoading(false);
+        const { props } = await deleteTeam(id)
+        try {
+            if (props && props.delete) {
+                setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
+                setMessageColor(Constants.SUCCESS);
+                router.push('/teams');
+            } else {
+                const data = props.delete.detail;
+                setMessage(data);
                 setMessageColor(Constants.ERROR);
-            });
+            }
+            setLoading(false);
+        } catch (error) {
+            const data = props.delete.detail;
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+            console.error('Error fetching data:', error);
+        }
     }
+
+// Invite A Team Member 
+
+    const { register: createOrUpdateRegister,
+        handleSubmit: createOrUpdateTeam,
+        formState: { errors: createOrUpdateTeamErrors },
+    } = useForm(
+        { resolver: yupResolver(createOrUpdateTeamSchema) }
+    )
+
+    const { register: inviteTeamMemberRegister,
+        handleSubmit: inviteTeamMember,
+        formState: { errors: inviteTeamMemberErrors },
+    } = useForm(
+        { resolver: yupResolver(inviteTeamMemberSchema) }
+    )
+
+    const [openInvite, setOpenInvite] = React.useState(false);
+    const handleClickOpenInvite = () => {
+        setOpenInvite(true);
+    };
+
+    const onInviteTeamMember = async (data: InviteATeamMemberFormData) => {
+        setShowMessage(true);
+        const { props } = await inviteATeamMember(id, data)
+        try {
+            if (props && props.inviteMember) {
+                setMessage(Constants.INVITED_SUCCESSFULLY);
+                setMessageColor(Constants.SUCCESS);
+                setOpenInvite(false);
+                location.reload();
+                setLoading(false);
+            } else {
+                const data = props.inviteMember.detail;
+                setMessage(data);
+                setMessageColor(Constants.ERROR);
+            }
+        }
+        catch (error) {
+            const data = props.inviteMember.detail;
+            console.error('Error fetching data:', error);
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+        }
+    };
+
+// Delete Team Member
 
     const [openDeleteConfirmationDialog, setOpenDeleteConfirmationDialog] = React.useState(false);
 
@@ -147,26 +201,20 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
 
     const handleDeleteTeamMember = async (teamId: string, teamMemberId: any) => {
         setShowMessage(true);
-        await deleteTeamMember(teamId, teamMemberId)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    setMessage(Constants.TEAM__MEMBER_DELETED_SUCCESSFULLY);
-                    setMessageColor(Constants.SUCCESS);
-                    location.reload();
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                setMessage(error);
-                setLoading(false);
-                setMessageColor(Constants.ERROR);
-            });
+        const { props } = await deleteTeamMember(teamId, teamMemberId);
+        try {
+            setMessage(Constants.TEAM__MEMBER_DELETED_SUCCESSFULLY);
+            setMessageColor(Constants.SUCCESS);
+            location.reload();
+        } catch (error) {
+            const data = props.deleteMember.detail;
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+            console.error('Error fetching data:', error);
+        }
     }
+
+// Update Team Member role
 
     const [openUpdateMember, setOpenUpdateMember] = React.useState(false);
 
@@ -185,91 +233,20 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
     const onUpdateTeamMember = async (teamId: string, teamMemberId: string, data: UpdateATeamMemberFormData) => {
         setShowMessage(true);
         setLoading(true);
-        await updateTeamMemberRole(teamId, teamMemberId, data)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    setMessage(Constants.TEAM__MEMBER_UPDATED_SUCCESSFULLY);
-                    setMessageColor(Constants.SUCCESS);
-                    location.reload();
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                setMessage(error);
-                setLoading(false);
-                setMessageColor(Constants.ERROR);
-            });
+        const { props } = await updateTeamMemberRole(teamId, teamMemberId, data);
+        try {
+            const data = props.updateMember.detail;
+            setMessage(data);
+            setMessageColor(Constants.SUCCESS);
+            location.reload();
+        } catch (error) {
+            const data = props.updateMember.detail;
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+            console.error('Error fetching data:', error);
+        }
     }
 
-    const { register: createOrUpdateRegister,
-        handleSubmit: createOrUpdateTeam,
-        formState: { errors: createOrUpdateTeamErrors },
-    } = useForm(
-        { resolver: yupResolver(createOrUpdateTeamSchema) }
-    )
-
-    const { register: inviteTeamMemberRegister,
-        handleSubmit: inviteTeamMember,
-        formState: { errors: inviteTeamMemberErrors },
-    } = useForm(
-        { resolver: yupResolver(inviteTeamMemberSchema) }
-    )
-
-    const submit = async (data: TeamsFormData) => {
-        setShowMessage(true);
-        setLoading(true);
-        await updateTeam(id, data)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    setMessage(Constants.TEAM_UPDATED_SUCCESSFULLY);
-                    setMessageColor(Constants.SUCCESS);
-                    location.reload();
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                setMessage(error);
-                setLoading(false);
-                setMessageColor(Constants.ERROR);
-            });
-    };
-
-    const [openInvite, setOpenInvite] = React.useState(false);
-    const handleClickOpenInvite = () => {
-        setOpenInvite(true);
-    };
-
-    const onInviteTeamMember = async (data: InviteATeamMemberFormData) => {
-        setShowMessage(true);
-        await inviteATeamMember(id, data)
-            .then(async (res) => {
-                const response = await res.json();
-                if (res.status === 200) {
-                    setMessage(Constants.INVITED_SUCCESSFULLY);
-                    setMessageColor(Constants.SUCCESS);
-                    setOpenInvite(false);
-                    location.reload();
-                } else {
-                    const data = response.detail;
-                    setMessage(data);
-                    setMessageColor(Constants.ERROR);
-                }
-            })
-            .catch((error) => {
-                setMessage(error);
-                setMessageColor(Constants.ERROR);
-            });
-    };
 
     return (
         <Box className="flex">

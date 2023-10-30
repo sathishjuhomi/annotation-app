@@ -28,13 +28,17 @@ export default function acceptTeamInvitation(
     const [teamDetail, setTeamDetail] = React.useState(null)
 
     useEffect(() => {
-        const response = getMemberDetail(invite_token)
-        .then(async (res) => {
-            const response = await res.json()
-            if (res.status === 200){
-                setTeamDetail(response)
-            }
-        })
+        async function fetchData() {
+            const { props } = await getMemberDetail(invite_token)
+            try {
+                setTeamDetail(props.getMember)
+            } catch (error) {
+                const data = props.getMember.detail;
+                setShowMessage(data);
+                console.error('Error fetching data:', error);
+              }
+        }
+        fetchData();
     }, []);
 
     return (

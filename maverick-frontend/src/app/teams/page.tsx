@@ -31,112 +31,91 @@ const Teams = () => {
   });
   const router = useRouter();
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const response = teamList()
-  //     .then(async (res) => {
-  //       const response = await res.json();
-  //       console.log("status: ",res)
-  //       if (res.status === 200) {
-  //         const teamName = localStorage.getItem('teamName');
-  //         if (teamName === null) {
-  //           localStorage.setItem('teamName', response[0]['team_name'])
-  //         }
-  //         setTeams(response);
-  //       }
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-
   // Fetch the showTeams data using the getServerSideProps function
   useEffect(() => {
     async function fetchData() {
       const { props } = await teamList();
       setTeams(props.teams);
-      const teamName = localStorage.getItem('teamName');
+      try {
+        const teamName = localStorage.getItem('teamName');
         if (teamName === null) {
-          localStorage.setItem('teamName', props.teams[0]['team_name'])
+          localStorage.setItem('teamName', props.teams[0]['team_name']);
         }
+      } catch (error) {
+        const data = props.teams.detail;
+        setMessage(data);
+        setMessageColor(Constants.ERROR);
+        console.error('Error fetching data:', error);
+      }
     }
-      fetchData();
-    }, []);
 
+    fetchData();
+  }, []);
+
+  // Create Team using the getServerSideProps function
   const submit = async (data: TeamsFormData) => {
     setShowMessage(true);
     setLoading(true);
-    const response = await createTeam(data)
-      .then(async (res) => {
-        const response = await res.json();
-        if (res.status === 201) {
-          setMessage(Constants.TEAM_CREATED_SUCCESSFULLY);
-          setMessageColor(Constants.SUCCESS);
-          location.reload()
-        } else {
-          const data = response.detail;
-          setMessage(data);
-          setMessageColor(Constants.ERROR);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setMessage(error);
+    const { props } = await createTeam(data)
+    try {
+      if ((Object.keys(props.create).length) > 1) {
+        setMessage(Constants.TEAM_CREATED_SUCCESSFULLY);
+        setMessageColor(Constants.SUCCESS);
+        location.reload()
+      } else {
+        const data = props.create.detail;
+        setMessage(data);
         setLoading(false);
         setMessageColor(Constants.ERROR);
-      });
+      }
+      setLoading(false);
+    } catch (error) {
+      const data = props.create.detail;
+      setMessage(data);
+      setMessageColor(Constants.ERROR);
+      console.error('Error fetching data:', error);
+    }
   };
 
-  const onAcceptTeamInvite = async (inviteToken: any) => {
-    setShowMessage(true);
-    setLoading(true);
-    const response = await acceptTeamInvite(inviteToken)
-      .then(async (res) => {
-        const response = await res.json();
-        if (res.status === 200) {
-          setMessage(response.message);
-          setMessageColor(Constants.SUCCESS);
-          location.reload();
-        } else {
-          const data = response.detail;
-          setMessage(data);
-          setMessageColor(Constants.ERROR);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setMessage(error);
-        setLoading(false);
-        setMessageColor(Constants.ERROR);
-      });
-  };
+// Accept Team Member invite
+const onAcceptTeamInvite = async (inviteToken: any) => {
+  setShowMessage(true);
+  setLoading(true);
+  const {props} = await acceptTeamInvite(inviteToken)
+  try{
+        const data = props.acceptInvite.detail;
+        setMessage(data);
+        setMessageColor(Constants.SUCCESS);
+        location.reload();
+      setLoading(false);
+    } catch (error) {
+      const data = props.acceptInvite.detail;
+      setMessage(data);
+      setMessageColor(Constants.ERROR);
+      console.error('Error fetching data:', error);
+    }
+};
+
+// Decline Team Invite
+const onDeclineTeamInvite = async (inviteToken: any) => {
+  setShowMessage(true);
+  setLoading(true);
+  const {props} = await declineTeamInvite(inviteToken)
+  try{
+        const data = props.declineInvite.detail;
+        setMessage(data);
+        setMessageColor(Constants.SUCCESS);
+        location.reload();
+      setLoading(false);
+    } catch (error) {
+      const data = props.declineInvite.detail;
+      setMessage(data);
+      setMessageColor(Constants.ERROR);
+      console.error('Error fetching data:', error);
+    }
+};
 
 
-  const onDeclineTeamInvite = async (inviteToken: any) => {
-    setShowMessage(true);
-    setLoading(true);
-    const response = await declineTeamInvite(inviteToken)
-      .then(async (res) => {
-        const response = await res.json();
-        if (res.status === 200) {
-          setMessage(response.message);
-          setMessageColor(Constants.SUCCESS);
-          location.reload();
-        } else {
-          const data = response.detail;
-          setMessage(data);
-          setMessageColor(Constants.ERROR);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setMessage(error);
-        setLoading(false);
-        setMessageColor(Constants.ERROR);
-      });
-  };
   return (
     <Box className="flex">
       <NavBar></NavBar>
