@@ -8,6 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signup } from "./api/route";
 import * as Constants from "../utils/constant";
 import { useRouter } from "next/navigation";
+import Onboarding from "../onboarding/index";
+import Box from "@mui/material/Box";
 
 const Register = () => {
   const [loading, setLoading] = React.useState(false);
@@ -48,6 +50,8 @@ const Register = () => {
   };
 
   return (
+    <Box>
+    <Onboarding></Onboarding>
     <RegisterForm
       loading={loading}
       showMessage={showMessage}
@@ -59,6 +63,7 @@ const Register = () => {
       formHandleSubmit={handleSubmit}
       errors={errors}
     />
+    </Box>
   );
 };
 

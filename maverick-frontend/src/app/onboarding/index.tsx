@@ -1,12 +1,15 @@
 "use client";
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
+import Logo from '../component/mavericklogo.jpg';
+import imageOne from '../component/image1.jpg';
+import imageTwo from '../component/image2.jpg';
+import imageThree from '../component/image3.jpg';
+import Image from 'next/image'
 
 
 export default function Onboarding() {
@@ -20,65 +23,90 @@ export default function Onboarding() {
   };
 
   return (
-    <Box className="bg-white display-flex bg-lightgrey">
-      <CssBaseline />
-      {/* <AppBar component="nav" className="bg-lightgrey"> */}
-        <Toolbar>
-          <div className="flex-grow hidden sm:block">
-            <Typography
-              variant="h6"
-              component="div"
-              className="text-green sm-sm md-md lg-lg xl-xl"
-            >
-              Maverick
-            </Typography>
-          </div>
-          <div className="hidden sm:block">
-            <Box>
-              <Button className="text-black mr-2 hover:bg-lightgrey" onClick={navigateToSignIn}>
-                Log In
-              </Button>
-              <Button 
-              className="text-black bg-white hover:bg-lightgrey" 
-              onClick={navigateToSignUp}
-              >
-                Sign Up
-              </Button>
-            </Box>
-          </div>
-        </Toolbar>
-      {/* </AppBar> */}
-      <Box className="p-3" component="main">
-        {/* <Toolbar /> */}
-        <Typography
-          className="text-black font-bold mt-10"
-          variant="h2"
-          gutterBottom
-        >
-          Accelerate product development
-        </Typography>
-        <div>
+    <Box className="display-flex">
+      <Toolbar>
+        <div className="flex-grow p-8 hidden sm:block">
+          <Image
+            src={Logo}
+            alt='Maverick App'
+            className="h-6 w-44"
+            quality={100}
+            placeholder='blur'
+          />
+        </div>
+        <div className="hidden sm:block">
+          <Button className="text-login font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey" onClick={navigateToSignIn}>
+            Login
+          </Button>
+          <Button
+            className="text-login font-medium font-Inter text-base leading-8 normal-case hover:bg-lightgrey"
+            onClick={navigateToSignUp}
+          >
+            Sign Up
+          </Button>
+        </div>
+      </Toolbar>
+      <Box className="flex flex-row ">
+        <Box className="flex flex-col box-border max-w-lg max-h-36 mt-16 ml-14">
           <Typography
-            sx={{ marginTop: "-20px" }}
-            className="text-black font-bold"
+            className="text-black font-Inter font-bold text-left text-4xl leading-10 -tracking-1 "
             variant="h2"
             gutterBottom
           >
-            in Next.js and Python
+            Accelerate product
           </Typography>
+          <Typography
+            className="text-black font-Inter font-bold text-left text-4xl -mt-4 leading-10 -tracking-1 "
+            variant="h2"
+            gutterBottom
+          >
+            development in Next.js
+          </Typography>
+          <Typography
+            className="text-black font-Inter font-bold text-left text-4xl -mt-4 leading-10 -tracking-1 "
+            variant="h2"
+            gutterBottom
+          >
+            and Python
+          </Typography>
+          <Typography className="text-black font-Inter font-normal text-left text-lg leading-7 tracking-normal">
+            Maverick stands out as the top Next.js and Python
+          </Typography>
+          <Typography className="text-black font-Inter font-normal text-left text-lg -mt-1 leading-7 tracking-normal">
+            SaaS template available.Concentrate on your business
+          </Typography>
+          <Typography className="text-black font-Inter font-normal text-left text-lg -mt-1 leading-7 tracking-normal">
+            not on the initial setup and repetitive tasks.
+          </Typography>
+        </Box>
+        <div className="ml-42 -mb-8">
+          <Image
+            src={imageOne}
+            alt='ImageOne'
+            className="ml-32 max-w-xl max-h-80 rounded-2xl"
+            quality={100}
+            placeholder='blur'
+          />
         </div>
-        <Typography variant="h5" gutterBottom className="text-black mt-10">
-          Maverick stands out as the top Next.js and Python SaaS template available.
-          Concentrate on your business, not on the initial setup and repetitive tasks.
-        </Typography>
-        <br />
-        <br />
-        {/* <Button className="bg-edit text-white hover:bg-lightblack" variant="contained">
-          Maverick your next app
-        </Button>
-        <br />
-        <br /> */}
       </Box>
+      <div className="flex justify-end mt-10 -mb-96">
+        <Image
+          src={imageTwo}
+          alt='ImageTwo'
+          className="ml-32 w-72 max-h-96 rounded-2xl"
+          quality={100}
+          placeholder='blur'
+        />
+      </div>
+      {/* <div className="flex justify-end mt-96 mr-80 -mb-96">
+          <Image
+            src={imageThree}
+            alt='ImageThree'
+            className="ml-34 w-72 h-44 rounded-2xl"
+            quality={100}
+            placeholder='blur'
+          />
+        </div> */}
     </Box>
   );
 }
