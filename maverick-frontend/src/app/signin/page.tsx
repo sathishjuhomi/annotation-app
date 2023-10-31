@@ -8,6 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signIn, signInOauth } from "./api/route";
 import * as Constants from "../utils/constant";
 import { useRouter } from "next/navigation";
+import Onboarding from "../onboarding/index";
+import Box from "@mui/material/Box";
 
 const SignIn = () => {
   const [loading, setLoading] = React.useState(false);
@@ -22,8 +24,8 @@ const SignIn = () => {
     resolver: yupResolver(registerSchema),
   });
   const router = useRouter();
-  
-  const setAccessToken = (response:any) => {
+
+  const setAccessToken = (response: any) => {
     const accessToken = response.access_token;
     localStorage.setItem('access_token', accessToken);
   };
@@ -80,18 +82,21 @@ const SignIn = () => {
   };
 
   return (
-    <SignInForm
-      loading={loading}
-      showMessage={showMessage}
-      setShowMessage={setShowMessage}
-      message={message}
-      messageColor={messageColor}
-      onSubmit={submit}
-      register={register}
-      formHandleSubmit={handleSubmit}
-      handleOauth={submitOauth}
-      errors={errors}
-    />
+    <Box>
+      <Onboarding></Onboarding>
+      <SignInForm
+        loading={loading}
+        showMessage={showMessage}
+        setShowMessage={setShowMessage}
+        message={message}
+        messageColor={messageColor}
+        onSubmit={submit}
+        register={register}
+        formHandleSubmit={handleSubmit}
+        handleOauth={submitOauth}
+        errors={errors}
+      />
+    </Box>
   );
 };
 

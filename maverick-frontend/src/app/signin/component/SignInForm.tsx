@@ -7,13 +7,13 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 import { SignInProps } from "../../component/interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
+import imageThree from '../../component/image3.jpg';
+import Image from 'next/image';
 
 const defaultTheme = createTheme();
 
@@ -30,20 +30,16 @@ export default function Signin({
   errors,
 }: SignInProps) {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box className="mt-8 flex flex-col items-center">
-          <Avatar className="bg-black m-1">
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography className="text-black font-bold" component="h1" variant="h5">
-            Sign in
+    <Box> <br></br>
+      <Box className='flex flex-row'>
+        <Box className=" max-w-4xl max-h-56 ml-14 -mt-6 mr-80 flex flex-col  bg-white">
+          <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
+            Login
           </Typography>
           <br />
           <form noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Box className="mt-1 mr-2 flex flex-row">
+              <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
                   fullWidth
@@ -56,7 +52,7 @@ export default function Signin({
                   helperText={errors?.email ? errors?.email.message : " "}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
                   fullWidth
@@ -70,40 +66,38 @@ export default function Signin({
                   helperText={errors?.password ? errors?.password.message : " "}
                 />
               </Grid>
-            </Grid>
             <Button
               type="submit"
-              fullWidth
+              style={{ width: '100px', height: '55px' }}
               onClick={formHandleSubmit(onSubmit)}
               variant="contained"
-              className="bg-black mb-2 mt-3 hover:bg-lightblack"
+              className="text-white bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
             >
               Sign in
             </Button>
-            <Grid container>
-              <Grid item xs>
+            </Box>
+              <Grid className="flex justify-end mr-4 mb-4">
                 <Link href="/forgot-password" variant="body2" className="text-black">
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item>
+              <Grid>
                 <Link href="/signup" variant="body2" className="text-black">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-            </Grid>
           </form>
-          <Grid item>
+          {/* <Grid item>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               onClick={handleOauth}
-              className= 'bg-red mb-2 mt-3 hover:bg-lightred'
+              className='bg-red mb-2 mt-3 hover:bg-lightred'
             >
               Sign in with Google
             </Button>
-          </Grid>
+          </Grid> */}
           {message !== "" ? (
             <Snackbar
               showMessage={showMessage}
@@ -118,7 +112,17 @@ export default function Signin({
             </Box>
           ) : null}
         </Box>
-      </Container>
-    </ThemeProvider>
+        <br></br>
+      </Box>
+      <div className="flex justify-end flex-row mt-2 mr-80 mb-2">
+        <Image
+          src={imageThree}
+          alt='ImageThree'
+          className="ml-34 w-72 h-44 rounded-2xl"
+          quality={100}
+          placeholder='blur'
+        />
+      </div>
+    </Box>
   );
 }

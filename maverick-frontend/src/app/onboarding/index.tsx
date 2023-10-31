@@ -79,7 +79,7 @@ export default function Onboarding() {
             not on the initial setup and repetitive tasks.
           </Typography>
         </Box>
-        <div className="ml-42 -mb-8">
+        <div className="ml-42 -mb-10">
           <Image
             src={imageOne}
             alt='ImageOne'
@@ -89,7 +89,7 @@ export default function Onboarding() {
           />
         </div>
       </Box>
-      <div className="flex justify-end mt-10 -mb-96">
+      <div className="flex justify-end flex-row mt-14 -mb-96 mr-6">
         <Image
           src={imageTwo}
           alt='ImageTwo'
@@ -98,15 +98,17 @@ export default function Onboarding() {
           placeholder='blur'
         />
       </div>
-      {/* <div className="flex justify-end mt-96 mr-80 -mb-96">
-          <Image
-            src={imageThree}
-            alt='ImageThree'
-            className="ml-34 w-72 h-44 rounded-2xl"
-            quality={100}
-            placeholder='blur'
-          />
-        </div> */}
+      {/* <Box className="flex justify-end flex-row mt-44 mr-80 mb-2"> */}
+      {/* <div className="flex justify-end flex-row mt-44 mr-80 mb-2">
+        <Image
+          src={imageThree}
+          alt='ImageThree'
+          className="ml-34 w-72 h-44 rounded-2xl"
+          quality={100}
+          placeholder='blur'
+        />
+      </div> */}
+      {/* </Box> */}
     </Box>
   );
 }

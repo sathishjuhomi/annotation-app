@@ -9,7 +9,7 @@ import { createTheme } from "@mui/material/styles";
 import { SignUpProps } from "../../component/interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
-import imageTwo from '../../component/image2.jpg';
+import imageThree from '../../component/image3.jpg';
 import Image from 'next/image'
 
 const defaultTheme = createTheme();
@@ -26,12 +26,13 @@ export default function SignUp({
   errors,
 }: SignUpProps) {
   return (
-    <Box className='flex flex-row -mb-96'>
-      <Box className=" max-w-3xl max-h-56 mt-10 ml-14 flex flex-col  bg-white">
+    <Box> <br></br>
+    <Box className='flex flex-row'>
+      <Box className=" max-w-4xl max-h-56 ml-14 -mt-6 mr-80 flex flex-col  bg-white">
         <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
           Sign up
         </Typography>
-        <br />
+        <br/>
         <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
           <Box className="mt-1 mr-2 flex flex-row">
             <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
@@ -111,15 +112,17 @@ export default function SignUp({
           </Box>
         ) : null}
       </Box>
-      {/* <div className="ml-42 mt-10 -mb-6">
+      <br></br>
+    </Box>
+      <div className="flex justify-end flex-row mt-2 mr-80 mb-2">
           <Image
-            src={imageTwo}
-            alt='ImageTwo'
-            className="ml-32 w-72 max-h-96 rounded-2xl"
+            src={imageThree}
+            alt='ImageThree'
+            className="ml-34 w-72 h-44 rounded-2xl"
             quality={100}
             placeholder='blur'
           />
-        </div> */}
+        </div>
     </Box>
   );
 }
