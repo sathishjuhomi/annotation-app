@@ -18,5 +18,5 @@ class Plan(Base, TimestampMixIn):
     payment_type = Column(
         Enum('recurring', 'one_time', name='payment_type_enum'))
     billing_period = Column(
-        Enum('month', 'year', 'week', 'day', name='billing_period_enum'), nullable=False)
-    interval_count = Column(Integer, nullable=False)
+        Enum('month', 'year', 'week', 'day', name='billing_period_enum'), nullable=True)
+    interval_count = Column(Integer, nullable=True)
