@@ -18,7 +18,7 @@ const config: Config = {
       edit: "#1F2937",
       git: "#222222",
       logo: '#00BA62',
-      login: '#666666',
+      greyplus: '#666666',
       button: '#0DBE5E',
       border: '#EEEEEE',
       lightgreen: "#15d66e",

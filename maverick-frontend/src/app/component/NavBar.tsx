@@ -80,7 +80,7 @@ export default function ResponsiveDrawer(props: Props) {
 
     const drawer = (
         <Box className='mt-16 bg-grey'>
-            <AppBar className='bg-white shadow'>
+            <AppBar color='inherit' className='bg-white shadow'>
                 <Toolbar>
                     <div className='mt-3'>
                         <Image
@@ -96,6 +96,7 @@ export default function ResponsiveDrawer(props: Props) {
                             <Tooltip title={email} className='hover:bg-white'>
                                 <IconButton
                                     onClick={handleClickOpen}
+                                    className='bg-white hover:bg-white'
                                     size="small"
                                     sx={{ ml: 2 }}
                                     aria-controls={openmenu ? 'account-menu' : undefined}
@@ -133,7 +134,7 @@ export default function ResponsiveDrawer(props: Props) {
             </AppBar>
             <List>
                 <ListItemButton onClick={handleClick}>
-                    <ListItemText primary="Get Started" />
+                    <ListItemText className='text-black font-Inter font-bold text-sm leading-6'>Get Started</ListItemText> 
                     {open ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
@@ -145,7 +146,7 @@ export default function ResponsiveDrawer(props: Props) {
                                 "pl-4"
                             }
                             onClick={navigateToInstallation}>
-                            <ListItemText primary="Installation" />
+                            <ListItemText className='text-greyplus font-Inter font-bold text-sm leading-6'>Installation</ListItemText>
                         </ListItemButton>
                     </List>
                 </Collapse>
@@ -156,7 +157,7 @@ export default function ResponsiveDrawer(props: Props) {
                         "pl-4"
                     }
                     onClick={navigateToTeams}>
-                    <ListItemText primary="Teams" />
+                    <ListItemText className='text-greyplus font-Inter font-bold text-sm leading-6'>Teams</ListItemText>
                 </ListItemButton>
             </List>
         </Box>
@@ -176,8 +177,6 @@ export default function ResponsiveDrawer(props: Props) {
                 className='bg-grey'
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-                // TO do: className="w-full sm:w-{your-sm-width} flex-shrink-0"
-                aria-label="mailbox folders"
             >
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                 <Drawer

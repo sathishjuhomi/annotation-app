@@ -84,7 +84,7 @@ export default function ResetPassword({
                 <Link
                   href="/signin"
                   variant="body2"
-                  className="text-login font-Inter font-medium text-sm leading-7">
+                  className="text-greyplus font-Inter font-medium text-sm leading-7">
                   Back to Login
                 </Link>
               </Grid>

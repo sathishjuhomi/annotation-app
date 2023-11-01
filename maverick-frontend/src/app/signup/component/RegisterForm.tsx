@@ -29,6 +29,7 @@ export default function SignUp({
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
+        {/* <Paper elevation={5} className="max-w-4xl max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white"> */}
         <Paper elevation={5} className="max-w-4xl max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
           <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
             Sign Up
@@ -83,6 +84,7 @@ export default function SignUp({
               </Grid>
               <Button
                 type="submit"
+                color="inherit"
                 variant="contained"
                 className="text-white w-24 h-14 bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
               >
@@ -91,7 +93,7 @@ export default function SignUp({
             </Box>
             <Grid container justifyContent="flex-end" className="ml-4 mb-4 flex flex-col">
               <Grid className='flex flex-row'>
-                <Typography className="font-Inter font-medium text-login mt-4 mr-1 text-sm leading-7">
+                <Typography className="font-Inter font-medium text-greyplus mt-4 mr-1 text-sm leading-7">
                   Already have an account?
                 </Typography>
                 <Link

@@ -88,6 +88,7 @@ export default function Signin({
               </Grid>
               <Button
                 type="submit"
+                color="inherit"
                 onClick={formHandleSubmit(onSubmit)}
                 variant="contained"
                 className="text-white w-24 h-14 bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
@@ -97,7 +98,7 @@ export default function Signin({
             </Box>
             <Box className="mt-1 mr-2 flex flex-row">
               <Grid className='flex flex-row ml-3'>
-                <Typography className="font-Inter font-medium text-login ml-4 mt-4 mr-1 text-sm leading-7">
+                <Typography className="font-Inter font-medium text-greyplus ml-4 mt-4 mr-1 text-sm leading-7">
                   Don't have an account?
                 </Typography>
                 <Link
@@ -108,8 +109,11 @@ export default function Signin({
                 </Link>
               </Grid>
               <Grid className="flex justify-end ms-88 mb-4">
-                <Link href="/forgot-password" variant="body2" className="font-Inter font-medium text-login mt-4 ml-60">
-                  Forgot password?
+                <Link 
+                href="/forgot-password" 
+                variant="body2" 
+                className="font-Inter font-medium text-greyplus mt-4 ml-60">
+                  {"Forgot password?"}
                 </Link>
               </Grid>
             </Box>

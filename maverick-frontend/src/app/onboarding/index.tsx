@@ -34,11 +34,11 @@ export default function Onboarding() {
           />
         </div>
         <div className="hidden sm:block">
-          <Button className="text-login font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey" onClick={navigateToSignUp}>
+          <Button className="text-greyplus font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey" onClick={navigateToSignUp}>
             Sign Up
           </Button>
           <Button
-            className="text-login font-medium font-Inter text-base leading-8 normal-case hover:bg-lightgrey"
+            className="text-greyplus font-medium font-Inter text-base leading-8 normal-case hover:bg-lightgrey"
             onClick={navigateToSignIn}
           >
             Login
