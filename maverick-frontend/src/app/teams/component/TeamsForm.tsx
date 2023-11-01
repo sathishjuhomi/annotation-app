@@ -52,20 +52,22 @@ export default function TeamList(
     location.reload()
   };
   return (
-    <Box className="mt-4 w-full mr-4">
+    <Box className="mt-10 w-full mr-4">
+      <div className="flex flex-row mb-2">
+        <Typography className="mt-0 ml-4 text-left font-bold text-xl">Teams</Typography>
+        <Box className='ms-96'>
+        <Button
+          size="small"
+          variant="contained"
+          className="ms-72 text-white bg-green hover:bg-lightgreen"
+          onClick={handleClickOpen}
+        >
+          Create Team
+        </Button>
+        </Box>
+      </div>
       <Paper elevation={3} className="ml-2 mr-2">
         <br></br>
-        <div className="flex justify-between">
-          <Typography className="mt-0 ml-4 text-left font-bold text-xl">Teams</Typography>
-          <Button
-            size="small"
-            variant="contained"
-            className="text-white bg-green mr-4 hover:bg-lightgreen"
-            onClick={handleClickOpen}
-          >
-            Create Team
-          </Button>
-        </div>
         <CreateUpdateForm
           loading={loading}
           showMessage={showMessage}
@@ -92,9 +94,9 @@ export default function TeamList(
               {team.is_activated === true && team.team_name === teamNameValue ? null :
                 <Fab
                   className={
-                    team.is_activated === true 
-                    ? 'ml-18 mt-1 mb-1 mr-6 text-edit bg-white border border-3 border-solid border-lightgrey hover:bg-lightgrey' 
-                    : 'ml-18 mt-1 mb-1 mr-6 text-edit bg-white border border-3 border-solid border-lightgrey hover:bg-lightgrey'}
+                    team.is_activated === true
+                      ? 'ml-18 mt-1 mb-1 mr-6 text-edit bg-white border border-3 border-solid border-lightgrey hover:bg-lightgrey'
+                      : 'ml-18 mt-1 mb-1 mr-6 text-edit bg-white border border-3 border-solid border-lightgrey hover:bg-lightgrey'}
                   size="small"
                   onClick={() => {
                     team.is_activated === false ? onAcceptTeamInvite(team.invite_token) : onSwitchTeam(team.team_name)
@@ -106,9 +108,9 @@ export default function TeamList(
               }
               <Fab
                 className={
-                  team.is_activated === true 
-                  ? 'ml-1 mt-1 mb-1 text-white bg-edit border border-1 border-solid border-lightblack hover:bg-lightgrey' 
-                  : 'ml-1 mt-1 mb-1 text-white bg-edit border border-1 border-solid border-lightblack hover:bg-lightgrey'
+                  team.is_activated === true
+                    ? 'ml-1 mt-1 mb-1 text-white bg-edit border border-1 border-solid border-lightblack hover:bg-lightgrey'
+                    : 'ml-1 mt-1 mb-1 text-white bg-edit border border-1 border-solid border-lightblack hover:bg-lightgrey'
                 }
                 size="small"
                 onClick={() => {

@@ -13,11 +13,12 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { AppBar, Avatar, Collapse, Menu } from '@mui/material';
+import { AppBar, Avatar, Collapse, ListItemIcon, Menu } from '@mui/material';
 import { useRouter } from "next/navigation";
 import { useEffect } from 'react';
 import Logo from '../component/mavericklogo.jpg';
-import Image from 'next/image'
+import Image from 'next/image';
+import docsIcon from '@mui/icons-material/Article';
 
 const drawerWidth = 240;
 
@@ -134,11 +135,14 @@ export default function ResponsiveDrawer(props: Props) {
             </AppBar>
             <List>
                 <ListItemButton onClick={handleClick}>
-                    <ListItemText className='text-black font-Inter font-bold text-sm leading-6'>Get Started</ListItemText> 
+                    <ListItemText className='text-black font-Inter font-bold text-sm leading-6'>Get Started</ListItemText>
                     {open ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
+                        {/* <ListItemIcon>
+                            <docsIcon /> 
+                        </ListItemIcon> */}
                         <ListItemButton
                             className={navBar === "Installation" || navBar === "null" ?
                                 "pl-4 bg-lightgrey"
