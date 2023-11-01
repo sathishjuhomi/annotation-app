@@ -7,6 +7,7 @@ from backend.routers.user import auth_router
 from backend.routers.oauth import oauth_router
 from backend.routers.team import team_router
 from backend.routers.team_member import team_member_router
+from backend.routers.plan import plan_router
 
 logger = logging.getLogger(__name__)
 fileHandler = logging.FileHandler("logs.txt")
@@ -37,3 +38,4 @@ app.include_router(auth_router)
 app.include_router(oauth_router)
 app.include_router(team_router)
 app.include_router(team_member_router)
+app.include_router(plan_router)
