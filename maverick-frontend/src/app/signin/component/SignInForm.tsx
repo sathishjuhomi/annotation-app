@@ -49,7 +49,7 @@ export default function Signin({
                   startIcon={<Image
                     src={google}
                     alt='Google'
-                    className="w-7 h-8"
+                    className="w-6 h-8"
                     quality={100}
                     placeholder='blur'
                   />}
@@ -96,19 +96,19 @@ export default function Signin({
               </Button>
             </Box>
             <Box className="mt-1 mr-2 flex flex-row">
-              <Grid className='flex flex-row ml-2'>
-                <Typography className="font-Inter font-medium text-black ml-4 mr-1 text-sm leading-7">
+              <Grid className='flex flex-row ml-3'>
+                <Typography className="font-Inter font-medium text-login ml-4 mt-4 mr-1 text-sm leading-7">
                   Don't have an account?
                 </Typography>
                 <Link
                   href="/signup"
                   variant="body2"
-                  className="text-button font-Inter font-semibold mr-4 text-sm leading-7 mr-48">
+                  className="text-button font-Inter font-semibold mr-4 mt-4 text-sm leading-7 mr-48">
                   {"Register here"}
                 </Link>
               </Grid>
-              <Grid className="flex justify-end ml-60 mb-4">
-                <Link href="/forgot-password" variant="body2" className="font-Inter font-medium text-black ms-88">
+              <Grid className="flex justify-end ms-88 mb-4">
+                <Link href="/forgot-password" variant="body2" className="font-Inter font-medium text-login mt-4 ml-60">
                   Forgot password?
                 </Link>
               </Grid>

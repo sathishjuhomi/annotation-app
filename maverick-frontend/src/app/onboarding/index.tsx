@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import Logo from '../component/mavericklogo.jpg';
 import imageOne from '../component/image1.jpg';
 import imageTwo from '../component/image2.jpg';
-import imageThree from '../component/image3.jpg';
 import Image from 'next/image'
 
 

@@ -91,13 +91,13 @@ export default function SignUp({
             </Box>
             <Grid container justifyContent="flex-end" className="ml-4 mb-4 flex flex-col">
               <Grid className='flex flex-row'>
-                <Typography className="font-Inter font-medium text-black mr-1 text-sm leading-7">
+                <Typography className="font-Inter font-medium text-login mt-4 mr-1 text-sm leading-7">
                   Already have an account?
                 </Typography>
                 <Link
                   href="/signin"
                   variant="body2"
-                  className="text-button font-Inter font-medium mr-1 text-sm leading-7">
+                  className="text-button font-Inter font-medium mr-1 mt-4 text-sm leading-7">
                   {" Login "}
                 </Link>
               </Grid>

@@ -79,12 +79,12 @@ export default function ResetPassword({
                 Reset Password
               </Button>
             </Box>
-            <Grid className="flex justify-end mb-4 mr-5">
+            <Grid className="flex justify-end mt-0 mb-4 mr-5">
               <Grid item>
                 <Link
                   href="/signin"
                   variant="body2"
-                  className="text-button font-Inter font-medium text-sm leading-7">
+                  className="text-login font-Inter font-medium text-sm leading-7">
                   Back to Login
                 </Link>
               </Grid>

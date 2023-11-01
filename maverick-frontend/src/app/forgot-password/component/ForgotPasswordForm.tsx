@@ -63,7 +63,7 @@ export default function ForgotPassword({
             <Grid className="flex justify-end mb-4 mr-5">
                 <Link href="/signin" 
                 variant="body2" 
-                className="text-button font-Inter font-medium text-sm leading-7">
+                className="text-login mt-1 font-Inter font-medium text-sm leading-7">
                   {"Back to Login"}
                 </Link>
             </Grid>
