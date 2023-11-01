@@ -7,6 +7,8 @@ import registerSchema from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { forgotPassword } from "./api/route";
 import * as Constants from "../utils/constant";
+import Box from "@mui/material/Box";
+import Onboarding from "../onboarding/index";
 
 const ForgotPassword = () => {
   const [loading, setLoading] = React.useState(false);
@@ -45,17 +47,20 @@ const ForgotPassword = () => {
   };
 
   return (
-    <ForgotPasswordForm
-      loading={loading}
-      showMessage={showMessage}
-      setShowMessage={setShowMessage}
-      message={message}
-      messageColor={messageColor}
-      onSubmit={submit}
-      register={register}
-      formHandleSubmit={handleSubmit}
-      errors={errors}
-    />
+    <Box>
+      <Onboarding></Onboarding>
+      <ForgotPasswordForm
+        loading={loading}
+        showMessage={showMessage}
+        setShowMessage={setShowMessage}
+        message={message}
+        messageColor={messageColor}
+        onSubmit={submit}
+        register={register}
+        formHandleSubmit={handleSubmit}
+        errors={errors}
+      />
+    </Box>
   );
 };
 

@@ -7,11 +7,13 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 import { SignUpProps } from "../../component/interfaces";
 import Snackbar from "../../component/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
+import imageThree from '../../component/image3.jpg';
+import Image from 'next/image'
+import Paper from "@mui/material/Paper";
 
 const defaultTheme = createTheme();
 
@@ -27,20 +29,19 @@ export default function ResetPassword({
   errors,
 }: SignUpProps) {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box className="mt-8 flex flex-col items-center">
-          <Typography className="text-black font-bold mt-4" component="h1" variant="h5">
+    <Box> <br></br>
+      <Box className='flex flex-row'>
+        <Paper elevation={5} className="max-w-4xl max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
+          <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
             Reset Password
           </Typography>
           <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Box className="mt-1 mr-2 flex flex-row">
+              <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
-                  fullWidth
+                  className="w-full-reset h-16 ml-2"
                   name="password"
                   label="New Password"
                   type="password"
@@ -51,10 +52,10 @@ export default function ResetPassword({
                   helperText={errors?.password ? errors?.password.message : " "}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
-                  fullWidth
+                  className="w-full-reset h-16 ml-2"
                   name="passwordConfirm"
                   label="Confirm Password"
                   type="password"
@@ -69,19 +70,22 @@ export default function ResetPassword({
                   }
                 />
               </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              className="bg-black mb-2 mt-3 hover:bg-lightblack"
-            >
-              Reset Password
-            </Button>
-            <Grid container justifyContent="flex-end">
+
+              <Button
+                type="submit"
+                variant="contained"
+                className="text-white w-44 h-14 bg-button ml-4 mr-2 normal-case hover:bg-lightgreen"
+              >
+                Reset Password
+              </Button>
+            </Box>
+            <Grid className="flex justify-end mb-4 mr-5">
               <Grid item>
-                <Link href="/signin" variant="body2" className="text-black">
-                  Sign in
+                <Link
+                  href="/signin"
+                  variant="body2"
+                  className="text-button font-Inter font-medium text-sm leading-7">
+                  Back to Login
                 </Link>
               </Grid>
             </Grid>
@@ -99,8 +103,18 @@ export default function ResetPassword({
               <CircularProgress />
             </Box>
           ) : null}
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Paper>
+      </Box>
+      <div className="flex justify-end flex-row mt-3 mr-80 mb-3">
+        <Image
+          src={imageThree}
+          alt='ImageThree'
+          className="mr-2 w-72 h-40 rounded-2xl"
+          quality={100}
+          placeholder='blur'
+        />
+      </div>
+      <br></br>
+    </Box>
   );
 }

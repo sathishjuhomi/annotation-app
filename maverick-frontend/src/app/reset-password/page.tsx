@@ -8,6 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { resetPassword } from "./api/route";
 import * as Constants from "../utils/constant";
 import { useSearchParams } from 'next/navigation';
+import Box from "@mui/material/Box";
+import Onboarding from "../onboarding/index";
 
 const ResetPassword = () => {
   const [loading, setLoading] = React.useState(false);
@@ -49,9 +51,10 @@ const ResetPassword = () => {
   };
 
   return (
+    <Box>
+      <Onboarding></Onboarding>
     <ResetPasswordForm
       loading={loading}
-      setLoading={setLoading}
       showMessage={showMessage}
       setShowMessage={setShowMessage}
       message={message}
@@ -61,6 +64,7 @@ const ResetPassword = () => {
       formHandleSubmit={handleSubmit}
       errors={errors}
     />
+    </Box>
   );
 };
 

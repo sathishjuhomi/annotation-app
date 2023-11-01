@@ -35,14 +35,14 @@ export default function Onboarding() {
           />
         </div>
         <div className="hidden sm:block">
-          <Button className="text-login font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey" onClick={navigateToSignIn}>
-            Login
+          <Button className="text-login font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey" onClick={navigateToSignUp}>
+            Sign Up
           </Button>
           <Button
             className="text-login font-medium font-Inter text-base leading-8 normal-case hover:bg-lightgrey"
-            onClick={navigateToSignUp}
+            onClick={navigateToSignIn}
           >
-            Sign Up
+            Login
           </Button>
         </div>
       </Toolbar>
@@ -76,7 +76,7 @@ export default function Onboarding() {
             SaaS template available.Concentrate on your business
           </Typography>
           <Typography className="text-black font-Inter font-normal text-left text-lg -mt-1 leading-7 tracking-normal">
-            not on the initial setup and repetitive tasks.
+            not on the initial setup and repetitive tasks
           </Typography>
         </Box>
         <div className="ml-42 -mb-10">
@@ -93,7 +93,7 @@ export default function Onboarding() {
         <Image
           src={imageTwo}
           alt='ImageTwo'
-          className="ml-32 w-72 max-h-96 rounded-2xl"
+          className="w-72 max-h-96 mt-2 rounded-2xl"
           quality={100}
           placeholder='blur'
         />

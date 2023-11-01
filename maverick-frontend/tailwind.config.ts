@@ -37,6 +37,12 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      width: {
+        'full-plus': '596px',
+        'full-fourty': '219px',
+        'full-fourtyplus': '224.4px',
+        'full-reset': '292px',
+      },
     },
   },
   plugins: [],
