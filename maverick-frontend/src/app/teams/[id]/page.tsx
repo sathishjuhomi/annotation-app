@@ -30,7 +30,8 @@ import Fab from '@mui/material/Fab';
 import { useRouter } from "next/navigation";
 import UpdateATeamMember from "../component/UpdateRolesForm";
 
-const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => {
+const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) => 
+{
     const id = params.id;
     const [loading, setLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);

@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     colors: {
       black: "#000000",
-      red: "#bd2426",
+      red: "#EA4335",
       lightred: "#de373a",
       grey: "#F7F6F6",
       white: "#FFFFFF",
@@ -23,7 +23,7 @@ const config: Config = {
       border: '#EEEEEE',
       lightgreen: "#15d66e",
       lightblack: "#1a1a1a",
-      lightgrey: "#f2f2f2",
+      lightgrey: "#CCCCCC",
     },
     screens: {
       sm: "320px",
