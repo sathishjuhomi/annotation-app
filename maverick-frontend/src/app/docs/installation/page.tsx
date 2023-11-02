@@ -11,20 +11,20 @@ export default function Install() {
   return (
     <Box className="flex">
       <NavBar></NavBar>
-      <Box component="main" className="mt-10"
+      <Box component="main" className="mt-10 mb-10"
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - 240px)` } }}>
         <Typography className="-ml-3 font-Intern font-bold text-xl leading-8 p-3 text-black">
           Welcome to Maverick
         </Typography>
-        <Typography className="text-black text-sm font-Inter font-normal mb-2 -p-2">
+        <Typography className="text-greyplus text-sm font-Inter font-normal mb-3 -p-2">
           You can clone Maverick from our Git repository and merge updates at
           any time.
         </Typography>
-        <Paper elevation={3} className="bg-white">
-          <Typography className="ml-4 p-3 font-Inter font-bold leading-6 text-base text-black">
+        <Paper className="bg-white">
+          <Typography className="ml-4 p-3 font-Inter font-bold text-sm text-black leading-6">
             Using Maverick with Git
           </Typography>
-          <Typography className="ml-7 font-Inter font-normal text-sm text-black leading-6">
+          <Typography className="ml-7 -mt-3 font-Inter font-normal text-sm text-black leading-6">
             Git provides an easy way to merge changes from Maverick into your application.
           </Typography>
           <Typography className="ml-7 font-Inter font-normal text-sm text-black leading-6">
@@ -33,10 +33,10 @@ export default function Install() {
           <Typography className="ml-7 font-Inter font-normal text-sm text-black leading-6">
             to merge them into your application.
           </Typography>
-          <Typography className="ml-4 p-3 font-Inter font-bold leading-6 text-base text-black">
+          <Typography className="ml-4 p-3 font-Inter font-bold text-sm text-black leading-6">
             Clone The Repository
           </Typography>
-          <Typography className="ml-7 font-Inter font-normal text-sm text-black leading-6">
+          <Typography className="ml-7 -mt-3 font-Inter font-normal text-sm text-black leading-6">
             First, you'll need to clone Maverick from GitHub when you create your application.
           </Typography>
           <Typography className="ml-7 font-Inter font-normal text-sm text-black leading-6">
@@ -48,7 +48,7 @@ export default function Install() {
                 variant="caption"
                 display="block"
                 gutterBottom
-                className="text-white pl-10"
+                className="text-white text-sm font-Inter font-normal leading-6 pt-4 pl-10"
               >
                 git clone git@github.com:juhomi/maverick.git my-app
               </Typography>
@@ -56,7 +56,7 @@ export default function Install() {
                 variant="caption"
                 display="block"
                 gutterBottom
-                className="text-white pl-10"
+                className="text-white text-sm font-Inter font-normal leading-6 pl-10"
               >
                 cd my-app
               </Typography>
@@ -64,20 +64,20 @@ export default function Install() {
                 variant="caption"
                 display="block"
                 gutterBottom
-                className="text-white pl-10"
+                className="text-white text-sm font-Inter font-normal leading-6 pb-4 pl-10"
               >
                 git remote rename origin maverick
               </Typography>
             </Paper>
           </Box>
-          <Typography className="ml-4 p-3 font-Inter font-bold leading-6 text-base text-black">
+          <Typography className="ml-7 pt-3 font-Inter font-bold text-sm text-black leading-6">
             Create Your Git Repository
           </Typography>
           <Button
             variant="contained"
             target="_blank"
             href="https://github.com/new"
-            className="ml-7 text-white bg-green hover:bg-lightgreen"
+            className="ml-7 mt-1 w-36 h-11 text-white text-sm normal-case font-Inter font-bold leading-6 bg-green hover:bg-lightgreen"
           >
             Github
           </Button>
@@ -91,7 +91,7 @@ export default function Install() {
                 variant="caption"
                 display="block"
                 gutterBottom
-                className="text-white pl-10"
+                className="text-white text-sm font-Inter font-normal leading-6 pt-4 pl-10"
               >
                 git remote add origin
                 git@github.com:your-account/your-new-repo.git
@@ -100,16 +100,16 @@ export default function Install() {
                 variant="caption"
                 display="block"
                 gutterBottom
-                className="text-white pl-10"
+                className="text-white text-sm font-Inter font-normal leading-6 pb-4 pl-10"
               >
                 git push -u origin main
               </Typography>
             </Paper>
           </Box>
-          <Typography className="ml-4 p-3 font-Inter font-bold leading-6 text-base text-black">
+          <Typography className="ml-4 p-3 font-Inter font-bold text-sm text-black leading-6">
             Merging updates from Maverick
           </Typography>
-          <Typography className="ml-7 p-1 font-Inter font-normal text-sm text-black leading-6">
+          <Typography className="ml-7 -mt-3 font-Inter font-normal text-sm text-black leading-6">
             Then We can use git to fetch and merge updates into your application.
           </Typography>
           <Box>
@@ -118,7 +118,7 @@ export default function Install() {
                 variant="caption"
                 display="block"
                 gutterBottom
-                className="text-white pl-10"
+                className="text-white text-sm font-Inter font-normal leading-6 pt-4 pl-10"
               >
                 git fetch maverick
               </Typography>
@@ -126,7 +126,7 @@ export default function Install() {
                 variant="caption"
                 display="block"
                 gutterBottom
-                className="text-white pl-10"
+                className="text-white text-sm font-Inter font-normal leading-6 pb-4 pl-10"
               >
                 git merge maverick/main
               </Typography>

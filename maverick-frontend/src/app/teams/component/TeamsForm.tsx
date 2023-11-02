@@ -53,21 +53,19 @@ export default function TeamList(
   };
   return (
     <Box className="mt-10 w-full mr-4">
-      <div className="flex flex-row mb-2">
-        <Typography className="mt-0 ml-4 text-left font-bold text-xl">Teams</Typography>
-        <Box className='ms-96'>
-        <Button
-          size="small"
-          variant="contained"
-          className="ms-72 text-white bg-green hover:bg-lightgreen"
-          onClick={handleClickOpen}
-        >
-          Create Team
-        </Button>
-        </Box>
-      </div>
       <Paper elevation={3} className="ml-2 mr-2">
         <br></br>
+        <div className="flex justify-between">
+          <Typography className="mt-0 ml-4 text-left font-bold text-xl">Teams</Typography>
+          <Button
+            size="small"
+            variant="contained"
+            className="text-white bg-green mr-4 hover:bg-lightgreen"
+            onClick={handleClickOpen}
+          >
+            Create Team
+          </Button>
+        </div>
         <CreateUpdateForm
           loading={loading}
           showMessage={showMessage}

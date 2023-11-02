@@ -31,7 +31,7 @@ export default function ResetPassword({
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
-        <Paper elevation={5} className="max-w-4xl max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
+        <Paper elevation={5} className="w-paper max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
           <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
             Reset Password
           </Typography>
@@ -73,8 +73,9 @@ export default function ResetPassword({
 
               <Button
                 type="submit"
+                color="inherit"
                 variant="contained"
-                className="text-white w-44 h-14 bg-button ml-4 mr-2 normal-case hover:bg-lightgreen"
+                className="text-white w-button3 h-14 bg-button ml-4 mr-2 normal-case hover:bg-lightgreen"
               >
                 Reset Password
               </Button>
@@ -109,7 +110,7 @@ export default function ResetPassword({
         <Image
           src={imageThree}
           alt='ImageThree'
-          className="mr-2 w-72 h-40 rounded-2xl"
+          className="mr-4 w-72 h-40 rounded-2xl"
           quality={100}
           placeholder='blur'
         />

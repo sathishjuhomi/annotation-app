@@ -34,7 +34,7 @@ export default function Signin({
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
-        <Paper elevation={5} className="max-w-4xl max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
+        <Paper elevation={5} className="w-paper max-h-56 ml-14 mr-2 -mt-5 mb-2 flex flex-col  bg-white">
           <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
             Login
           </Typography>
@@ -53,7 +53,7 @@ export default function Signin({
                     quality={100}
                     placeholder='blur'
                   />}
-                  className='bg-border text-black normal-case font-Inter mb-1 ml-6 hover:bg-lightgrey'
+                  className='w-52 h-16 bg-border text-black normal-case font-Inter mb-1 ml-6 hover:bg-lightgrey'
                 >
                   Login with Google
                 </Button>
@@ -62,7 +62,7 @@ export default function Signin({
               <Grid className="mb-1 ml-2 border-inherit border-1 rounded-none">
                 <TextField
                   required
-                  className="w-full-fourty h-8"
+                  className="w-full-fourty h-16"
                   id="email"
                   label="Email Address"
                   name="email"
@@ -75,7 +75,7 @@ export default function Signin({
               <Grid className="mb-1 ml-2 border-inherit border-1 rounded-none">
                 <TextField
                   required
-                  className="w-full-fourty h-8"
+                  className="w-full-fourty h-16"
                   name="password"
                   label="Password"
                   type="password"
@@ -91,12 +91,12 @@ export default function Signin({
                 color="inherit"
                 onClick={formHandleSubmit(onSubmit)}
                 variant="contained"
-                className="text-white w-24 h-14 bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
+                className="text-white w-button h-14 bg-button ml-2 normal-case hover:bg-lightgreen"
               >
                 Login
               </Button>
             </Box>
-            <Box className="mt-1 mr-2 flex flex-row">
+            <Box className="mt-1 flex flex-row">
               <Grid className='flex flex-row ml-3'>
                 <Typography className="font-Inter font-medium text-greyplus ml-4 mt-4 mr-1 text-sm leading-7">
                   Don't have an account?
@@ -104,7 +104,7 @@ export default function Signin({
                 <Link
                   href="/signup"
                   variant="body2"
-                  className="text-button font-Inter font-semibold mr-4 mt-4 text-sm leading-7 mr-48">
+                  className="text-button font-Inter font-semibold mt-4 text-sm leading-7 mr-56">
                   {"Register here"}
                 </Link>
               </Grid>
@@ -112,7 +112,7 @@ export default function Signin({
                 <Link 
                 href="/forgot-password" 
                 variant="body2" 
-                className="font-Inter font-medium text-greyplus mt-4 ml-60">
+                className="font-Inter font-medium text-greyplus mt-4 ml-80 -mr-4">
                   {"Forgot password?"}
                 </Link>
               </Grid>
@@ -138,7 +138,7 @@ export default function Signin({
         <Image
           src={imageThree}
           alt='ImageThree'
-          className="mr-2 w-72 h-40 rounded-2xl"
+          className="mr-4 w-72 h-40 rounded-2xl"
           quality={100}
           placeholder='blur'
         />

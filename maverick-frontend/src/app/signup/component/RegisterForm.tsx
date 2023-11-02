@@ -29,14 +29,13 @@ export default function SignUp({
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
-        {/* <Paper elevation={5} className="max-w-4xl max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white"> */}
-        <Paper elevation={5} className="max-w-4xl max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
+        <Paper elevation={5} className="w-paper max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
           <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
             Sign Up
           </Typography>
           <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
-            <Box className="mt-1 mr-2 flex flex-row">
+            <Box className="mt-1 mr-2 ml-2 flex flex-row">
               <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
@@ -86,13 +85,13 @@ export default function SignUp({
                 type="submit"
                 color="inherit"
                 variant="contained"
-                className="text-white w-24 h-14 bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
+                className="text-white w-button h-14 bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
               >
                 Signup
               </Button>
             </Box>
             <Grid container justifyContent="flex-end" className="ml-4 mb-4 flex flex-col">
-              <Grid className='flex flex-row'>
+              <Grid className='ml-2 flex flex-row'>
                 <Typography className="font-Inter font-medium text-greyplus mt-4 mr-1 text-sm leading-7">
                   Already have an account?
                 </Typography>
@@ -126,7 +125,7 @@ export default function SignUp({
         <Image
           src={imageThree}
           alt='ImageThree'
-          className="mr-2 w-72 h-40 rounded-2xl"
+          className="mr-4 w-72 h-40 rounded-2xl"
           quality={100}
           placeholder='blur'
         />

@@ -13,12 +13,14 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { AppBar, Avatar, Collapse, ListItemIcon, Menu } from '@mui/material';
+import { AppBar, Avatar, Collapse, Menu } from '@mui/material';
 import { useRouter } from "next/navigation";
 import { useEffect } from 'react';
 import Logo from '../component/mavericklogo.jpg';
+import Teams from '../component/teams.jpg';
+import Docs from '../component/docs.jpg';
+import Start from '../component/start.jpg';
 import Image from 'next/image';
-import docsIcon from '@mui/icons-material/Article';
 
 const drawerWidth = 240;
 
@@ -80,7 +82,7 @@ export default function ResponsiveDrawer(props: Props) {
     };
 
     const drawer = (
-        <Box className='mt-16 bg-grey'>
+        <Box className='mt-16 bg-grey overscroll-none'>
             <AppBar color='inherit' className='bg-white shadow'>
                 <Toolbar>
                     <div className='mt-3'>
@@ -94,6 +96,7 @@ export default function ResponsiveDrawer(props: Props) {
                     </div>
                     <React.Fragment>
                         <Box className="ml-auto flex flex-row">
+                            <Typography className="mt-3 text-black">{email ? email : ""}</Typography>
                             <Tooltip title={email} className='hover:bg-white'>
                                 <IconButton
                                     onClick={handleClickOpen}
@@ -104,8 +107,7 @@ export default function ResponsiveDrawer(props: Props) {
                                     aria-haspopup="true"
                                     aria-expanded={openmenu ? 'true' : undefined}
                                 >
-                                    <Typography className="text-black">{email ? email : ""}</Typography>
-                                    <Avatar className="font-bold bg-grey ml-2 text-green">{email ? email[0].toUpperCase() : ""}</Avatar>
+                                    <Avatar className="-ml-3 font-bold bg-git text-white">{email ? email[0].toUpperCase() : ""}</Avatar>
                                 </IconButton>
                             </Tooltip>
                         </Box>
@@ -135,22 +137,34 @@ export default function ResponsiveDrawer(props: Props) {
             </AppBar>
             <List>
                 <ListItemButton onClick={handleClick}>
-                    <ListItemText className='text-black font-Inter font-bold text-sm leading-6'>Get Started</ListItemText>
+                    <Image
+                        src={Start}
+                        alt='Start'
+                        className="w-6 h-6"
+                        quality={100}
+                        placeholder='blur'
+                    />
+                    <ListItemText className='ml-2 text-black font-Inter font-normal text-sm leading-6'>Get Started</ListItemText>
                     {open ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {/* <ListItemIcon>
-                            <docsIcon /> 
-                        </ListItemIcon> */}
                         <ListItemButton
                             className={navBar === "Installation" || navBar === "null" ?
                                 "pl-4 bg-lightgrey"
                                 :
                                 "pl-4"
                             }
-                            onClick={navigateToInstallation}>
-                            <ListItemText className='text-greyplus font-Inter font-bold text-sm leading-6'>Installation</ListItemText>
+                            onClick={navigateToInstallation}
+                        >
+                            <Image
+                                src={Docs}
+                                alt='Docs'
+                                className="w-6 h-6"
+                                quality={100}
+                                placeholder='blur'
+                            />
+                            <ListItemText className='ml-2 text-greyplus font-Inter font-normal text-sm leading-6'>Installation</ListItemText>
                         </ListItemButton>
                     </List>
                 </Collapse>
@@ -161,31 +175,35 @@ export default function ResponsiveDrawer(props: Props) {
                         "pl-4"
                     }
                     onClick={navigateToTeams}>
-                    <ListItemText className='text-greyplus font-Inter font-bold text-sm leading-6'>Teams</ListItemText>
+                    <Image
+                        src={Teams}
+                        alt='Teams'
+                        className="w-6 h-6"
+                        quality={100}
+                        placeholder='blur'
+                    />
+                    <ListItemText className='ml-2 text-greyplus font-Inter font-normal text-sm leading-6'>Teams</ListItemText>
                 </ListItemButton>
             </List>
         </Box>
     );
 
     return (
-        <Box className='bg-grey'>
+        <Box>
             <Box
                 position="fixed"
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-                    background: "#FFFFFF",
                 }}>
             </Box>
             <Box
-                className='bg-grey'
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
             >
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                 <Drawer
                     container={container}
-                    className='bg-grey'
                     variant="temporary"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
@@ -194,19 +212,16 @@ export default function ResponsiveDrawer(props: Props) {
                     }}
                     sx={{
                         display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                        background: "#F7F6F6",
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
                     }}
                 >
                     {drawer}
                 </Drawer>
                 <Drawer
                     variant="permanent"
-                    className='bg-grey'
                     sx={{
                         display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                        background: "#F7F6F6",
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, background: '#F7F6F6' }
                     }}
                     open
                 >
