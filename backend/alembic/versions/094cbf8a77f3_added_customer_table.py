@@ -32,6 +32,12 @@ def upgrade():
             'plans.price_id'), nullable=True),
         sa.Column('subscription_id', sa.String(), nullable=True),
         sa.Column('invoice_id', sa.String(), nullable=True),
+        sa.Column("is_active", sa.Boolean,
+                  nullable=False, server_default='false'),
+        sa.Column("is_deleted", sa.Boolean,
+                  nullable=False, server_default='false'),
+        sa.Column("deleted_by_id", sa.dialects.postgresql.UUID(
+            as_uuid=True), nullable=True),
         sa.Column('t_create', sa.TIMESTAMP(timezone=True),
                   nullable=False, server_default=sa.text("now()")),
         sa.Column('t_update', sa.TIMESTAMP(timezone=True), nullable=False,

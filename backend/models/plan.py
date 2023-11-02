@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, Enum
+from sqlalchemy import Column, String, Integer, Float, Enum, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 
 from backend.models.database import Base
@@ -20,3 +20,5 @@ class Plan(Base, TimestampMixIn):
     billing_period = Column(
         Enum('month', 'year', 'week', 'day', name='billing_period_enum'), nullable=True)
     interval_count = Column(Integer, nullable=True)
+    is_deleted = Column(Boolean, default=False, nullable=False)
+    deleted_by_id = Column(UUID(as_uuid=True), nullable=True)
