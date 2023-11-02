@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import imageThree from '../../component/image3.jpg';
 import Image from 'next/image'
 import Paper from '@mui/material/Paper';
+import { useRouter } from "next/navigation";
 
 const defaultTheme = createTheme();
 
@@ -26,6 +27,12 @@ export default function SignUp({
   register,
   errors,
 }: SignUpProps) {
+
+  const router = useRouter();
+  const navigateToSignIn = () => {
+    router.push("/signin");
+  };
+
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
@@ -95,12 +102,12 @@ export default function SignUp({
                 <Typography className="font-Inter font-medium text-greyplus mt-4 mr-1 text-sm leading-7">
                   Already have an account?
                 </Typography>
-                <Link
-                  href="/signin"
-                  variant="body2"
-                  className="text-button font-Inter font-medium mr-1 mt-4 text-sm leading-7">
-                  {" Login "}
-                </Link>
+                <Button
+                  className="text-button font-Inter normal-case font-medium mt-2 -ml-2 text-sm leading-7"
+                  onClick={navigateToSignIn}
+                >
+                  Login
+                </Button>
               </Grid>
             </Grid>
 

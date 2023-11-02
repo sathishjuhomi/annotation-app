@@ -13,6 +13,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import imageThree from '../../component/image3.jpg';
 import Image from 'next/image'
 import Paper from "@mui/material/Paper";
+import { useRouter } from "next/navigation";
 
 const defaultTheme = createTheme();
 
@@ -27,6 +28,12 @@ export default function ForgotPassword({
   register,
   errors,
 }: SignUpProps) {
+
+  const router = useRouter();
+  const navigateToSignIn = () => {
+    router.push("/signin");
+  };
+
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
@@ -61,11 +68,12 @@ export default function ForgotPassword({
             <Box><br></br></Box>
           </Box>
             <Grid className="flex justify-end mb-4 mr-5">
-                <Link href="/signin" 
-                variant="body2" 
-                className="text-greyplus mt-1 font-Inter font-medium text-sm leading-7">
-                  {"Back to Login"}
-                </Link>
+                <Button
+                  className="text-greyplus font-Inter normal-case font-medium text-sm leading-7"
+                  onClick={navigateToSignIn}
+                >
+                  Back to Login
+                </Button>
             </Grid>
           </form>
           {message !== "" ? (

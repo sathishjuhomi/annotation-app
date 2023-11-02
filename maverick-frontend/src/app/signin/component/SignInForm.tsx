@@ -16,6 +16,7 @@ import imageThree from '../../component/image3.jpg';
 import google from '../../component/google.jpg';
 import Image from 'next/image';
 import Paper from "@mui/material/Paper";
+import { useRouter } from "next/navigation";
 
 const defaultTheme = createTheme();
 
@@ -31,6 +32,15 @@ export default function Signin({
   register,
   errors,
 }: SignInProps) {
+
+  const router = useRouter();
+  const navigateToSignUp = () => {
+    router.push("/signup");
+  };
+  const navigateToForgotPassword = () => {
+    router.push("/forgot-password");
+  };
+
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
@@ -101,20 +111,20 @@ export default function Signin({
                 <Typography className="font-Inter font-medium text-greyplus ml-4 mt-4 mr-1 text-sm leading-7">
                   Don't have an account?
                 </Typography>
-                <Link
-                  href="/signup"
-                  variant="body2"
-                  className="text-button font-Inter font-semibold mt-4 text-sm leading-7 mr-56">
-                  {"Register here"}
-                </Link>
+                <Button 
+                  className="text-button font-Inter font-semibold normal-case mt-0 -ml-2 text-sm leading-7 mr-56"
+                  onClick={navigateToSignUp}
+                >
+                  Register here
+                </Button>
               </Grid>
               <Grid className="flex justify-end ms-88 mb-4">
-                <Link 
-                href="/forgot-password" 
-                variant="body2" 
-                className="font-Inter font-medium text-greyplus mt-4 ml-80 -mr-4">
-                  {"Forgot password?"}
-                </Link>
+                <Button
+                  className="font-Inter font-medium text-greyplus normal-case mt-2 ml-72 -mr-4"
+                  onClick={navigateToForgotPassword}
+                >
+                  Forgot Password
+                </Button>
               </Grid>
             </Box>
           </form>

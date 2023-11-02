@@ -97,17 +97,6 @@ export default function Onboarding() {
           placeholder='blur'
         />
       </div>
-      {/* <Box className="flex justify-end flex-row mt-44 mr-80 mb-2"> */}
-      {/* <div className="flex justify-end flex-row mt-44 mr-80 mb-2">
-        <Image
-          src={imageThree}
-          alt='ImageThree'
-          className="ml-34 w-72 h-44 rounded-2xl"
-          quality={100}
-          placeholder='blur'
-        />
-      </div> */}
-      {/* </Box> */}
     </Box>
   );
 }
