@@ -3,7 +3,8 @@ import uuid
 from pydantic import UUID4
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema
+from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema, UpdatePriceSchema
+from backend.schemas.response.plan import PlanResponseSchema
 from backend.db_handler.plan_handler import plan_db_handler
 from backend.config import get_settings
 
@@ -17,6 +18,28 @@ else:
 
 
 class PlanService():
+    @staticmethod
+    def map_db_responses_to_schemas(db_responses):
+        schemas = []
+        for db_response in db_responses:
+            schema = PlanResponseSchema(
+                id=db_response['id'],
+                plan=UpdatePlanSchema(
+                    plan_name=db_response['plan_name'],
+                    description=db_response['description']
+                ),
+                price=UpdatePriceSchema(
+                    price=db_response['price'],
+                    currency=db_response['currency'],
+                    payment_mode=db_response['payment_mode'],
+                    payment_type=db_response['payment_type'],
+                    billing_period=db_response['billing_period'],
+                    interval_count=db_response['interval_count']
+                )
+            )
+            schemas.append(schema)
+        return schemas
+
     @staticmethod
     def create_product(plan_data: dict) -> dict:
         try:
@@ -48,6 +71,25 @@ class PlanService():
             )
 
     @staticmethod
+    def update_product_price(price_id: str, plan_price: dict) -> dict:
+        try:
+            amount = int(plan_price["price"])*100
+            updated_price = stripe.Price.modify(
+                price_id,
+                price=amount,
+                currency=plan_price["currency"],
+                type=plan_price["payment_type"],
+                interval=plan_price["billing_period"],
+                interval_count=plan_price["interval_count"]
+            )
+            return updated_price
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to update the price: {str(e)}"
+            )
+
+    @staticmethod
     def create_price(plan_data: dict, product: dict) -> dict:
         try:
             amount = int(plan_data["price"]) * 100
@@ -72,13 +114,14 @@ class PlanService():
                 detail=f"Failed to create price plan: {str(e)}"
             )
 
-    @staticmethod
-    def get_all_plans(db: Session):
-        return plan_db_handler.load_all_by_column(
+    def get_all_plans(self, db: Session):
+        response = plan_db_handler.load_all_by_column(
             db=db,
             column_name="is_deleted",
             value=False
         )
+        db_responses = [row.__dict__ for row in response]
+        return self.map_db_responses_to_schemas(db_responses=db_responses)
 
     def create_plan(
             self,
@@ -86,11 +129,13 @@ class PlanService():
             db: Session
     ) -> dict:
         plan_data = request_payload.model_dump()
-        plan_data["id"] = uuid.uuid4()
-        product = self.create_product(plan_data)
-        price = self.create_price(plan_data, product)
-        plan_data['price_id'] = price.id
-        plan_db_handler.create(db, input_object=plan_data)
+        plan_data["plan"]["id"] = uuid.uuid4()
+        product = self.create_product(plan_data["plan"])
+        price = self.create_price(plan_data["price"], product)
+        plan_data["price"]['price_id'] = price.id
+        merged_dict = {key: value for subdict in plan_data.values()
+                       for key, value in subdict.items()}
+        plan_db_handler.create(db, input_object=merged_dict)
         return {"detail": "Plan created successfully"}
 
     def update_plan(
@@ -105,13 +150,39 @@ class PlanService():
             "plan_name": updated_plan["name"],
             "description": updated_plan["description"]
         }
-        plan = plan_db_handler.load_by_id(db=db, id=id)
+        plan_obj = plan_db_handler.load_by_id(db=db, id=id)
         plan_db_handler.update(
             db=db,
-            db_obj=plan,
+            db_obj=plan_obj,
             input_object=input_obj
         )
         return {"detail": "Plan updated successfully"}
+
+    def update_price(
+            self,
+            price_id: str,
+            request_payload: UpdatePriceSchema,
+            db: Session
+    ) -> dict:
+        price = request_payload.model_dump()
+        updated_price = self.update_product_price(
+            price_id=price_id,
+            plan_price=price
+        )
+        input_obj = {
+            "price": updated_price["price"],
+            "currency": updated_price["currency"],
+            "payment_type": updated_price["type"],
+            "billing_period": updated_price["interval"],
+            "interval_count": updated_price["interval_count"]
+        }
+        price_obj = plan_db_handler.load_by_id(db=db, id=price_id)
+        plan_db_handler.update(
+            db=db,
+            db_obj=price_obj,
+            input_object=input_obj
+        )
+        return {"detail": "Price updated successfully"}
 
 
 plan_service = PlanService()

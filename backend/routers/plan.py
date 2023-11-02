@@ -1,15 +1,13 @@
 from typing import Any, List
 from pydantic import UUID4
-from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema
+from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema, UpdatePriceSchema
 from backend.schemas.response.plan import PlanResponseSchema
 from backend.schemas.response.user import DetailSchema
-from backend.db_handler.plan_handler import plan_db_handler
 from backend.service.plan import plan_service
 from fastapi.security import HTTPBearer
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from backend.models.database import get_db
-from backend.utils.utils import decode_token
 
 
 plan_router = APIRouter(prefix="/api/v1", tags=["Plans"])
@@ -47,7 +45,7 @@ def create_plan(
     response_model=List[PlanResponseSchema],
     responses={
         status.HTTP_200_OK: {
-            "description": "Success"
+            "description": "Successfully retrived all the plans"
         },
         status.HTTP_500_INTERNAL_SERVER_ERROR: {
             "description": "Internal Server Error"
@@ -58,7 +56,7 @@ def get_plans(
     db: Session = Depends(get_db)
 ):
     return plan_service.get_all_plans(db)
-    
+
 
 @plan_router.patch(
     "/plans/{id}",
@@ -66,11 +64,11 @@ def get_plans(
     response_model=DetailSchema,
     responses={
         status.HTTP_200_OK: {
-            "description": "Success"
+            "description": "Successfully updated the plan name, description"
         },
         status.HTTP_500_INTERNAL_SERVER_ERROR: {
             "description": "Internal Server Error"
-        }        
+        }
     }
 )
 def update_plan(
@@ -79,3 +77,24 @@ def update_plan(
     db: Session = Depends(get_db)
 ):
     return plan_service.update_plan(id, request_payload, db)
+
+
+@plan_router.patch(
+    "/plans/price/{price_id}",
+    description="This API will allow owner to update the price for their plan",
+    response_model=DetailSchema,
+    responses={
+        status.HTTP_200_OK: {
+            "description": "Successfully updated the price"
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Internal Server Error"
+        }
+    }
+)
+def update_price(
+    price_id: str,
+    request_payload: UpdatePriceSchema,
+    db: Session = Depends(get_db)
+):
+    return plan_service.update_price(price_id, request_payload, db)
