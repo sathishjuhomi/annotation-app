@@ -56,6 +56,5 @@ def create_plan(
 def get_plans(
     db: Session = Depends(get_db)
 ):
-    return plan_db_handler.load_all(
-        db=db)
+    return plan_service.get_all_plans(db)
     
