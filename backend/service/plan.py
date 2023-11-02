@@ -72,6 +72,14 @@ class PlanService():
                 detail=f"Failed to create price plan: {str(e)}"
             )
 
+    @staticmethod
+    def get_all_plans(db: Session):
+        return plan_db_handler.load_all_by_column(
+            db=db,
+            column_name="is_deleted",
+            value=False
+        )
+
     def create_plan(
             self,
             request_payload: PlanRequestSchema,

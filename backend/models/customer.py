@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, JSON, ForeignKey
+from sqlalchemy import Column, String, JSON, ForeignKey, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -21,6 +21,9 @@ class Customer(Base, TimestampMixIn):
     price_id = Column(String, ForeignKey('plans.price_id'), nullable=True)
     subscription_id = Column(String, nullable=True)
     invoice_id = Column(String, nullable=True)
+    is_active = Column(Boolean, default=False, nullable=False)
+    is_deleted = Column(Boolean, default=False, nullable=False)
+    deleted_by_id = Column(UUID(as_uuid=True), nullable=True)
 
     user = relationship("Users")
     plan = relationship("Plan")
