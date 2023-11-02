@@ -17,49 +17,57 @@ else:
 
 class PlanService():
     @staticmethod
-    def create_plan(
-            request_payload: PlanRequestSchema,
-            db: Session):
-        plan_data = request_payload.model_dump()
-        plan_data["id"] = uuid.uuid4()
+    def create_product(plan_data: dict) -> dict:
         try:
             product = stripe.Product.create(
+                id=plan_data["id"],
                 name=plan_data["plan_name"],
                 description=plan_data["description"]
             )
+            return product
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to create product: {str(e)}"
             )
 
+    @staticmethod
+    def create_price(plan_data: dict, product: dict) -> dict:
         try:
-            if product:
-                if plan_data['payment_type'] == 'recurring':
-                    billing_period = plan_data['billing_period']
-                    interval_count = plan_data['interval_count']
-                    # Create a price plan (subscription)
-                    price = stripe.Price.create(
-                        unit_amount=(int(plan_data["price"]))*100,
-                        currency=plan_data["currency"],
-                        recurring={"interval": billing_period,
-                                   "interval_count": interval_count},
-                        product=product.id,  
-                    )
-                else:
-                    # Create a price plan (subscription)
-                    price = stripe.Price.create(
-                        unit_amount=(int(plan_data["price"]))*100,
-                        currency=plan_data["currency"],
-                        product=product.id,
-                    )
+            amount = int(plan_data["price"]) * 100
+            price_params = {
+                "unit_amount": amount,
+                "currency": plan_data["currency"],
+                "product": product.id,
+            }
+
+            if plan_data['payment_type'] == 'recurring':
+                price_params["recurring"] = {
+                    "interval": plan_data['billing_period'],
+                    "interval_count": plan_data['interval_count'],
+                }
+
+            price = stripe.Price.create(**price_params)
+            return price
+
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to create price plan: {str(e)}"
             )
+
+    def create_plan(
+            self,
+            request_payload: PlanRequestSchema,
+            db: Session
+    ) -> dict:
+        plan_data = request_payload.model_dump()
+        plan_data["id"] = uuid.uuid4()
+        product = self.create_product(plan_data)
+        price = self.create_price(plan_data, product)
         plan_data['price_id'] = price.id
         plan_db_handler.create(db, input_object=plan_data)
         return {"detail": "Plan created successfully"}
+
 
 plan_service = PlanService()
