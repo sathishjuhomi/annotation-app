@@ -31,6 +31,8 @@ def create_plan(
     db: Session = Depends(get_db),
     # authorization: str = Depends(bearer)
 ) -> Any:
+    # print('inside plan')
     # token = authorization.credentials
+    # print('token', token)
     # _ = decode_token(token=token)
     return plan_service.create_plan(request_payload=request_payload, db=db)

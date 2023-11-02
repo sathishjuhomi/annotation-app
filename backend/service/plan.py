@@ -44,14 +44,14 @@ class PlanService():
                         currency=plan_data["currency"],
                         recurring={"interval": billing_period,
                                    "interval_count": interval_count},
-                        product=product.id,  # Use the product ID from the previous step
+                        product=product.id,  
                     )
                 else:
                     # Create a price plan (subscription)
                     price = stripe.Price.create(
                         unit_amount=(int(plan_data["price"]))*100,
                         currency=plan_data["currency"],
-                        product=product.id,  # Use the product ID from the previous step
+                        product=product.id,
                     )
         except Exception as e:
             raise HTTPException(
