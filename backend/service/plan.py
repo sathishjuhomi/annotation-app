@@ -1,8 +1,9 @@
 import stripe
 import uuid
+from pydantic import UUID4
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from backend.schemas.request.plan import PlanRequestSchema
+from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema
 from backend.db_handler.plan_handler import plan_db_handler
 from backend.config import get_settings
 
@@ -29,6 +30,21 @@ class PlanService():
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to create product: {str(e)}"
+            )
+
+    @staticmethod
+    def update_product(id: UUID4, plan: dict) -> dict:
+        try:
+            updated_product = stripe.Product.modify(
+                str(id),
+                name=plan["plan_name"],
+                description=plan["description"]
+            )
+            return updated_product
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to update the product: {str(e)}"
             )
 
     @staticmethod
@@ -68,6 +84,26 @@ class PlanService():
         plan_data['price_id'] = price.id
         plan_db_handler.create(db, input_object=plan_data)
         return {"detail": "Plan created successfully"}
+
+    def update_plan(
+            self,
+            id: UUID4,
+            request_payload: UpdatePlanSchema,
+            db: Session
+    ) -> dict:
+        plan = request_payload.model_dump()
+        updated_plan = self.update_product(id, plan)
+        input_obj = {
+            "plan_name": updated_plan["name"],
+            "description": updated_plan["description"]
+        }
+        plan = plan_db_handler.load_by_id(db=db, id=id)
+        plan_db_handler.update(
+            db=db,
+            db_obj=plan,
+            input_object=input_obj
+        )
+        return {"detail": "Plan updated successfully"}
 
 
 plan_service = PlanService()

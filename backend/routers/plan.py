@@ -1,5 +1,6 @@
 from typing import Any, List
-from backend.schemas.request.plan import PlanRequestSchema
+from pydantic import UUID4
+from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema
 from backend.schemas.response.plan import PlanResponseSchema
 from backend.schemas.response.user import DetailSchema
 from backend.db_handler.plan_handler import plan_db_handler
@@ -59,3 +60,23 @@ def get_plans(
     return plan_db_handler.load_all(
         db=db)
     
+
+@plan_router.patch(
+    "/plans/{id}",
+    description="This API will allow owner to update their plan name",
+    response_model=DetailSchema,
+    responses={
+        status.HTTP_200_OK: {
+            "description": "Success"
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Internal Server Error"
+        }        
+    }
+)
+def update_plan(
+    id: UUID4,
+    request_payload: UpdatePlanSchema,
+    db: Session = Depends(get_db)
+):
+    return plan_service.update_plan(id, request_payload, db)
