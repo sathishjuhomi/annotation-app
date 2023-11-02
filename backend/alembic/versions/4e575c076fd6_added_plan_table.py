@@ -36,6 +36,10 @@ def upgrade():
         sa.Column('payment_type', payment_type_enum, nullable=False),
         sa.Column('billing_period', billing_period_enum, nullable=True),
         sa.Column('interval_count', sa.Integer(), nullable=True),
+        sa.Column("is_deleted", sa.Boolean,
+                  nullable=False, server_default='false'),
+        sa.Column("deleted_by_id", sa.dialects.postgresql.UUID(
+            as_uuid=True), nullable=True),
         sa.Column('t_create', sa.TIMESTAMP(timezone=True),
                   nullable=False, server_default=sa.text("now()")),
         sa.Column('t_update', sa.TIMESTAMP(timezone=True), nullable=False,
