@@ -43,7 +43,7 @@ export default function InviteTeamMember(
         { name: "member", checked: false },
     ];
     const { handleSubmit } = useForm();
-    
+
     const [email, setMail] = React.useState("");
     const [roles, setRoles] = React.useState(initialRolesState);
 
@@ -56,16 +56,16 @@ export default function InviteTeamMember(
 
     return (
         <div>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Invite User</DialogTitle>
+            <Dialog className='rounded-md' open={open} onClose={handleClose}>
+                <DialogTitle className='ml-3 mr-3 mt-8 text-2xl text-black font-Inter font-bold'>Invite User</DialogTitle>
                 <DialogContent>
-                    <DialogContentText className='text-black'>
-                        Invite a member to join your team.
+                    <DialogContentText className='ml-4 mr-48 -mt-1 text-greyplus text-sm font-Inter font-normal leading-6'>
+                        Invite a member to join your team
                     </DialogContentText>
                     <br></br>
                     <TextField
                         required
-                        fullWidth
+                        className='w-full h-20 p-3 -mt-4'
                         id="email"
                         label="Email Address"
                         name="email"
@@ -77,14 +77,14 @@ export default function InviteTeamMember(
                         helperText={errors?.email ? errors?.email.message : " "}
                     />
                     <br></br><br></br>
-                    <FormControl component="fieldset" variant="standard">
-                        <FormLabel className="text-black font-bold">Assign roles</FormLabel>
-                        <FormGroup>
+                    <FormControl className='ml-4 mr-4 -mt-6 capitalize text-black font-Inter font-normal leading-6'>
+                        <FormGroup className='flex flex-row '>
                             {roles.map((role) => (
                                 <FormControlLabel
                                     key={role.name}
                                     control={
                                         <Checkbox
+                                            className='ml-2 w-6 h-6 accent-black-500 hover:bg-grey2'
                                             checked={role.checked}
                                             onChange={handleChange(role.name)}
                                             name={role.name} />
@@ -100,28 +100,28 @@ export default function InviteTeamMember(
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        className='text-white bg-edit border border-1 border-solid border-black hover:bg-lightblack'
-                        variant='contained'
-                        type='submit'
-                        disabled={!email}
-                        onClick={handleSubmit((data) => {
-                              const formData = {
-                                email: email,
-                                roles: roles.filter((role) => role.checked).map((role) => role.name),
-                                admin: roles[0].checked,
-                                member: roles[1].checked
-                              };
-                              formHandleSubmitInvite(onSubmit(formData));
-                          })}
-                    >
-                        Send Invitation
-                    </Button>
-                    <Button
-                        className='text-black mr-2 border border-1 border-solid border-black'
+                        className='mr-2 w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack'
                         variant='outlined'
                         onClick={handleCloseInvite}
                     >
                         Cancel
+                    </Button>
+                    <Button
+                        className='w-38 h-11 ml-6 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
+                        variant='contained'
+                        type='submit'
+                        disabled={!roles}
+                        onClick={handleSubmit((data) => {
+                            const formData = {
+                                email: email,
+                                roles: roles.filter((role) => role.checked).map((role) => role.name),
+                                admin: roles[0].checked,
+                                member: roles[1].checked
+                            };
+                            formHandleSubmitInvite(onSubmit(formData));
+                        })}
+                    >
+                        Send Invitation
                     </Button>
                 </DialogActions>
             </Dialog>

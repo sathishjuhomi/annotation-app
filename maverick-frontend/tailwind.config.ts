@@ -24,6 +24,7 @@ const config: Config = {
       lightgreen: "#15d66e",
       lightblack: "#1a1a1a",
       lightgrey: "#CCCCCC",
+      grey2: "#D9D9D9"
     },
     screens: {
       sm: "320px",
@@ -47,6 +48,7 @@ const config: Config = {
         'button2': '181px',
         'button3': '168px',
         'image1': '628px',
+        'full-tt': '1015px'
       },
     },
   },

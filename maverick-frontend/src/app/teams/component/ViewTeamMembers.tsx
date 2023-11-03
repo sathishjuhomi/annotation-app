@@ -23,10 +23,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TeamsFormData, UpdateATeamMemberFormData } from "@/app/component/interfaces";
 import { InviteATeamMemberFormData } from "@/app/component/interfaces";
 import { updateTeam } from "../api/route";
-import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteTeamIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import Fab from '@mui/material/Fab';
+import teamMember from '@/app/component/teammember.jpg';
+import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import UpdateATeamMember from "./UpdateRolesForm";
 
@@ -249,63 +247,41 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
 
     return (
-        <Box className="flex">
+        <Box className="flex flex-col">
             {/* <Fab
-                className="ml-auto mt-1 mb-1 mr-4 text-white bg-edit border border-1 border-solid border-lightgrey hover:bg-lightblack"
-                size="small"
-                onClick={handleClickOpen}
-            >
-                <EditIcon />
-            </Fab>
-            <CreateUpdateForm
-                loading={loading}
-                showMessage={showMessage}
-                setShowMessage={setShowMessage}
-                message={message}
-                messageColor={messageColor}
-                onSubmit={submit}
-                formHandleSubmit={createOrUpdateTeam}
-                register={createOrUpdateRegister}
-                errors={createOrUpdateTeamErrors}
-                open={open}
-                setOpen={setOpen}
-                teamTitle={teamName}
-            />
-            <Fab
                 size="small"
                 className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover:bg-lightgrey"
                 onClick={handleClickOpenDeleteTeam}
             >
                 <DeleteTeamIcon />
-            </Fab> */}
-            {/* <Paper className="max-w-full"> */}
-            {/* <Box className='flex flex-row'> */}
-            <Dialog open={openDeleteTeam} onClose={handleCloseDeleteTeam}>
-                <DialogContent>
-                    <DialogContentText className="text-black">
-                        Are you sure you want to delete the Team {teamName} ?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        className="text-white bg-edit hover:bg-lightblack"
-                        onClick={handleDeleteTeam}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        onClick={handleCloseDeleteTeam}
-                        variant="outlined"
-                        className="text-black border-black hover:bg-lightgrey"
-                    >
-                        No
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Table aria-label="simple table">
-                {/* <TableHead>
+            </Fab>  */}
+            <Paper className="w-full-tt shadow-none">
+                <Dialog open={openDeleteTeam} onClose={handleCloseDeleteTeam}>
+                    <DialogContent>
+                        <DialogContentText className="text-black">
+                            Are you sure you want to delete the Team {teamName} ?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            className="text-white bg-edit hover:bg-lightblack"
+                            onClick={handleDeleteTeam}
+                        >
+                            Yes
+                        </Button>
+                        <Button
+                            onClick={handleCloseDeleteTeam}
+                            variant="outlined"
+                            className="text-black border-black hover:bg-lightgrey"
+                        >
+                            No
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Table aria-label="simple table">
+                    {/* <TableHead>
                     <TableRow>
                     <TableCell className="text-left font-bold text-lg"> </TableCell>
                     <TableCell className="text-right font-bold text-lg"> </TableCell>
@@ -313,90 +289,131 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     <TableCell className="text-right font-bold text-lg"> </TableCell>
                 </TableRow>
                 </TableHead> */}
-                <TableBody>
-                    {teamMembers.map((teamMember) => (
-                        <TableRow
-                            key={teamMember['team_member_id']}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    <TableBody>
+                        {teamMembers.map((teamMember) => (
+                            <TableRow
+                                key={teamMember['team_member_id']}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell className="font-Inter font-normal leading-6 text-smtext-black" component="th" scope="row">
+                                    {teamMember['email']}
+                                </TableCell>
+                                <TableCell className="font-Inter font-normal leading-6 text-sm text-greyplus" align="right">
+                                    {getTeamMemberRoles(teamMember['roles'])}
+                                </TableCell>
+                                <TableCell className="text-base" align="right">
+                                    <Button
+                                        size="small"
+                                        className="-mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                        onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'])}
+                                    >
+                                        Edit
+                                    </Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography className="-mr-4">|</Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Button
+                                        size="small"
+                                        className="-ml-10 -mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
+                                        onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'])}
+                                    >
+                                        Delete
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                <Dialog className='rounded-md' open={openDeleteConfirmationDialog} onClose={handleCloseDelete}>
+                    <DialogContent className="ml-10 mr-22">
+                        <div className="flex flex-row -mt-2">
+                            <Image
+                                src={teamMember}
+                                alt='TeamMember'
+                                className="w-16 h-22 mt-11"
+                                quality={100}
+                                placeholder='blur'
+                            />
+                        </div>
+                        <Box className='ml-20 mr-9 -mt-24'>
+                            <DialogContentText className='ml-3 mr-3 mt-1 text-2xl text-black font-Inter font-bold'>
+                                Are you sure you want to delete
+                            </DialogContentText>
+                            <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter font-bold'>
+                                the person
+                            </DialogContentText>
+                            <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter font-bold'>
+                                from {teamName} ?
+                            </DialogContentText>
+                            <DialogContentText className='ml-4 mr-42 mt-2 text-greyplus text-sm font-Inter font-normal leading-6'>
+                                It will impact all the relevant data from the user
+                            </DialogContentText>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={handleCloseDelete}
+                            variant="outlined"
+                            className="w-20 h-11 mr-1 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black"
                         >
-                            <TableCell className="font-Inter font-normal leading-6 text-smtext-black" component="th" scope="row">
-                                {teamMember['email']}
-                            </TableCell>
-                            <TableCell className="font-Inter font-normal leading-6 text-sm text-greyplus" align="right">
-                                {getTeamMemberRoles(teamMember['roles'])}
-                            </TableCell>
-                            <TableCell className="text-base" align="right">
-                                <Button
-                                    size="small"
-                                    className="-mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
-                                    onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'])}
-                                >
-                                    Edit
-                                </Button>
-                            </TableCell>
-                            <TableCell>
-                                <Typography className="-mr-4">|</Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Button
-                                    size="small"
-                                    className="-ml-8 -mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
-                                    onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'])}
-                                >
-                                    Delete
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <Dialog open={openDeleteConfirmationDialog} onClose={handleCloseDelete}>
-                <DialogContent>
-                    <DialogContentText className="text-black">
-                        Are you sure you want to delete the person from {teamName} ?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        className="text-white bg-edit hover-bg-lightblack"
-                        onClick={() => handleDeleteTeamMember(id, selectedTeamMemberIdForDelete)}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        onClick={handleCloseDelete}
-                        variant="outlined"
-                        className="text-black border border-1 border-solid border-black hover-bg-lightgrey"
-                    >
-                        No
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <UpdateATeamMember
-                loading={loading}
-                showMessage={showMessage}
-                setShowMessage={setShowMessage}
-                message={message}
-                messageColor={messageColor}
-                onSubmitRoles={onUpdateTeamMember}
-                formHandleSubmitRoles={updateTeamMember}
-                register={updateTeamMemberRegister}
-                errors={updateTeamMemberErrors}
-                open={openUpdateMember}
-                setOpen={setOpenUpdateMember}
-                teamId={id}
-                teamMemberId={selectedTeamMemberIdForEdit}
-            />
-            <br></br>
-            {/* </Paper> */}
-                {/* <Button
-                    className="ml-3 mt-1 mb-4 text-white font-bold bg-green hover:bg-lightgreen"
-                    variant="contained"
+                            No
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            className="w-20 h-11 mr-10 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
+                            onClick={() => handleDeleteTeamMember(id, selectedTeamMemberIdForDelete)}
+                        >
+                            Yes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <UpdateATeamMember
+                    loading={loading}
+                    showMessage={showMessage}
+                    setShowMessage={setShowMessage}
+                    message={message}
+                    messageColor={messageColor}
+                    onSubmitRoles={onUpdateTeamMember}
+                    formHandleSubmitRoles={updateTeamMember}
+                    register={updateTeamMemberRegister}
+                    errors={updateTeamMemberErrors}
+                    open={openUpdateMember}
+                    setOpen={setOpenUpdateMember}
+                    teamId={id}
+                    teamMemberId={selectedTeamMemberIdForEdit}
+                />
+            </Paper>
+            <Box className='mt-5'>
+                <Button
+                    className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 mr-36 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
+                    size="small"
+                    onClick={handleClickOpen}
+                >
+                    {"Update Team"}
+                </Button>
+                <CreateUpdateForm
+                    loading={loading}
+                    showMessage={showMessage}
+                    setShowMessage={setShowMessage}
+                    message={message}
+                    messageColor={messageColor}
+                    onSubmit={submit}
+                    formHandleSubmit={createOrUpdateTeam}
+                    register={createOrUpdateRegister}
+                    errors={createOrUpdateTeamErrors}
+                    open={open}
+                    setOpen={setOpen}
+                    teamTitle={teamName}
+                />
+                <Button
+                    className="flex flex-end ml-auto -mt-12 mb-4 mr-2 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
+                    variant="outlined"
                     onClick={handleClickOpenInvite}
                 >
-                    Invite A Member
+                    {"Invite Member"}
                 </Button>
                 <InviteTeamMember
                     showMessage={showMessage}
@@ -409,24 +426,25 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     errors={inviteTeamMemberErrors}
                     open={openInvite}
                     setOpen={setOpenInvite}
-                /> */}
-                {
-                    message !== "" ? (
-                        <Snackbar
-                            showMessage={showMessage}
-                            setShowMessage={setShowMessage}
-                            message={message}
-                            messageColor={messageColor}
-                        />
-                    ) : null
-                }
-                {
-                    loading ? (
-                        <Box>
-                            <CircularProgress />
-                        </Box>
-                    ) : null
-                }
+                />
+            </Box>
+            {
+                message !== "" ? (
+                    <Snackbar
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        message={message}
+                        messageColor={messageColor}
+                    />
+                ) : null
+            }
+            {
+                loading ? (
+                    <Box>
+                        <CircularProgress />
+                    </Box>
+                ) : null
+            }
         </Box >
     );
 };

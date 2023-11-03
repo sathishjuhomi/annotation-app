@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
-import { CircularProgress, DialogContent, DialogTitle, FormHelperText } from '@mui/material';
+import { CircularProgress, DialogContent, DialogContentText, DialogTitle, FormHelperText } from '@mui/material';
 import { UpdateATeamMemberProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
 import { useForm } from 'react-hook-form';
@@ -39,8 +39,8 @@ export default function UpdateATeamMember(
     };
 
     const initialRolesState = [
-        { name: "owner", checked: false },
         { name: "admin", checked: false },
+        { name: "owner", checked: false },
         { name: "member", checked: false },
     ];
     const { handleSubmit } = useForm();
@@ -59,20 +59,25 @@ export default function UpdateATeamMember(
     };
     return (
         <div>
-            <Dialog open={open} onClose={handleCloseUpdate}>
-                <DialogTitle>Update User</DialogTitle>
+            <Dialog className='rounded-md' open={open} onClose={handleCloseUpdate}>
+                <DialogTitle className='ml-3 mr-52 mt-8 text-2xl text-black font-Inter font-bold'>Update User Roles</DialogTitle>
                 <DialogContent>
-                    <FormControl component="fieldset" variant="standard">
-                        <FormLabel className="text-black font-bold">Assign roles</FormLabel>
-                        <FormGroup>
+                    <DialogContentText className='ml-4 mr-60 -mt-1 text-greyplus text-sm font-Inter font-normal leading-6'>
+                        It will impact selected user roles
+                    </DialogContentText>
+                    <br></br>
+                    <FormControl className='ml-4 mr-4 -mt-6 capitalize text-black font-Inter font-normal leading-6'>
+                        <FormGroup className='flex flex-row mt-8'>
                             {roles.map((role) => (
                                 <FormControl
+                                    className='mr-10'
                                     key={role.name}
                                     error={Boolean(errors?.[role.name])}
                                 >
                                     <FormControlLabel
                                         control={
                                             <Checkbox
+                                                className='ml-2 w-6 h-6 text-greyplus hover:bg-grey2'
                                                 checked={role.checked}
                                                 onChange={handleChange(role.name)}
                                                 name={role.name}
@@ -91,7 +96,7 @@ export default function UpdateATeamMember(
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        className='text-black mr-2 border-black hover:bg-lightgrey'
+                        className='mr-2 w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack'
                         variant='outlined'
                         onClick={navigateToTeams}
                     >
@@ -99,14 +104,14 @@ export default function UpdateATeamMember(
                     </Button>
                     <Button
                         disabled={!roles}
-                        className='text-white bg-edit hover:bg-lightblack'
+                        className='w-38 h-11 ml-6 mr-10 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
                         variant='contained'
                         type='submit'
                         onClick={handleSubmit(() => {
                             const formData = {
                                 roles: roles.filter((role) => role.checked).map((role) => role.name),
-                                owner: roles[0].checked,
-                                admin: roles[1].checked,
+                                admin: roles[0].checked,
+                                owner: roles[1].checked,
                                 member: roles[2].checked,
                             };
                             formHandleSubmitRoles(onSubmitRoles(teamId, teamMemberId, formData));
@@ -115,6 +120,7 @@ export default function UpdateATeamMember(
                         Update Role
                     </Button>
                 </DialogActions>
+                <br></br> <br></br>
             </Dialog>
             {message !== "" ? (
                 <Snackbar

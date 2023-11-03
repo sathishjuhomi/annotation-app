@@ -82,14 +82,13 @@ export default function TeamList(
         errors={errors}
         open={open}
         setOpen={setOpen}
-        teamTitle="Create New Team"
+        teamTitle="Create Team"
       />
       {teams.length > 0 ? teams.map((team: any) => (
-        <Box>
-          <Accordion className='mt-3 shadow-none'
+        <Box className='m-3'>
+          <Accordion className='shadow-none divide-y-2 divide-lightgrey'
             onClick={() => { handleViewTeamMembers(team.team_id) }}>
             <AccordionSummary
-              // className='bg-white'
               expandIcon={
                 <ExpandMoreIcon
                   className='w-9 h-9'
@@ -143,7 +142,7 @@ export default function TeamList(
                 {team.is_activated === true ? "" : "Decline"}
               </Button>
             </AccordionSummary>
-            <AccordionDetails className='mt-2' >
+            <AccordionDetails className='mt-0' >
               {expandedTeamMemberId !== null && expandedTeamMemberId === team.team_id ?
                 <Box>
                   <ViewTeamAndTeamMembers
