@@ -25,6 +25,7 @@ class PlanService():
             schema = PlanResponseSchema(
                 id=db_response['id'],
                 price_id=db_response['price_id'],
+                is_active=db_response['is_active'],
                 plan=UpdatePlanSchema(
                     plan_name=db_response['plan_name'],
                     description=db_response['description']
@@ -72,19 +73,17 @@ class PlanService():
             )
 
     @staticmethod
-    def update_price(price_id: str, price_state: dict) -> dict:
+    def update_price(price_id: str, price_state: bool) -> dict:
         try:
-            print("price_id", price_id)
-            print("active", price_state["active"])
             updated_price = stripe.Price.modify(
                 price_id,
-                active=price_state["active"]
+                active=price_state
             )
             return updated_price
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Failed to update the price: {str(e)}"
+                detail=f"Failed to update the plan state: {str(e)}"
             )
 
     @staticmethod
@@ -113,8 +112,10 @@ class PlanService():
             )
 
     def get_all_plans(self, db: Session):
-        response = plan_db_handler.load_all(
-            db=db
+        response = plan_db_handler.load_all_by_column(
+            db=db,
+            column_name="is_deleted",
+            value=False
         )
         db_responses = [row.__dict__ for row in response]
         return self.map_db_responses_to_schemas(db_responses=db_responses)
@@ -156,17 +157,16 @@ class PlanService():
 
     def update_price_state(
             self,
-            request_payload: PriceStateRequestSchema,
+            active: bool,
             price_id: str,
             db: Session
     ) -> dict:
-        price_state = request_payload.model_dump()
         updated_price = self.update_price(
             price_id=price_id,
-            price_state=price_state
+            price_state=active
         )
         input_obj = {
-            "is_deleted": updated_price["active"]
+            "is_active": updated_price["active"]
         }
         plan_obj = plan_db_handler.load_by_column(
             db=db, column_name="price_id", value=price_id)

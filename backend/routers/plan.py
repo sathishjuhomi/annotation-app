@@ -94,10 +94,9 @@ def update_plan(
 )
 def deactivate_plan(
     price_id: str,
-    request_payload: PriceStateRequestSchema,
     db: Session = Depends(get_db)
 ):
-    return plan_service.update_price_state(request_payload, price_id=price_id, db=db)
+    return plan_service.update_price_state(active="False", price_id=price_id, db=db)
 
 
 @plan_router.patch(
@@ -115,7 +114,6 @@ def deactivate_plan(
 )
 def activate_plan(
     price_id: str,
-    request_payload: PriceStateRequestSchema,
     db: Session = Depends(get_db)
 ):
-    return plan_service.update_price_state(request_payload, price_id=price_id, db=db)
+    return plan_service.update_price_state(active="True", price_id=price_id, db=db)
