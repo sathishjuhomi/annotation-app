@@ -20,5 +20,6 @@ class Plan(Base, TimestampMixIn):
     billing_period = Column(
         Enum('month', 'year', 'week', 'day', name='billing_period_enum'), nullable=True)
     interval_count = Column(Integer, nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False)
     is_deleted = Column(Boolean, default=False, nullable=False)
     deleted_by_id = Column(UUID(as_uuid=True), nullable=True)

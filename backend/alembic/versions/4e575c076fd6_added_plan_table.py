@@ -36,6 +36,8 @@ def upgrade():
         sa.Column('payment_type', payment_type_enum, nullable=False),
         sa.Column('billing_period', billing_period_enum, nullable=True),
         sa.Column('interval_count', sa.Integer(), nullable=True),
+        sa.Column('is_active', sa.Boolean,
+                  nullable=False, server_default='true'),
         sa.Column("is_deleted", sa.Boolean,
                   nullable=False, server_default='false'),
         sa.Column("deleted_by_id", sa.dialects.postgresql.UUID(
