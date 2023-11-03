@@ -3,7 +3,7 @@ import uuid
 from pydantic import UUID4
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema, UpdatePriceSchema
+from backend.schemas.request.plan import PlanRequestSchema, PriceStateRequestSchema, UpdatePlanSchema, UpdatePriceSchema
 from backend.schemas.response.plan import PlanResponseSchema
 from backend.db_handler.plan_handler import plan_db_handler
 from backend.config import get_settings
@@ -24,6 +24,7 @@ class PlanService():
         for db_response in db_responses:
             schema = PlanResponseSchema(
                 id=db_response['id'],
+                price_id=db_response['price_id'],
                 plan=UpdatePlanSchema(
                     plan_name=db_response['plan_name'],
                     description=db_response['description']
@@ -71,16 +72,13 @@ class PlanService():
             )
 
     @staticmethod
-    def update_product_price(price_id: str, plan_price: dict) -> dict:
+    def update_price(price_id: str, price_state: dict) -> dict:
         try:
-            amount = int(plan_price["price"])*100
+            print("price_id", price_id)
+            print("active", price_state["active"])
             updated_price = stripe.Price.modify(
                 price_id,
-                price=amount,
-                currency=plan_price["currency"],
-                type=plan_price["payment_type"],
-                interval=plan_price["billing_period"],
-                interval_count=plan_price["interval_count"]
+                active=price_state["active"]
             )
             return updated_price
         except Exception as e:
@@ -115,10 +113,8 @@ class PlanService():
             )
 
     def get_all_plans(self, db: Session):
-        response = plan_db_handler.load_all_by_column(
-            db=db,
-            column_name="is_deleted",
-            value=False
+        response = plan_db_handler.load_all(
+            db=db
         )
         db_responses = [row.__dict__ for row in response]
         return self.map_db_responses_to_schemas(db_responses=db_responses)
@@ -158,31 +154,31 @@ class PlanService():
         )
         return {"detail": "Plan updated successfully"}
 
-    def update_price(
+    def update_price_state(
             self,
+            request_payload: PriceStateRequestSchema,
             price_id: str,
-            request_payload: UpdatePriceSchema,
             db: Session
     ) -> dict:
-        price = request_payload.model_dump()
-        updated_price = self.update_product_price(
+        price_state = request_payload.model_dump()
+        updated_price = self.update_price(
             price_id=price_id,
-            plan_price=price
+            price_state=price_state
         )
         input_obj = {
-            "price": updated_price["price"],
-            "currency": updated_price["currency"],
-            "payment_type": updated_price["type"],
-            "billing_period": updated_price["interval"],
-            "interval_count": updated_price["interval_count"]
+            "is_deleted": updated_price["active"]
         }
-        price_obj = plan_db_handler.load_by_id(db=db, id=price_id)
+        plan_obj = plan_db_handler.load_by_column(
+            db=db, column_name="price_id", value=price_id)
         plan_db_handler.update(
             db=db,
-            db_obj=price_obj,
+            db_obj=plan_obj,
             input_object=input_obj
         )
-        return {"detail": "Price updated successfully"}
+
+        message = "activated" if updated_price["active"] == True else "deactivated"
+
+        return {"detail": f"Plan {message} successfully"}
 
 
 plan_service = PlanService()

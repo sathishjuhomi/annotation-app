@@ -18,3 +18,7 @@ class UpdatePriceSchema(BaseModel):
 class PlanRequestSchema(BaseModel):
     plan: UpdatePlanSchema
     price: UpdatePriceSchema
+
+
+class PriceStateRequestSchema(BaseModel):
+    active: bool

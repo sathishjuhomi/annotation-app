@@ -1,6 +1,6 @@
 from typing import Any, List
 from pydantic import UUID4
-from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema, UpdatePriceSchema
+from backend.schemas.request.plan import PlanRequestSchema, PriceStateRequestSchema, UpdatePlanSchema, UpdatePriceSchema
 from backend.schemas.response.plan import PlanResponseSchema
 from backend.schemas.response.user import DetailSchema
 from backend.service.plan import plan_service
@@ -80,21 +80,42 @@ def update_plan(
 
 
 @plan_router.patch(
-    "/plans/price/{price_id}",
-    description="This API will allow owner to update the price for their plan",
+    "/plans/{price_id}/deactivate",
+    description="This API will allow owner to deactivate the plan",
     response_model=DetailSchema,
     responses={
         status.HTTP_200_OK: {
-            "description": "Successfully updated the price"
+            "description": "Plan deactivated successfully"
         },
         status.HTTP_500_INTERNAL_SERVER_ERROR: {
             "description": "Internal Server Error"
         }
     }
 )
-def update_price(
+def deactivate_plan(
     price_id: str,
-    request_payload: UpdatePriceSchema,
+    request_payload: PriceStateRequestSchema,
     db: Session = Depends(get_db)
 ):
-    return plan_service.update_price(price_id, request_payload, db)
+    return plan_service.update_price_state(request_payload, price_id=price_id, db=db)
+
+
+@plan_router.patch(
+    "/plans/{price_id}/activate",
+    description="This API will allow owner to activate the plan",
+    response_model=DetailSchema,
+    responses={
+        status.HTTP_200_OK: {
+            "description": "Plan activated successfully"
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Internal Server Error"
+        }
+    }
+)
+def activate_plan(
+    price_id: str,
+    request_payload: PriceStateRequestSchema,
+    db: Session = Depends(get_db)
+):
+    return plan_service.update_price_state(request_payload, price_id=price_id, db=db)
