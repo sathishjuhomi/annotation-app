@@ -283,6 +283,7 @@ const ViewTeamAndTeamMembers = ({ params }: { params: { id: string } }) =>
                             open={open}
                             setOpen={setOpen}
                             teamTitle={teamName}
+                            teamId={id}
                         />
                         <Fab
                             size="small"

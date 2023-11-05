@@ -77,7 +77,7 @@ export default function InviteTeamMember(
                         helperText={errors?.email ? errors?.email.message : " "}
                     />
                     <br></br><br></br>
-                    <FormControl className='ml-4 mr-4 -mt-6 capitalize text-black font-Inter font-normal leading-6'>
+                    <FormControl className='ml-4 mr-4 -mt-4 capitalize text-black font-Inter font-normal leading-6'>
                         <FormGroup className='flex flex-row '>
                             {roles.map((role) => (
                                 <FormControlLabel

@@ -1,14 +1,9 @@
 "use client";
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
 import { createTheme } from "@mui/material/styles";
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { TeamsProps } from '@/app/component/interfaces';
 import Snackbar from "../../component/Snackbar";
@@ -20,7 +15,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Divider } from '@mui/material';
 
 const defaultTheme = createTheme();
 
@@ -48,7 +42,6 @@ export default function TeamList(
 
   const [expandedTeamMemberId, setExpandedTeamMemberId] = React.useState(null)
   const handleViewTeamMembers = (id: any) => {
-    console.log("Team Id:", id)
     setExpandedTeamMemberId(id)
   };
 
@@ -83,6 +76,7 @@ export default function TeamList(
         open={open}
         setOpen={setOpen}
         teamTitle="Create Team"
+        teamId={setExpandedTeamMemberId}
       />
       {teams.length > 0 ? teams.map((team: any) => (
         <Box className='m-3'>

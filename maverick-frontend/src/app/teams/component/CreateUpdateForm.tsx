@@ -15,7 +15,8 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import * as Constants from "../../utils/constant";
 import { InputAdornment, Typography } from '@mui/material';
-import ViewTeamAndTeamMembers from './ViewTeamMembers';
+import DeleteTeamForm from './DeleteForm';
+import { deleteTeam } from '../api/route';
 
 export default function CreateOrUpdateForm(
     {
@@ -31,18 +32,52 @@ export default function CreateOrUpdateForm(
         open,
         setOpen,
         teamTitle,
+        teamId,
     }: CreateUpdateProps
 ) {
+    
     const handleClose = () => {
         setOpen(false);
     };
 
     const router = useRouter();
 
+    const [openDeleteTeam, setOpenDeleteTeam] = React.useState(false);
+    const handleClickOpenDeleteTeam = () => {
+        setOpenDeleteTeam(true);
+    };
+
+    console.log("Team Id:", teamId)
+
+    const handleDeleteTeam = async (teamId: string) => {
+        try {
+            const { props } = await deleteTeam(teamId);
     
-    // const handleClickOpenDeleteTeam = (id: any) => {
-    //     console.log("Team Id:", id)
-    // };
+            if (props && props.delete) {
+                location.reload()
+                return {
+                    success: true,
+                    message: Constants.TEAM_DELETED_SUCCESSFULLY,
+                    messageColor: Constants.SUCCESS,
+                };
+            } else {
+                const data = props.delete.detail;
+                return {
+                    success: false,
+                    message: data,
+                    messageColor: Constants.ERROR,
+                };
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return {
+                success: false,
+                message: 'An error occurred while deleting the team.',
+                messageColor: Constants.ERROR,
+            };
+        }
+    };
+    
 
     return (
         <div>
@@ -86,14 +121,30 @@ export default function CreateOrUpdateForm(
                     <br></br>
                 </DialogContent>
                 <DialogActions>
-                    {teamTitle === Constants.CREATE_TEAM
-                        ? null
-                        : <Button
-                            className='mr-auto ml-8 -mt-24 text-black font-Inter font-bold leading-6 normal-case bg-white hover:text-red'
-                            // onClick={() => { handleClickOpenDeleteTeam(teamId) }}
-                        >
-                            Delete Team
-                        </Button>
+                    {teamTitle !== Constants.CREATE_TEAM
+                        ? <div>
+                            <Button
+                                className='mr-44 -mt-24 text-black font-Inter font-bold leading-6 normal-case bg-white hover:text-red'
+                                onClick={handleClickOpenDeleteTeam}
+                            >
+                                Delete Team
+                            </Button>
+                            <div>
+                                <DeleteTeamForm
+                                    loading={loading}
+                                    showMessage={showMessage}
+                                    setShowMessage={setShowMessage}
+                                    message={message}
+                                    messageColor={messageColor}
+                                    open={openDeleteTeam}
+                                    setOpen={setOpenDeleteTeam}
+                                    teamTitle={teamTitle}
+                                    teamId={teamId}
+                                    handleDeleteTeam={handleDeleteTeam}
+                                />
+                            </div>
+                        </div>
+                        : null
                     }
                     <Button
                         className="w-28 h-11 -mt-24 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"

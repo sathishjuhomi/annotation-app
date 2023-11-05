@@ -68,6 +68,7 @@ export interface CreateUpdateProps {
   open: boolean;
   setOpen: any;
   teamTitle: string;
+  teamId: any;
 }
 
 export interface InviteATeamMemberProps {
@@ -120,4 +121,17 @@ export interface UpdateATeamMemberFormData {
   admin: boolean;
   member: boolean;
   owner: boolean;
+}
+
+export interface DeleteTeamProps{
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  open: boolean;
+  setOpen: any;
+  teamTitle: string;
+  teamId: string;
+  handleDeleteTeam: any;
 }

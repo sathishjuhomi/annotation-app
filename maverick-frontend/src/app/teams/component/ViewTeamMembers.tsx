@@ -1,18 +1,15 @@
 "use client";
 import Box from "@mui/material/Box";
 import * as React from "react";
-import NavBar from "../../component/NavBar";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
 import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole } from "../api/route";
-import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, Divider, ListItemAvatar } from "@mui/material";
-import ListItem from '@mui/material/ListItem';
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import * as Constants from "../../utils/constant";
 import Snackbar from "@/app/component/Snackbar";
 import CreateUpdateForm from "./CreateUpdateForm";
@@ -28,14 +25,44 @@ import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import UpdateATeamMember from "./UpdateRolesForm";
 
+// const handleDeleteTeam = async (teamId: string) => {
+//     const [loading, setLoading] = React.useState(false);
+//     const [showMessage, setShowMessage] = React.useState(false);
+//     const [message, setMessage] = React.useState("");
+//     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
+//     console.log("handleDEleteTeam: ", teamId)
+//     setShowMessage(true);
+//     setLoading(true);
+//     const { props } = await deleteTeam(teamId)
+//     try {
+//         if (props && props.delete) {
+//             setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
+//             setMessageColor(Constants.SUCCESS);
+//             // location.reload()
+//         } else {
+//             const data = props.delete.detail;
+//             setMessage(data);
+//             setMessageColor(Constants.ERROR);
+//         }
+//         setLoading(false);
+//     } catch (error) {
+//         const data = props.delete.detail;
+//         setMessage(data);
+//         setMessageColor(Constants.ERROR);
+//         console.error('Error fetching data:', error);
+//     }
+// };
+// export { handleDeleteTeam };
+
 const ViewTeamAndTeamMembers = (props: any) => {
     const id = props.id;
     const [loading, setLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
-    const [teamName, setTeamName] = React.useState("")
-    const [teamMembers, setTeamMembers] = React.useState([])
+    const [teamName, setTeamName] = React.useState("");
+    const [teamId, setTeamId] = React.useState("");
+    const [teamMembers, setTeamMembers] = React.useState([]);
     const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState(null);
     const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
 
@@ -116,7 +143,8 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     const router = useRouter();
 
-    const handleDeleteTeam = async () => {
+    const handleDeleteTeam = async (teamId: string) => {
+        console.log("handleDEleteTeam: ", teamId)
         setShowMessage(true);
         setLoading(true);
         const { props } = await deleteTeam(id)
@@ -124,7 +152,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
             if (props && props.delete) {
                 setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
                 setMessageColor(Constants.SUCCESS);
-                router.push('/teams');
+                location.reload()
             } else {
                 const data = props.delete.detail;
                 setMessage(data);
@@ -248,47 +276,39 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     return (
         <Box className="flex flex-col">
-            {/* <Fab
+            {/* <Button
                 size="small"
                 className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover:bg-lightgrey"
                 onClick={handleClickOpenDeleteTeam}
             >
-                <DeleteTeamIcon />
-            </Fab>  */}
+                Delete
+            </Button>
+            <Dialog open={openDeleteTeam} onClose={handleCloseDeleteTeam}>
+                <DialogContent>
+                    <DialogContentText className="text-black">
+                        Are you sure you want to delete the Team {teamName} ?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        className="text-white bg-edit hover:bg-lightblack"
+                        onClick={() => handleDeleteTeam(id)}
+                    >
+                        Yes
+                    </Button>
+                    <Button
+                        onClick={handleCloseDeleteTeam}
+                        variant="outlined"
+                        className="text-black border-black hover:bg-lightgrey"
+                    >
+                        No
+                    </Button>
+                </DialogActions>
+            </Dialog> */}
             <Paper className="w-full-tt shadow-none">
-                <Dialog open={openDeleteTeam} onClose={handleCloseDeleteTeam}>
-                    <DialogContent>
-                        <DialogContentText className="text-black">
-                            Are you sure you want to delete the Team {teamName} ?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            className="text-white bg-edit hover:bg-lightblack"
-                            onClick={handleDeleteTeam}
-                        >
-                            Yes
-                        </Button>
-                        <Button
-                            onClick={handleCloseDeleteTeam}
-                            variant="outlined"
-                            className="text-black border-black hover:bg-lightgrey"
-                        >
-                            No
-                        </Button>
-                    </DialogActions>
-                </Dialog>
                 <Table aria-label="simple table">
-                    {/* <TableHead>
-                    <TableRow>
-                    <TableCell className="text-left font-bold text-lg"> </TableCell>
-                    <TableCell className="text-right font-bold text-lg"> </TableCell>
-                    <TableCell className="text-right font-bold text-lg"> </TableCell>
-                    <TableCell className="text-right font-bold text-lg"> </TableCell>
-                </TableRow>
-                </TableHead> */}
                     <TableBody>
                         {teamMembers.map((teamMember) => (
                             <TableRow
@@ -407,6 +427,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     open={open}
                     setOpen={setOpen}
                     teamTitle={teamName}
+                    teamId={id}
                 />
                 <Button
                     className="flex flex-end ml-auto -mt-12 mb-4 mr-2 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
@@ -448,4 +469,4 @@ const ViewTeamAndTeamMembers = (props: any) => {
         </Box >
     );
 };
-export default ViewTeamAndTeamMembers
+export default ViewTeamAndTeamMembers;
