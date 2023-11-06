@@ -307,8 +307,8 @@ const ViewTeamAndTeamMembers = (props: any) => {
                             <DialogContentText className='ml-3 mr-10 mt-1 text-2xl text-black font-Inter font-bold leading-8'>
                                 Are you sure you want to delete 
                             </DialogContentText>
-                            <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter leading-8'>
-                                <b>the person</b> ({selectedTeamMemberEmailId})
+                            <DialogContentText className='ml-3 mr-10 text-2xl text-black font-Inter leading-8'>
+                                <b>the person</b> <p className="text-xl">({selectedTeamMemberEmailId})</p>
                             </DialogContentText>
                             <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter font-bold leading-8'>
                                 from <span className="uppercase"> {teamName}</span> Team
