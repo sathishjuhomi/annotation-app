@@ -117,6 +117,7 @@ class PlanService():
             column_name="is_deleted",
             value=False
         )
+        print(response)
         db_responses = [row.__dict__ for row in response]
         return self.map_db_responses_to_schemas(db_responses=db_responses)
 
