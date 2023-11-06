@@ -21,8 +21,6 @@ export default function DeleteTeam(
     }: DeleteTeamProps
 ) {
 
-    console.log("TeamId*: ", teamId)
-
     const handleCloseDeleteTeam = () => {
         setOpen(false);
     };

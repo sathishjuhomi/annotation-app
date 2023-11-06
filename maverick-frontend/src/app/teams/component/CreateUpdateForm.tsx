@@ -47,8 +47,6 @@ export default function CreateOrUpdateForm(
         setOpenDeleteTeam(true);
     };
 
-    console.log("Team Id:", teamId)
-
     const handleDeleteTeam = async (teamId: string) => {
         try {
             const { props } = await deleteTeam(teamId);
@@ -105,8 +103,6 @@ export default function CreateOrUpdateForm(
                                 helperText={errors?.teamname ? errors?.teamname.message : " "}
                             />
                             <TextField
-                                autoFocus
-                                required
                                 className='w-full h-28 p-3 border-greyplus'
                                 margin="dense"
                                 id="avatar"
