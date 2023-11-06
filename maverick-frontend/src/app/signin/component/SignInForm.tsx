@@ -59,7 +59,7 @@ export default function Signin({
                   startIcon={<Image
                     src={google}
                     alt='Google'
-                    className="w-6 h-8"
+                    className="w-6 h-6"
                     quality={100}
                     placeholder='blur'
                   />}
@@ -111,8 +111,8 @@ export default function Signin({
                 <Typography className="font-Inter font-medium text-greyplus ml-4 mt-4 mr-1 text-sm leading-7">
                   Don't have an account?
                 </Typography>
-                <Button 
-                  className="text-button font-Inter font-semibold normal-case mt-0 -ml-2 text-sm leading-7 mr-56"
+                <Button
+                  className="text-button font-Inter font-semibold normal-case mt-0 -ml-1 text-sm leading-7 mr-56 hover:bg-white"
                   onClick={navigateToSignUp}
                 >
                   Register here
@@ -137,8 +137,10 @@ export default function Signin({
             />
           ) : null}
           {loading ? (
-            <Box>
-              <CircularProgress />
+            <Box
+              className="text-greyplus mt-2 flex justify-center items-center"
+            >
+              <CircularProgress color="inherit" />
             </Box>
           ) : null}
         </Paper>

@@ -2,7 +2,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -17,7 +16,7 @@ import { useForm } from 'react-hook-form';
 
 export default function InviteTeamMember(
     {
-        // loading,
+        loading,
         showMessage,
         setShowMessage,
         message,
@@ -57,17 +56,17 @@ export default function InviteTeamMember(
     return (
         <div>
             <Dialog className='rounded-md' open={open} onClose={handleClose}>
-                <DialogTitle className='ml-3 mr-3 mt-8 text-2xl text-black font-Inter font-bold'>Invite User</DialogTitle>
+                <DialogTitle className='ml-8 mr-3 mt-8 text-2xl text-black font-Inter font-bold'>Invite User</DialogTitle>
                 <DialogContent>
-                    <DialogContentText className='ml-4 mr-48 -mt-1 text-greyplus text-sm font-Inter font-normal leading-6'>
+                    <DialogContentText className='ml-8 mr-48 -mt-1 text-greyplus text-sm font-Inter font-normal leading-6'>
                         Invite a member to join your team
                     </DialogContentText>
                     <br></br>
                     <TextField
                         required
-                        className='w-full h-20 p-3 -mt-4'
+                        className='w-full-six h-20 ml-8 mr-3'
                         id="email"
-                        label="Email Address"
+                        label="Email ID"
                         name="email"
                         autoComplete="email"
                         variant='outlined'
@@ -77,14 +76,15 @@ export default function InviteTeamMember(
                         helperText={errors?.email ? errors?.email.message : " "}
                     />
                     <br></br><br></br>
-                    <FormControl className='ml-4 mr-4 -mt-4 capitalize text-black font-Inter font-normal leading-6'>
-                        <FormGroup className='flex flex-row '>
+                    <FormControl className='ml-8 mr-4 -mt-4 capitalize text-black font-Inter font-normal leading-6'>
+                        <FormGroup className='flex flex-row text-black text-sm font-Inter font-bold leading-6'>
                             {roles.map((role) => (
                                 <FormControlLabel
                                     key={role.name}
                                     control={
                                         <Checkbox
-                                            className='ml-2 w-6 h-6 accent-black-500 hover:bg-grey2'
+                                            className='ml-2 mr-2 w-6 h-6'
+                                            sx={{'&.Mui-checked': {color: '#000000'} }}
                                             checked={role.checked}
                                             onChange={handleChange(role.name)}
                                             name={role.name} />
@@ -100,14 +100,14 @@ export default function InviteTeamMember(
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        className='mr-2 w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack'
+                        className='mr-2 w-28 h-11 mb-8 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack'
                         variant='outlined'
                         onClick={handleCloseInvite}
                     >
                         Cancel
                     </Button>
                     <Button
-                        className='w-38 h-11 ml-6 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
+                        className='w-38 h-11 ml-6 mb-8 mr-6 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
                         variant='contained'
                         type='submit'
                         disabled={!roles}
@@ -124,6 +124,7 @@ export default function InviteTeamMember(
                         Send Invitation
                     </Button>
                 </DialogActions>
+                <br></br>
             </Dialog>
             {message !== "" ? (
                 <Snackbar
@@ -133,11 +134,13 @@ export default function InviteTeamMember(
                     messageColor={messageColor}
                 />
             ) : null}
-            {/* {loading ? (
-                <Box>
-                    <CircularProgress />
+            {loading ? (
+                <Box
+                    className="text-greyplus mb-10 flex justify-center items-center"
+                >
+                    <CircularProgress color="inherit" />
                 </Box>
-            ) : null} */}
+            ) : null}
         </div>
     );
 }

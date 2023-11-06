@@ -17,6 +17,7 @@ export default function DeleteTeam(
         open,
         setOpen,
         teamId,
+        teamTitle,
         handleDeleteTeam,
     }: DeleteTeamProps
 ) {
@@ -34,7 +35,7 @@ export default function DeleteTeam(
                         Are you sure you want to
                     </DialogContentText>
                     <DialogContentText className="ml-36 mr-12 text-2xl text-black font-Inter font-bold">
-                        delete the Team
+                        delete the Team <span className="uppercase"> {teamTitle}</span>
                     </DialogContentText>
                     <DialogContentText className='ml-36 text-greyplus text-sm font-Inter font-normal leading-6'>
                         It will impact all the members of the team
@@ -55,8 +56,8 @@ export default function DeleteTeam(
                         onClick={handleCloseDeleteTeam}
                         style={{
                             display: 'flex',
-                            justifyContent: 'center', 
-                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            alignItems: 'center',
                         }}
                     >
                         No
@@ -65,8 +66,8 @@ export default function DeleteTeam(
                         className="w-20 h-11 mr-10 mb-14 rounded-md text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
                         style={{
                             display: 'flex',
-                            justifyContent: 'center', 
-                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            alignItems: 'center',
                         }}
                         onClick={() => handleDeleteTeam(teamId)}
                     >
@@ -83,8 +84,10 @@ export default function DeleteTeam(
                 />
             ) : null}
             {loading ? (
-                <Box>
-                    <CircularProgress />
+                <Box
+                    className="text-greyplus mt-2 flex justify-center items-center"
+                >
+                    <CircularProgress color="inherit" />
                 </Box>
             ) : null}
 

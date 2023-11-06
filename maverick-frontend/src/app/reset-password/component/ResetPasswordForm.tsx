@@ -113,9 +113,11 @@ export default function ResetPassword({
             />
           ) : null}
           {loading ? (
-            <Box>
-              <CircularProgress />
-            </Box>
+            <Box
+            className='text-greyplus mt-2 flex justify-center items-center'
+          >
+            <CircularProgress color="inherit"/>
+          </Box>
           ) : null}
         </Paper>
       </Box>

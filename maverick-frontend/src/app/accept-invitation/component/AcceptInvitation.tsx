@@ -36,7 +36,7 @@ export default function acceptTeamInvitation(
                 const data = props.getMember.detail;
                 setShowMessage(data);
                 console.error('Error fetching data:', error);
-              }
+            }
         }
         fetchData();
     }, []);
@@ -51,14 +51,14 @@ export default function acceptTeamInvitation(
                     <Typography className="text-black font-bold text-xl ml-5">Join the {teamDetail !== null ? teamDetail['team_name'] : ""}</Typography>
                     <br></br>
                     <Typography className="text-black ml-5">
-                    {teamDetail !== null ? teamDetail['invited_by'] : ""} invited you to the team
+                        {teamDetail !== null ? teamDetail['invited_by'] : ""} invited you to the team
                     </Typography>
                     <br></br>
                     <Button
                         type="submit"
                         className="ml-5 mb-6 mt-2 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
                         variant="contained"
-                        onClick= {onSubmit}
+                        onClick={onSubmit}
                     >
                         Accept
                     </Button>
@@ -73,18 +73,20 @@ export default function acceptTeamInvitation(
                 </Paper>
             </Box>
             {message !== "" ? (
-            <Snackbar
-              showMessage={showMessage}
-              setShowMessage={setShowMessage}
-              message={message}
-              messageColor={messageColor}
-            />
-          ) : null}
-          {loading ? (
-            <Box>
-              <CircularProgress />
-            </Box>
-          ) : null}
+                <Snackbar
+                    showMessage={showMessage}
+                    setShowMessage={setShowMessage}
+                    message={message}
+                    messageColor={messageColor}
+                />
+            ) : null}
+            {loading ? (
+                <Box
+                    className='text-greyplus mt-2 text-greyplus mt-2 flex justify-center items-center'
+                >
+                    <CircularProgress color="inherit" />
+                </Box>
+            ) : null}
         </Box>
     );
 }

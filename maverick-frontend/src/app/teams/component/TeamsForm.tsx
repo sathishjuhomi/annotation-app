@@ -163,8 +163,10 @@ export default function TeamList(
       }
       {
         loading ? (
-          <Box>
-            <CircularProgress />
+          <Box
+            className="text-greyplus mt-auto flex justify-center items-center"
+          >
+            <CircularProgress color="inherit" />
           </Box>
         ) : null
       }

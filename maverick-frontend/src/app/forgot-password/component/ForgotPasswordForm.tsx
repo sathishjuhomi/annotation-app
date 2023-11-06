@@ -43,37 +43,37 @@ export default function ForgotPassword({
           </Typography>
           <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
-          <Box className="mt-1 ml-2 mr-2 flex flex-row">
-            <Grid className="mb-1 ml-2 border-inherit border-1 rounded-none">
-              <TextField
-                required
-                className="w-full-plus h-16 ml-2"
-                id="email"
-                label="Email ID"
-                name="email"
-                autoComplete="email"
-                {...register("email")}
-                error={Boolean(errors?.email)}
-                helperText={errors?.email ? errors?.email.message : " "}
-              />
-            </Grid>
-            <Button
-              type="submit"
-              color="inherit"
-              variant="contained"
-              className="w-button2 h-14 text-white bg-button ml-4 mr-2 normal-case hover:bg-lightgreen"
-            >
-              Forgot Password
-            </Button>
-            <Box><br></br></Box>
-          </Box>
+            <Box className="mt-1 ml-2 mr-2 flex flex-row">
+              <Grid className="mb-1 ml-2 border-inherit border-1 rounded-none">
+                <TextField
+                  required
+                  className="w-full-plus h-16 ml-2"
+                  id="email"
+                  label="Email ID"
+                  name="email"
+                  autoComplete="email"
+                  {...register("email")}
+                  error={Boolean(errors?.email)}
+                  helperText={errors?.email ? errors?.email.message : " "}
+                />
+              </Grid>
+              <Button
+                type="submit"
+                color="inherit"
+                variant="contained"
+                className="w-button2 h-14 text-white bg-button ml-4 mr-2 normal-case hover:bg-lightgreen"
+              >
+                Forgot Password
+              </Button>
+              <Box><br></br></Box>
+            </Box>
             <Grid className="flex justify-end mb-4 mr-5">
-                <Button
-                  className="text-greyplus font-Inter normal-case font-medium text-sm leading-7"
-                  onClick={navigateToSignIn}
-                >
-                  Back to Login
-                </Button>
+              <Button
+                className="text-greyplus font-Inter normal-case font-medium text-sm leading-7"
+                onClick={navigateToSignIn}
+              >
+                Back to Login
+              </Button>
             </Grid>
           </form>
           {message !== "" ? (
@@ -85,8 +85,10 @@ export default function ForgotPassword({
             />
           ) : null}
           {loading ? (
-            <Box>
-              <CircularProgress />
+            <Box
+              className='text-greyplus mt-2 flex justify-center items-center'
+            >
+              <CircularProgress color="inherit"/>
             </Box>
           ) : null}
         </Paper>

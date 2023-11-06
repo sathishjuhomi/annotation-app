@@ -120,8 +120,10 @@ export default function SignUp({
             />
           ) : null}
           {loading ? (
-            <Box>
-              <CircularProgress />
+            <Box
+              className="text-greyplus mt-2 flex justify-center items-center"
+            >
+              <CircularProgress color="inherit" />
             </Box>
           ) : null}
         </Paper>

@@ -30,6 +30,7 @@ export default function UpdateATeamMember(
         setOpen,
         teamId,
         teamMemberId,
+        teamMemberEmailId,
     }: UpdateATeamMemberProps
 
 ) {
@@ -53,31 +54,29 @@ export default function UpdateATeamMember(
         setRoles(updatedRoles);
     };
 
-    const router = useRouter();
-    const navigateToTeams = () => {
-        location.reload();
-    };
+
     return (
-        <div>
+        <div className='w-full-six'>
             <Dialog className='rounded-md' open={open} onClose={handleCloseUpdate}>
-                <DialogTitle className='ml-3 mr-52 mt-8 text-2xl text-black font-Inter font-bold'>Update User Roles</DialogTitle>
+                <DialogTitle className='ml-3 mr-64 mt-8 text-2xl text-black font-Inter font-bold'>Update User Roles</DialogTitle>
                 <DialogContent>
-                    <DialogContentText className='ml-4 mr-60 -mt-1 text-greyplus text-sm font-Inter font-normal leading-6'>
-                        It will impact selected user roles
+                    <DialogContentText className='ml-4 mr-4 -mt-1 text-greyplus text-sm font-Inter font-normal leading-6'>
+                        It will impact selected <b className='text-black font-Inter'>{teamMemberEmailId}</b> user roles
                     </DialogContentText>
                     <br></br>
-                    <FormControl className='ml-4 mr-4 -mt-6 capitalize text-black font-Inter font-normal leading-6'>
+                    <FormControl className='ml-4 mr-4 -mt-6 capitalize text-black font-Inter font-bold leading-6'>
                         <FormGroup className='flex flex-row mt-8'>
                             {roles.map((role) => (
                                 <FormControl
-                                    className='mr-10'
+                                    className='mr-10 text-black text-sm font-Inter font-bold leading-6'
                                     key={role.name}
                                     error={Boolean(errors?.[role.name])}
                                 >
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                className='ml-2 w-6 h-6 text-greyplus hover:bg-grey2'
+                                                className='ml-2 mr-2 w-6 h-6 text-greyplus text-sm font-Inter font-bold leading-6'
+                                                sx={{'&.Mui-checked': {color: '#000000'} }}
                                                 checked={role.checked}
                                                 onChange={handleChange(role.name)}
                                                 name={role.name}
@@ -96,9 +95,9 @@ export default function UpdateATeamMember(
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        className='mr-2 w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack'
+                        className='mr-2 w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black'
                         variant='outlined'
-                        onClick={navigateToTeams}
+                        onClick={handleCloseUpdate}
                     >
                         Cancel
                     </Button>
@@ -131,8 +130,10 @@ export default function UpdateATeamMember(
                 />
             ) : null}
             {loading ? (
-                <Box>
-                    <CircularProgress />
+                <Box
+                    className="text-greyplus mt-auto flex justify-center items-center"
+                >
+                    <CircularProgress color="inherit" />
                 </Box>
             ) : null}
         </div>

@@ -35,7 +35,7 @@ export default function CreateOrUpdateForm(
         teamId,
     }: CreateUpdateProps
 ) {
-    
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -50,7 +50,7 @@ export default function CreateOrUpdateForm(
     const handleDeleteTeam = async (teamId: string) => {
         try {
             const { props } = await deleteTeam(teamId);
-    
+
             if (props && props.delete) {
                 location.reload()
                 return {
@@ -75,14 +75,13 @@ export default function CreateOrUpdateForm(
             };
         }
     };
-    
 
     return (
         <div>
             <Dialog className='rounded-md' open={open} onClose={handleClose}>
-                <DialogTitle className='ml-3 mr-3 mt-8 text-2xl text-black font-Inter font-bold'>{teamTitle}</DialogTitle>
+                <DialogTitle className='ml-6 mr-8 mt-8 text-2xl text-black font-Inter font-bold'>{teamTitle}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText className='ml-4 mr-4 -mt-1 text-greyplus text-sm font-Inter font-normal leading-6'>
+                    <DialogContentText className='ml-6 mr-8 -mt-1 -mb-2 text-greyplus text-sm font-Inter font-normal leading-6'>
                         You can collaborate and share with others by {teamTitle === Constants.CREATE_TEAM ? "creating" : "updating"} new team
                     </DialogContentText>
                 </DialogContent>
@@ -92,18 +91,19 @@ export default function CreateOrUpdateForm(
                             <TextField
                                 autoFocus
                                 required
-                                className='w-full h-20 p-3 -mt-6 border-greyplus'
+                                style={{ textAlign: 'center' }}
+                                className='w-full-six h-20 -mt-2 ml-6 border-greyplus'
                                 margin="dense"
                                 id="teamname"
                                 label="Team Name"
                                 type="text"
-                                defaultValue={teamTitle === Constants.CREATE_TEAM ? "" : teamTitle}
+                                defaultValue={teamTitle === Constants.CREATE_TEAM ? null : teamTitle}
                                 {...register("teamname")}
                                 error={Boolean(errors?.teamname)}
                                 helperText={errors?.teamname ? errors?.teamname.message : " "}
                             />
                             <TextField
-                                className='w-full h-28 p-3 border-greyplus'
+                                className='w-full-six h-20 ml-6 mb-6 border-greyplus'
                                 margin="dense"
                                 id="avatar"
                                 label="File Upload for avatar"
@@ -117,10 +117,11 @@ export default function CreateOrUpdateForm(
                     <br></br>
                 </DialogContent>
                 <DialogActions>
-                    {teamTitle !== Constants.CREATE_TEAM
-                        ? <div>
+                    {teamTitle === Constants.CREATE_TEAM
+                        ? null : 
+                        <div>
                             <Button
-                                className='mr-44 -mt-24 text-black font-Inter font-bold leading-6 normal-case bg-white hover:text-red'
+                                className='mr-36 -mt-24 text-black font-Inter font-bold leading-6 normal-case bg-white hover:text-red hover:bg-white'
                                 onClick={handleClickOpenDeleteTeam}
                             >
                                 Delete Team
@@ -140,13 +141,12 @@ export default function CreateOrUpdateForm(
                                 />
                             </div>
                         </div>
-                        : null
                     }
                     <Button
                         className="w-28 h-11 -mt-24 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
                         onClick={handleClose}>Cancel</Button>
                     <Button
-                        className='w-32 h-11 -mt-24 mr-6 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
+                        className='w-32 h-11 -mt-24 mr-8 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
                         variant='contained'
                         type="submit"
                         onClick={formHandleSubmit(onSubmit)}
@@ -154,6 +154,7 @@ export default function CreateOrUpdateForm(
                         {teamTitle === Constants.CREATE_TEAM ? "Create" : "Update"}
                     </Button>
                 </DialogActions>
+                <br></br>
             </Dialog>
             {message !== "" ? (
                 <Snackbar
@@ -164,8 +165,10 @@ export default function CreateOrUpdateForm(
                 />
             ) : null}
             {loading ? (
-                <Box>
-                    <CircularProgress />
+                <Box
+                    className="text-greyplus mt-2 text-greyplus mt-2 flex justify-center items-center"
+                >
+                    <CircularProgress color="inherit" />
                 </Box>
             ) : null}
         </div >

@@ -48,7 +48,8 @@ const config: Config = {
         'button2': '181px',
         'button3': '168px',
         'image1': '628px',
-        'full-tt': '1015px'
+        'full-tt': '1015px',
+        'full-six':'513px',
       },
     },
   },

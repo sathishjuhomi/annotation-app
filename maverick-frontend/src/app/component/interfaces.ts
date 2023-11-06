@@ -72,7 +72,7 @@ export interface CreateUpdateProps {
 }
 
 export interface InviteATeamMemberProps {
-  // loading: boolean;
+  loading: boolean;
   showMessage: boolean;
   setShowMessage: any;
   message: string;
@@ -115,6 +115,7 @@ export interface UpdateATeamMemberProps {
   setOpen: any;
   teamId: string;
   teamMemberId: any;
+  teamMemberEmailId:string;
 }
 
 export interface UpdateATeamMemberFormData {

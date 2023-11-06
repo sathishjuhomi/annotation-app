@@ -25,46 +25,21 @@ import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import UpdateATeamMember from "./UpdateRolesForm";
 
-// const handleDeleteTeam = async (teamId: string) => {
-//     const [loading, setLoading] = React.useState(false);
-//     const [showMessage, setShowMessage] = React.useState(false);
-//     const [message, setMessage] = React.useState("");
-//     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
-//     console.log("handleDEleteTeam: ", teamId)
-//     setShowMessage(true);
-//     setLoading(true);
-//     const { props } = await deleteTeam(teamId)
-//     try {
-//         if (props && props.delete) {
-//             setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
-//             setMessageColor(Constants.SUCCESS);
-//             // location.reload()
-//         } else {
-//             const data = props.delete.detail;
-//             setMessage(data);
-//             setMessageColor(Constants.ERROR);
-//         }
-//         setLoading(false);
-//     } catch (error) {
-//         const data = props.delete.detail;
-//         setMessage(data);
-//         setMessageColor(Constants.ERROR);
-//         console.error('Error fetching data:', error);
-//     }
-// };
-// export { handleDeleteTeam };
-
 const ViewTeamAndTeamMembers = (props: any) => {
     const id = props.id;
     const [loading, setLoading] = React.useState(false);
+    const [dataLoading, setDataLoading] = React.useState(false);
+    const [teamUpdateLoading, setTeamUpdateLoading] = React.useState(false);
+    const [inviteLoading, setInviteLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("");
     const [teamId, setTeamId] = React.useState("");
     const [teamMembers, setTeamMembers] = React.useState([]);
-    const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState(null);
+    const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState('');
     const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
+    const [selectedTeamMemberEmailId, setSelectedTeamMemberEmailId] = React.useState('');
 
     // Fetch the showTeams data using the getServerSideProps function
     useEffect(() => {
@@ -90,7 +65,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     const submit = async (data: TeamsFormData) => {
         setShowMessage(true);
-        setLoading(true);
+        setDataLoading(true);
         const { props } = await updateTeam(id, data)
         try {
             if (((Object.keys(props.update).length) > 1)) {
@@ -144,7 +119,6 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const router = useRouter();
 
     const handleDeleteTeam = async (teamId: string) => {
-        console.log("handleDEleteTeam: ", teamId)
         setShowMessage(true);
         setLoading(true);
         const { props } = await deleteTeam(id)
@@ -190,6 +164,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     const onInviteTeamMember = async (data: InviteATeamMemberFormData) => {
         setShowMessage(true);
+        setInviteLoading(true);
         const { props } = await inviteATeamMember(id, data)
         try {
             if (props && props.inviteMember) {
@@ -220,8 +195,9 @@ const ViewTeamAndTeamMembers = (props: any) => {
         setOpenDeleteConfirmationDialog(false);
     };
 
-    const handleClickOpenDelete = (teamId: string, teamMemberId: any) => {
+    const handleClickOpenDelete = (teamId: string, teamMemberId: string, teamMemberEmailId: string) => {
         setSelectedTeamMemberIdForDelete(teamMemberId);
+        setSelectedTeamMemberEmailId(teamMemberEmailId)
         setOpenDeleteConfirmationDialog(true);
     };
 
@@ -244,8 +220,9 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     const [openUpdateMember, setOpenUpdateMember] = React.useState(false);
 
-    const handleClickOpenUpdateMember = (teamId: string, teamMemberId: any) => {
+    const handleClickOpenUpdateMember = (teamId: string, teamMemberId: any, teamMemberEmailId: string) => {
         setSelectedTeamMemberIdForEdit(teamMemberId);
+        setSelectedTeamMemberEmailId(teamMemberEmailId);
         setOpenUpdateMember(true);
     };
 
@@ -258,7 +235,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     const onUpdateTeamMember = async (teamId: string, teamMemberId: string, data: UpdateATeamMemberFormData) => {
         setShowMessage(true);
-        setLoading(true);
+        setTeamUpdateLoading(true);
         const { props } = await updateTeamMemberRole(teamId, teamMemberId, data);
         try {
             const data = props.updateMember.detail;
@@ -276,37 +253,6 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     return (
         <Box className="flex flex-col">
-            {/* <Button
-                size="small"
-                className="mr-1 mt-1 bg-white text-edit border border-1 border-solid border-lightgrey hover:bg-lightgrey"
-                onClick={handleClickOpenDeleteTeam}
-            >
-                Delete
-            </Button>
-            <Dialog open={openDeleteTeam} onClose={handleCloseDeleteTeam}>
-                <DialogContent>
-                    <DialogContentText className="text-black">
-                        Are you sure you want to delete the Team {teamName} ?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        className="text-white bg-edit hover:bg-lightblack"
-                        onClick={() => handleDeleteTeam(id)}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        onClick={handleCloseDeleteTeam}
-                        variant="outlined"
-                        className="text-black border-black hover:bg-lightgrey"
-                    >
-                        No
-                    </Button>
-                </DialogActions>
-            </Dialog> */}
             <Paper className="w-full-tt shadow-none">
                 <Table aria-label="simple table">
                     <TableBody>
@@ -325,7 +271,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     <Button
                                         size="small"
                                         className="-mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
-                                        onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'])}
+                                        onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
                                     >
                                         Edit
                                     </Button>
@@ -337,7 +283,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     <Button
                                         size="small"
                                         className="-ml-10 -mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
-                                        onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'])}
+                                        onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
                                     >
                                         Delete
                                     </Button>
@@ -357,15 +303,15 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                 placeholder='blur'
                             />
                         </div>
-                        <Box className='ml-20 mr-9 -mt-24'>
-                            <DialogContentText className='ml-3 mr-3 mt-1 text-2xl text-black font-Inter font-bold'>
-                                Are you sure you want to delete
+                        <Box className='ml-20 -mt-24'>
+                            <DialogContentText className='ml-3 mr-10 mt-1 text-2xl text-black font-Inter font-bold leading-8'>
+                                Are you sure you want to delete 
                             </DialogContentText>
-                            <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter font-bold'>
-                                the person
+                            <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter leading-8'>
+                                <b>the person</b> ({selectedTeamMemberEmailId})
                             </DialogContentText>
-                            <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter font-bold'>
-                                from {teamName} ?
+                            <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter font-bold leading-8'>
+                                from <span className="uppercase"> {teamName}</span> Team
                             </DialogContentText>
                             <DialogContentText className='ml-4 mr-42 mt-2 text-greyplus text-sm font-Inter font-normal leading-6'>
                                 It will impact all the relevant data from the user
@@ -391,7 +337,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     </DialogActions>
                 </Dialog>
                 <UpdateATeamMember
-                    loading={loading}
+                    loading={teamUpdateLoading}
                     showMessage={showMessage}
                     setShowMessage={setShowMessage}
                     message={message}
@@ -404,6 +350,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     setOpen={setOpenUpdateMember}
                     teamId={id}
                     teamMemberId={selectedTeamMemberIdForEdit}
+                    teamMemberEmailId={selectedTeamMemberEmailId}
                 />
             </Paper>
             <Box className='mt-5'>
@@ -415,7 +362,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     {"Update Team"}
                 </Button>
                 <CreateUpdateForm
-                    loading={loading}
+                    loading={dataLoading}
                     showMessage={showMessage}
                     setShowMessage={setShowMessage}
                     message={message}
@@ -437,6 +384,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     {"Invite Member"}
                 </Button>
                 <InviteTeamMember
+                    loading={inviteLoading}
                     showMessage={showMessage}
                     setShowMessage={setShowMessage}
                     message={message}
@@ -461,8 +409,10 @@ const ViewTeamAndTeamMembers = (props: any) => {
             }
             {
                 loading ? (
-                    <Box>
-                        <CircularProgress />
+                    <Box
+                        className="text-greyplus flex justify-center items-center"
+                    >
+                        <CircularProgress color="inherit" />
                     </Box>
                 ) : null
             }
