@@ -6,22 +6,58 @@ import Button from "@mui/material/Button";
 import { Accordion, AccordionDetails, AccordionSummary, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
+import { useRouter } from "next/navigation";
+import CreatePlanForm from './CreatePlanForm';
+import { PlansProps } from '@/app/component/interfaces';
 
-export default function PlansList() {
+export default function PlansList(
+    {
+        loading,
+        showMessage,
+        setShowMessage,
+        message,
+        messageColor,
+        onSubmit,
+        formHandleSubmit,
+        register,
+        errors,
+        plans,
+    }: PlansProps
+) {
+
+
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     return (
         <Box className="mt-10 w-full mr-4">
             <div className="flex justify-between pb-5">
-                <Typography className="text-left font-Inter font-bold leading-7 text-xl">Plans</Typography>
+                <Typography className="text-left font-Inter font-bold leading-7 text-xl ml-2">Plans</Typography>
                 <Button
                     size="small"
                     variant="contained"
-                    className="w-28 h-11 normal-case font-Inter font-normal font-bold text-sm text-white bg-button hover:bg-lightgreen"
+                    className="w-28 h-11 ml-auto normal-case font-Inter font-normal font-bold text-sm text-white bg-button hover:bg-lightgreen"
+                    onClick={handleClickOpen}
                 >
                     Create Plan
                 </Button>
+                <CreatePlanForm
+                    loading={loading}
+                    showMessage={showMessage}
+                    setShowMessage={setShowMessage}
+                    message={message}
+                    messageColor={messageColor}
+                    onSubmit={onSubmit}
+                    formHandleSubmit={formHandleSubmit}
+                    register={register}
+                    errors={errors}
+                    open={open}
+                    setOpen={setOpen}
+                />
             </div>
-            <Box>
+            {/* <Box>
                 <Accordion className='shadow-none divide-y-2 divide-lightgrey'>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -32,10 +68,6 @@ export default function PlansList() {
                         <Button className='ml-auto mr-2'> <EditIcon className='text-green' /> </Button>
                     </AccordionSummary>
                     <AccordionDetails>
-                        {/* <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                            malesuada lacus ex, sit amet blandit leo lobortis eget.
-                        </Typography> */}
                         <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -70,12 +102,6 @@ export default function PlansList() {
                             </TableHead>
                             <TableBody>
                                 <TableRow>
-                                    {/* <TableCell className="text-base" component="th" scope="row">
-                                        
-                                    </TableCell>
-                                    <TableCell className="text-base" align="right">
-                                        
-                                    </TableCell> */}
                                     <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
                                         #01
                                     </TableCell>
@@ -110,7 +136,7 @@ export default function PlansList() {
                         </Table>
                     </AccordionDetails>
                 </Accordion>
-            </Box>
+            </Box> */}
         </Box>
     )
 }

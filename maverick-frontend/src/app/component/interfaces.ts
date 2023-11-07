@@ -115,7 +115,7 @@ export interface UpdateATeamMemberProps {
   setOpen: any;
   teamId: string;
   teamMemberId: any;
-  teamMemberEmailId:string;
+  teamMemberEmailId: string;
 }
 
 export interface UpdateATeamMemberFormData {
@@ -124,7 +124,7 @@ export interface UpdateATeamMemberFormData {
   owner: boolean;
 }
 
-export interface DeleteTeamProps{
+export interface DeleteTeamProps {
   loading: boolean;
   showMessage: boolean;
   setShowMessage: any;
@@ -135,4 +135,42 @@ export interface DeleteTeamProps{
   teamTitle: string;
   teamId: string;
   handleDeleteTeam: any;
+}
+
+export interface CreatePlanProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+  register: any;
+  errors: any;
+  open: boolean;
+  setOpen: any;
+}
+
+export interface CreatePlansFormData {
+  planname: string;
+  description: string;
+  price: number;
+  currency: string;
+  paymentmode: string;
+  paymenttype: string;
+  billingperiod: string;
+  intervalcount: number;
+  active: boolean;
+}
+export interface PlansProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+  register: any;
+  errors: any;
+  plans: any;
 }
