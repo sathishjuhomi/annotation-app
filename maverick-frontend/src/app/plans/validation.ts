@@ -27,7 +27,4 @@ export const createPlanSchema = yup.object().shape({
     intervalcount: yup
     .number()
     .required(Constants.INTERVALCOUNT_REQUIRED),
-    active: yup
-    .boolean()
-    .required(Constants.ACTIVE_REQUIRED),
 });

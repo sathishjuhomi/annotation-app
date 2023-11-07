@@ -31,6 +31,8 @@ export default function PlansList(
         setOpen(true);
     };
 
+    console.log("PlansFOrm: ")
+
     return (
         <Box className="mt-10 w-full mr-4">
             <div className="flex justify-between pb-5">
@@ -57,13 +59,76 @@ export default function PlansList(
                     setOpen={setOpen}
                 />
             </div>
+
+            <Box className=' bg-white m-1'>
+                <Table aria-label="simple table">
+                    <TableHead className=' mt-2 mb-2'>
+                        <TableRow>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Name
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Description
+                            </TableCell>
+                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
+                                Price
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Currency
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Payment Mode
+                            </TableCell>
+                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
+                                Payment Type
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Billing Period
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Interval Count
+                            </TableCell>
+                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
+                                Active
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Plan 1
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Plan 1 is opening for developing team
+                            </TableCell>
+                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
+                                20000
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                               Dollar
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                Credit Card
+                            </TableCell>
+                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
+                                Credit Card
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                One Month
+                            </TableCell>
+                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
+                                30 days
+                            </TableCell>
+                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
+                                Ture
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Box>
+
             {/* <Box>
                 <Accordion className='shadow-none divide-y-2 divide-lightgrey'>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                    >
                         <Typography>Plan 1</Typography>
                         <Button className='ml-auto mr-2'> <EditIcon className='text-green' /> </Button>
                     </AccordionSummary>
@@ -131,7 +196,6 @@ export default function PlansList(
                                     </TableCell>
 
                                 </TableRow>
-
                             </TableBody>
                         </Table>
                     </AccordionDetails>

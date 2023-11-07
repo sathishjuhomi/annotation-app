@@ -33,6 +33,8 @@ export default function CreatePlansForm(
     setSelectedValue(event.target.value);
   };
 
+  console.log("CreatePlanForm: ")
+
   const paymentMode = [{ value: 'card', label: 'Card' }];
   const paymentType = [{ value: 'recurring', label: 'Recurring' }, { value: 'one_time', label: 'One Time' }];
   const billingPeriod = [
@@ -53,14 +55,13 @@ export default function CreatePlansForm(
 
   return (
     <div>
-
       <Dialog className='rounded-md' open={open} onClose={handleClose}>
         <DialogTitle className='ml-6 mr-8 mt-8 text-2xl text-black font-Inter font-bold'>Create Plan</DialogTitle>
         <DialogContentText className='ml-12 mr-8 text-greyplus text-sm font-Inter font-normal leading-6'>
           You can create your new plan here
         </DialogContentText>
         <DialogContent>
-          <form noValidate>
+          <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
             <Grid className='mt-2'>
               <TextField
                 autoFocus
@@ -170,7 +171,7 @@ export default function CreatePlansForm(
                 error={Boolean(errors?.intervalcount)}
                 helperText={errors?.intervalcount ? errors?.intervalcount.message : " "}
               >
-                {billingPeriod.map((option) => (
+                {intervalCount.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
@@ -209,18 +210,6 @@ export default function CreatePlansForm(
                   // helperText={errors?.intervalcount ? errors?.intervalcount.message : " "}
                 />
               )} */}
-
-              <TextField
-                required
-                className='w-full-six h-20 ml-6 border-greyplus'
-                margin="dense"
-                id="active"
-                label="Active"
-                type="text"
-                {...register("active")}
-                error={Boolean(errors?.active)}
-                helperText={errors?.active ? errors?.active.message : " "}
-              />
               <DialogActions>
                 <Button
                   className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"

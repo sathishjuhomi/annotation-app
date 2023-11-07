@@ -25,4 +25,3 @@ export const PAYMENTMODE_REQUIRED = "Payment mode is required";
 export const PAYMENTTYPE_REQUIRED = "Payment type is required";
 export const BILLINGPERIOD_REQUIRED = "Billing Period is required";
 export const INTERVALCOUNT_REQUIRED = "Interval count is required";
-export const ACTIVE_REQUIRED = "Active is required";

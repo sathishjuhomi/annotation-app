@@ -90,6 +90,7 @@ export default function SignUp({
               <Button
                 type="submit"
                 color="inherit"
+                onClick={formHandleSubmit(onSubmit)}
                 variant="contained"
                 className="text-white w-button h-14 bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
               >

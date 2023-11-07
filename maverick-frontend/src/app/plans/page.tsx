@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { createPlanSchema } from "./validation";
-import { CreatePlansFormData } from "./../component/interfaces";
+import { CreatePlanFormData } from "./../component/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Constants from "../utils/constant";
 import { createPlan } from "./api/route";
@@ -14,6 +14,7 @@ import { createPlan } from "./api/route";
 
 const Plans = () => {
 
+  console.log("Page: ")
   const [loading, setLoading] = React.useState(false);
   const [showMessage, setShowMessage] = React.useState(false);
   const [message, setMessage] = React.useState("");
@@ -29,30 +30,31 @@ const Plans = () => {
 
 
   // Create Plan
-  const submit = async (data: CreatePlansFormData) => {
+  const submit = async (data: CreatePlanFormData) => {
+    console.log("CReatePLANS: Submit: ")
     setShowMessage(true);
     setLoading(true);
-    const { props } = await createPlan(data)
-    try {
-      if ((Object.keys(props.create).length) > 1) {
-        setMessage(Constants.TEAM_CREATED_SUCCESSFULLY);
-        setMessageColor(Constants.SUCCESS);
-        location.reload()
-      } else {
-        const data = props.create.detail;
-        setMessage(data);
+    const response = await createPlan(data)
+      .then(async (res) => {
+        const response = await res.json();
+        if (res.status === 201) {
+          setMessage(Constants.USER_SUCCESS);
+          setMessageColor(Constants.SUCCESS);
+          location.reload()
+        } else {
+          const data = response.detail;
+          setMessage(data);
+          setMessageColor(Constants.ERROR);
+        }
+         setLoading(false);
+      })
+      .catch((error) => {
+        setMessage(error);
         setLoading(false);
         setMessageColor(Constants.ERROR);
-      }
-      setLoading(false);
-    } catch (error) {
-      const data = props.create.detail;
-      setMessage(data);
-      setMessageColor(Constants.ERROR);
-      console.error('Error fetching data:', error);
-    }
+      });
   };
-
+  
 
   return (
     <Box className="flex">

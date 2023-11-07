@@ -151,7 +151,7 @@ export interface CreatePlanProps {
   setOpen: any;
 }
 
-export interface CreatePlansFormData {
+export interface CreatePlanFormData {
   planname: string;
   description: string;
   price: number;
@@ -160,7 +160,6 @@ export interface CreatePlansFormData {
   paymenttype: string;
   billingperiod: string;
   intervalcount: number;
-  active: boolean;
 }
 export interface PlansProps {
   loading: boolean;
