@@ -3,12 +3,13 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Accordion, AccordionDetails, AccordionSummary, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from "next/navigation";
 import CreatePlanForm from './CreatePlanForm';
 import { PlansProps } from '@/app/component/interfaces';
+import Snackbar from '@/app/component/Snackbar';
 
 export default function PlansList(
     {
@@ -61,146 +62,99 @@ export default function PlansList(
             </div>
 
             <Box className=' bg-white m-1'>
-                <Table aria-label="simple table">
-                    <TableHead className=' mt-2 mb-2'>
-                        <TableRow>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Name
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Description
-                            </TableCell>
-                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
-                                Price
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Currency
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Payment Mode
-                            </TableCell>
-                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
-                                Payment Type
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Billing Period
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Interval Count
-                            </TableCell>
-                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
-                                Active
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Plan 1
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Plan 1 is opening for developing team
-                            </TableCell>
-                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
-                                20000
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                               Dollar
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                Credit Card
-                            </TableCell>
-                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
-                                Credit Card
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                One Month
-                            </TableCell>
-                            <TableCell align="right" className="text-right font-Inter font-normal leading-6 text-sm">
-                                30 days
-                            </TableCell>
-                            <TableCell align="right" className="text-left font-Inter font-normal leading-6 text-sm">
-                                Ture
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+                <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                        <TableHead className=' mt-2 mb-2'>
+                            <TableRow>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Name
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Description
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Price
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Currency
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Payment Mode
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Payment Type
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Billing Period
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Interval Count
+                                </TableCell>
+                                <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    Active
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {plans.length > 0 ? plans.map((plan: any) => (
+                                <TableRow key={plans.id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.plan.plan_name}
+                                    </TableCell>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.plan.description}
+                                    </TableCell>
+                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
+                                        {plan.price.price}
+                                    </TableCell>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.price.currency}
+                                    </TableCell>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.price.payment_mode}
+                                    </TableCell>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.price.payment_type}
+                                    </TableCell>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.price.billing_period}
+                                    </TableCell>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.price.interval_count}
+                                    </TableCell>
+                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.is_active ? 'True' : 'False'}
+                                    </TableCell>
+                                </TableRow>
+                            )) : <Box>
+                                <Typography className='text-center mt-10 mb-2'> No Plans </Typography>
+                                <br />
+                            </Box>
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Box>
-
-            {/* <Box>
-                <Accordion className='shadow-none divide-y-2 divide-lightgrey'>
-                        <Typography>Plan 1</Typography>
-                        <Button className='ml-auto mr-2'> <EditIcon className='text-green' /> </Button>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Table aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
-                                        ID
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Name
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Description
-                                    </TableCell>
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
-                                        Price
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Currency
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Payment Mode
-                                    </TableCell>
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
-                                        Payment Type
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Billing Period
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Interval Count
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
-                                        #01
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Plan 1
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Description of plan1
-                                    </TableCell>
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
-                                        #23.0
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        $
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        Credit Card
-                                    </TableCell>
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
-                                        Credit Card
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        One Month
-                                    </TableCell>
-                                    <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
-                                        30 days
-                                    </TableCell>
-
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </AccordionDetails>
-                </Accordion>
-            </Box> */}
+            {
+                message !== "" ? (
+                    <Snackbar
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        message={message}
+                        messageColor={messageColor}
+                    />
+                ) : null
+            }
+            {
+                loading ? (
+                    <Box
+                        className="text-greyplus mt-auto flex justify-center items-center"
+                    >
+                        <CircularProgress color="inherit" />
+                    </Box>
+                ) : null
+            }
         </Box>
     )
 }

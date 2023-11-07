@@ -9,7 +9,7 @@ import { createPlanSchema } from "./validation";
 import { CreatePlanFormData } from "./../component/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Constants from "../utils/constant";
-import { createPlan } from "./api/route";
+import { createPlan, planList } from "./api/route";
 
 
 const Plans = () => {
@@ -28,6 +28,45 @@ const Plans = () => {
     resolver: yupResolver(createPlanSchema),
   });
 
+  useEffect(() => {
+    async function fetchData() {
+      const { props } = await planList();
+      try {
+        console.log("Plans: ", props.plans);
+        setPlans(props.plans);
+        // Additional logic can go here
+      } catch (error) {
+        const data = props.plans.detail;
+        setMessage(data);
+        setMessageColor(Constants.ERROR);
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const { props } = await planList();
+  //     setPlans(props.plans);
+  //     console.log("Plans: ", props.plans)
+  //     try {
+  //       setPlans(props.plans);
+  //       // const plan = localStorage.getItem('teamName');
+  //       // if (teamName === null) {
+  //       //   localStorage.setItem('teamName', props.teams[0]['team_name']);
+  //       // }
+  //     } catch (error) {
+  //       const data = props.plans.detail;
+  //       setMessage(data);
+  //       setMessageColor(Constants.ERROR);
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   }
+
+  //   fetchData();
+  // }, []);
 
   // Create Plan
   const submit = async (data: CreatePlanFormData) => {
@@ -46,7 +85,7 @@ const Plans = () => {
           setMessage(data);
           setMessageColor(Constants.ERROR);
         }
-         setLoading(false);
+        setLoading(false);
       })
       .catch((error) => {
         setMessage(error);
@@ -54,7 +93,7 @@ const Plans = () => {
         setMessageColor(Constants.ERROR);
       });
   };
-  
+
 
   return (
     <Box className="flex">
