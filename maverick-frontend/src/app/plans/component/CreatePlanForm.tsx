@@ -48,7 +48,7 @@ export default function CreatePlansForm(
     { value: '7', label: '7' }, { value: '8', label: '8' },
     { value: '9', label: '9' }, { value: '10', label: '10' },
     { value: '11', label: '11' }, { value: '12', label: '12' },
-    { value: 'custom', label: 'Custom' }
+    // { value: 'custom', label: 'Custom' }
   ];
 
   return (
@@ -56,10 +56,10 @@ export default function CreatePlansForm(
 
       <Dialog className='rounded-md' open={open} onClose={handleClose}>
         <DialogTitle className='ml-6 mr-8 mt-8 text-2xl text-black font-Inter font-bold'>Create Plan</DialogTitle>
+        <DialogContentText className='ml-12 mr-8 text-greyplus text-sm font-Inter font-normal leading-6'>
+          You can create your new plan here
+        </DialogContentText>
         <DialogContent>
-          <DialogContentText className='ml-6 mr-8 text-greyplus text-sm font-Inter font-normal leading-6'>
-            You can create your new plan here
-          </DialogContentText>
           <form noValidate>
             <Grid className='mt-2'>
               <TextField
@@ -166,6 +166,24 @@ export default function CreatePlansForm(
                 margin="dense"
                 id="intervalcount"
                 label="Interval Count"
+                {...register("intervalcount")}
+                error={Boolean(errors?.intervalcount)}
+                helperText={errors?.intervalcount ? errors?.intervalcount.message : " "}
+              >
+                {billingPeriod.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              {/* <TextField
+                select
+                required
+                className='w-full-six h-20 ml-6 border-greyplus'
+                margin="dense"
+                id="intervalcount"
+                label="Interval Count"
                 value={selectedValue}
                 onChange={handleSelectChange}
                 // {...register("intervalcount")}
@@ -190,7 +208,7 @@ export default function CreatePlansForm(
                   // error={Boolean(errors?.intervalcount)}
                   // helperText={errors?.intervalcount ? errors?.intervalcount.message : " "}
                 />
-              )}
+              )} */}
 
               <TextField
                 required
