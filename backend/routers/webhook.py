@@ -1,7 +1,9 @@
 import json
 import os
+import uuid
 from typing import Optional
-from fastapi import FastAPI, Header, HTTPException, status, APIRouter
+from backend.db_handler.user_handler import user_db_handler
+from fastapi import FastAPI, Header, HTTPException, status, APIRouter, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -11,7 +13,9 @@ from starlette.responses import RedirectResponse
 from pydantic import BaseModel
 import stripe
 from backend.config import get_settings
-
+from backend.db_handler.subscription_handler import subscription_db_handler
+from backend.models.database import get_db
+from sqlalchemy.orm import Session
 
 webhook_router = APIRouter(prefix="/api/v1", tags=["Plans"])
 
@@ -24,8 +28,12 @@ if settings.WEBHOOK_SECRET_KEY:
 else:
     raise ValueError("WEBHOOK_SECRET_KEY is not defined in the configuration.")
 
+
 @webhook_router.post('/webhook', response_class=JSONResponse)
-async def webhook(request: Request):
+async def webhook(
+    request: Request,
+    db: Session = Depends(get_db)
+):
     event = None
     payload = await request.body()
     sig_header = request.headers['stripe-signature']
@@ -50,16 +58,47 @@ async def webhook(request: Request):
         print('session checkout.session.async_payment_succeeded', session)
     elif event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        print('session checkout.session.completed', session)
-        subscription_id = session.get("subscription")
-        subscription = stripe.Subscription.retrieve(subscription_id)
-        items = subscription['items']['data']
+        print("inside checkout session")
+        if 'customer_details' in session:
+            email = session['customer_details'].get('email')
+        else:
+            email = None
 
-        for item in items:
-            price_id = item['price']['id']
-            print('price_id ', price_id)
-            product = stripe.Product.retrieve(item['price']['product'])
-            print(f"Product ID: {product['id']}, Name: {product['name']}")
+        subscription_id = session.get("subscription")
+
+        if subscription_id:
+            subscription = stripe.Subscription.retrieve(subscription_id)
+            if 'items' in subscription and len(subscription['items']['data']) > 0:
+                price_id = subscription['items']['data'][0]['price']['id']
+            else:
+                price_id = None
+
+            user = user_db_handler.load_by_column(
+                db=db,
+                column_name="email",
+                value=email
+            )
+            print('user81', user)
+            customer_details = session.get("customer_details")
+            address = customer_details.address
+            print("address ", address)
+            user_address = {"address": address}
+            # print('user_address', user_address)
+            user_db_handler.update(db=db, db_obj=user, input_object=user_address)
+
+            if email and subscription_id and price_id:
+                subscription_obj = {
+                    "id": uuid.uuid4(),
+                    "user_id": user.id,
+                    "subscription_id": subscription_id,
+                    "price_id": price_id,
+                    "payment_status": session.get("payment_status")
+                }
+                subscription_db_handler.create(db=db, input_object=subscription_obj)
+            else:
+                print("Missing required data (email, subscription_id, or price_id)")
+
+        print('session checkout.session.completed', session)
 
     elif event['type'] == 'checkout.session.expired':
         session = event['data']['object']
