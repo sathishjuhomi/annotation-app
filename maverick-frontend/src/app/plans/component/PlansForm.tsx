@@ -22,11 +22,8 @@ import UpdatePlanForm from './UpdatePlanForm';
 import { updatePlanSchema } from '../validation';
 import { ActivatePlan, DeactivatePlan, updatePlan } from '../api/route';
 import * as Constants from "../../utils/constant";
-import ActivateOrDeactivate from './ActivateOrDeactivateForm';
-import ActivateOrDeactivateForm from './ActivateOrDeactivateForm';
 import DeactivateForm from './DeactivateForm';
 import ActivateForm from './ActivateForm';
-// import ActivateOrDeactivate from './ActivateOrDeactivateForm';
 
 export default function PlansList({
     loading,
@@ -42,41 +39,28 @@ export default function PlansList({
 }: PlansProps) {
     const [open, setOpen] = useState(false);
     const [openUpdate, setOpenUpdate] = useState(false);
-    const [openStatus, setOpenStatus] = useState(false);
+    const [openActivate, setOpenActivate] = useState(false);
     const [openDeactivate, setOpenDeactivate] = useState(false);
     const [selectedPlanId, setSelectedPlanId] = React.useState('');
     const [selectedPriceId, setSelectedPriceId] = React.useState('');
-    const [selectedPriceIdActive, setSelectedPriceIdActive] = React.useState('')
     const [selectedPlanName, setSelectedPlanName] = React.useState('');
-    const [selectedstatus, setSelectedStatus] = React.useState('');
-    const [selectedDeactivate, setSelectedDeactivate] = React.useState('');
     const [selectedDescription, setSelectedDescription] = React.useState('');
     const [updatePlanLoading, setUpdatePlanLoading] = React.useState(false);
     const [showMessageUpdate, setShowMessageUpdate] = React.useState(false);
     const [messageUpdate, setMessageUpdate] = React.useState("");
     const [messageColorUpdate, setMessageColorUpdate] = React.useState(Constants.INFO);
-    const [activateDeactivateLoading, setActivateDeactivateLoading] = React.useState(false);
-    const [showMessageActivateDeactivate, setShowMessageActivateDeactivate] = React.useState(false);
-    const [messageActivateDeactivate, setMessageActivateDeactivate] = React.useState("");
-    const [messageColorActivateDeactivate, setMessageColorActivateDeactivate] = React.useState(Constants.INFO);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
-    const handleClickOpenStatus = (priceId: string, planName: string, statusValue: string) => {
+    const handleClickOpenActive = (priceId: string, planName: string) => {
         setSelectedPriceId(priceId)
         setSelectedPlanName(planName)
-        setSelectedStatus(statusValue)
-        setSelectedPriceIdActive(priceId)
-        console.log("PriceId & pplan Name: ", priceId, planName, statusValue)
-        setOpenStatus(true);
+        setOpenActivate(true);
     };
-    const handleClickOpenDeactivate = (priceId: string, planName: string, statusValue: string) => {
+    const handleClickOpenDeactivate = (priceId: string, planName: string) => {
         setSelectedPriceId(priceId)
         setSelectedPlanName(planName)
-        setSelectedDeactivate(statusValue)
-        // setSelectedPriceIdActive(priceId)
-        console.log("PriceId & pplan Name: ", priceId, planName, statusValue)
         setOpenDeactivate(true);
     };
 
@@ -133,7 +117,7 @@ export default function PlansList({
             };
         }
     }
-    const handleDeactivatePlan = async (priceId: string) => {
+    const handleDeactivatePlan = async () => {
         try {
             const { props } = await DeactivatePlan(selectedPriceId);
 
@@ -141,7 +125,7 @@ export default function PlansList({
                 location.reload()
                 return {
                     success: true,
-                    message: Constants.TEAM_DELETED_SUCCESSFULLY,
+                    message: Constants.DEACTIVATED_SUCCESSFULLY,
                     messageColor: Constants.SUCCESS,
                 };
             } else {
@@ -162,7 +146,7 @@ export default function PlansList({
         }
     };
 
-    const handleActivatePlan = async (priceId: string) => {
+    const handleActivatePlan = async () => {
         try {
             const { props } = await ActivatePlan(selectedPriceId);
             console.log(props, "APIID: ", selectedPriceId)
@@ -270,9 +254,9 @@ export default function PlansList({
                                         {plan.is_active ?
                                             <div>
                                                 <Chip
-                                                    className="text-left text-black hover:text-green hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
+                                                    className="w-20 h-8 text-left text-black hover:text-green hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
                                                     label="Active"
-                                                    onClick={() => handleClickOpenStatus(plan.price_id, plan.plan.plan_name, 'Deactivate')}
+                                                    onClick={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
                                                 />
                                                 <DeactivateForm
                                                     loading={loading}
@@ -280,19 +264,18 @@ export default function PlansList({
                                                     setShowMessage={setShowMessage}
                                                     message={message}
                                                     messageColor={messageColor}
-                                                    handleActivateOrDeactivate={handleDeactivatePlan}
-                                                    open={openStatus}
-                                                    setOpen={setOpenStatus}
-                                                    statusValue={selectedstatus}
+                                                    handleDeactivate={handleDeactivatePlan}
+                                                    open={openActivate}
+                                                    setOpen={setOpenActivate}
                                                     priceId={selectedPriceId}
                                                     planName={selectedPlanName}
                                                 />
                                             </div>
                                             : <div>
                                                 <Chip
-                                                    className="text-left text-black hover:text-red hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
+                                                    className="w-20 h-8 text-left text-black hover:text-red hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
                                                     label="InActive"
-                                                    onClick={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name, 'Activate')}
+                                                    onClick={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
                                                 />
                                                 <ActivateForm
                                                     loading={loading}

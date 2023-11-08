@@ -221,3 +221,16 @@ export interface ActivateProps {
   priceId: any;
   planName: string
 }
+
+export interface DeactivateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  handleDeactivate: any;
+  open: boolean;
+  setOpen: any;
+  priceId: any;
+  planName: string
+}

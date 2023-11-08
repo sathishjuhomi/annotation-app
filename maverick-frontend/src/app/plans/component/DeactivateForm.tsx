@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Box';
 import { Box, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
-import { ActivateDeactivateProps } from '@/app/component/interfaces';
+import { DeactivateProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
 
 
@@ -13,20 +13,19 @@ export default function Deactivate(
         setShowMessage,
         message,
         messageColor,
-        handleActivateOrDeactivate,
+        handleDeactivate,
         open,
         setOpen,
-        statusValue,
         priceId,
         planName
-    }: ActivateDeactivateProps
+    }: DeactivateProps
 ) {
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    console.log("status: ", statusValue , handleActivateOrDeactivate)
+    console.log("Deactivate PriceId: ", priceId)
 
     return (
         <div>
@@ -64,7 +63,7 @@ export default function Deactivate(
                                 alignItems: 'center',
                             }}
                             className="w-20 h-11 mr-10 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
-                            onClick={() => handleActivateOrDeactivate(priceId)}
+                            onClick={() => handleDeactivate(priceId)}
                         >
                             Yes
                         </Button>
