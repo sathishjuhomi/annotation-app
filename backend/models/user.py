@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, UniqueConstraint
+from sqlalchemy import Column, String, UniqueConstraint, JSON, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 
 from backend.models.database import Base
@@ -12,5 +12,7 @@ class Users(Base, TimestampMixIn):
     email = Column(String, nullable=False)
     password_hash = Column(String, nullable=False)
     password_salt = Column(String, nullable=False)
+    address = Column(JSON, nullable=True)
+    admin = Column(Boolean, default=False)
 
     __table_args__ = (UniqueConstraint("email", name="user_login_email_key"),)
