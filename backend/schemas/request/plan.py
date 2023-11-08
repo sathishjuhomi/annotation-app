@@ -22,3 +22,6 @@ class PlanRequestSchema(BaseModel):
 
 class PriceStateRequestSchema(BaseModel):
     active: bool
+
+class CheckoutSessionRequestSchema(BaseModel):
+    payment_type: str
