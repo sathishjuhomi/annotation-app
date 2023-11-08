@@ -28,3 +28,12 @@ export const createPlanSchema = yup.object().shape({
     .number()
     .required(Constants.INTERVALCOUNT_REQUIRED),
 });
+
+export const updatePlanSchema = yup.object().shape({
+    planname: yup
+    .string()
+    .required(Constants.PLANNAME_REQUIRED),
+    description: yup
+    .string()
+    .required(Constants.DESCRIPTION_REQUIRED),
+});

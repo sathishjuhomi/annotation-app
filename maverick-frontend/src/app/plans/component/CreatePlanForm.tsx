@@ -33,7 +33,6 @@ export default function CreatePlansForm(
     setSelectedValue(event.target.value);
   };
 
-  console.log("CreatePlanForm: ")
 
   const paymentMode = [{ value: 'card', label: 'Card' }];
   const paymentType = [{ value: 'recurring', label: 'Recurring' }, { value: 'one_time', label: 'One Time' }];
@@ -237,7 +236,7 @@ export default function CreatePlansForm(
       ) : null}
       {loading ? (
         <Box
-          className="text-greyplus mt-2 text-greyplus mt-2 flex justify-center items-center"
+          className="text-greyplus mt-2 flex justify-center items-center"
         >
           <CircularProgress color="inherit" />
         </Box>

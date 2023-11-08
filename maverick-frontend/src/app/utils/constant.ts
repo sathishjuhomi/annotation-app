@@ -25,3 +25,6 @@ export const PAYMENTMODE_REQUIRED = "Payment mode is required";
 export const PAYMENTTYPE_REQUIRED = "Payment type is required";
 export const BILLINGPERIOD_REQUIRED = "Billing Period is required";
 export const INTERVALCOUNT_REQUIRED = "Interval count is required";
+export const PLAN_UPDATED_SUCCESSFULLY = "Plan updated successfully";
+export const DEACTIVATED_SUCCESSFULLY = "Plan deactivated successfully";
+export const ACTIVATED_SUCCESSFULLY = "Plan activated successfully";

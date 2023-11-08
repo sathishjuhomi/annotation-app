@@ -52,7 +52,7 @@ export default function DeleteTeam(
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        className='w-20 h-11 mr-1 mb-14 rounded-md text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black'
+                        className='w-20 h-11 mr-1 mb-14 rounded-md text-white font-Inter font-semibold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black'
                         onClick={handleCloseDeleteTeam}
                         style={{
                             display: 'flex',
@@ -63,7 +63,7 @@ export default function DeleteTeam(
                         No
                     </Button>
                     <Button
-                        className="w-20 h-11 mr-10 mb-14 rounded-md text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
+                        className="w-20 h-11 mr-10 mb-14 rounded-md text-white font-Inter font-semibold leading-6 normal-case bg-green hover:bg-lightgreen"
                         style={{
                             display: 'flex',
                             justifyContent: 'center',

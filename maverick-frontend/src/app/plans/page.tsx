@@ -14,12 +14,12 @@ import { createPlan, planList } from "./api/route";
 
 const Plans = () => {
 
-  console.log("Page: ")
   const [loading, setLoading] = React.useState(false);
   const [showMessage, setShowMessage] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [messageColor, setMessageColor] = React.useState(Constants.INFO);
   const [plans, setPlans] = React.useState([]);
+
   const {
     register,
     handleSubmit,
@@ -28,13 +28,40 @@ const Plans = () => {
     resolver: yupResolver(createPlanSchema),
   });
 
+// Create Plan
+    const submit = async (data: CreatePlanFormData) => {
+      setShowMessage(true);
+      setLoading(true);
+      const response = await createPlan(data)
+        .then(async (res) => {
+          const response = await res.json();
+          if (res.status === 201) {
+            setMessage(Constants.USER_SUCCESS);
+            setMessageColor(Constants.SUCCESS);
+            location.reload()
+          } else {
+            const data = response.detail;
+            setMessage(data);
+            setMessageColor(Constants.ERROR);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          setMessage(error);
+          setLoading(false);
+          setMessageColor(Constants.ERROR);
+        });
+    };
+
+    
+// View Plans
+
   useEffect(() => {
     async function fetchData() {
       const { props } = await planList();
       try {
-        console.log("Plans: ", props.plans);
+        console.log("Plans: ", props.plans.id);
         setPlans(props.plans);
-        // Additional logic can go here
       } catch (error) {
         const data = props.plans.detail;
         setMessage(data);
@@ -45,55 +72,6 @@ const Plans = () => {
 
     fetchData();
   }, []);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const { props } = await planList();
-  //     setPlans(props.plans);
-  //     console.log("Plans: ", props.plans)
-  //     try {
-  //       setPlans(props.plans);
-  //       // const plan = localStorage.getItem('teamName');
-  //       // if (teamName === null) {
-  //       //   localStorage.setItem('teamName', props.teams[0]['team_name']);
-  //       // }
-  //     } catch (error) {
-  //       const data = props.plans.detail;
-  //       setMessage(data);
-  //       setMessageColor(Constants.ERROR);
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, []);
-
-  // Create Plan
-  const submit = async (data: CreatePlanFormData) => {
-    console.log("CReatePLANS: Submit: ")
-    setShowMessage(true);
-    setLoading(true);
-    const response = await createPlan(data)
-      .then(async (res) => {
-        const response = await res.json();
-        if (res.status === 201) {
-          setMessage(Constants.USER_SUCCESS);
-          setMessageColor(Constants.SUCCESS);
-          location.reload()
-        } else {
-          const data = response.detail;
-          setMessage(data);
-          setMessageColor(Constants.ERROR);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setMessage(error);
-        setLoading(false);
-        setMessageColor(Constants.ERROR);
-      });
-  };
-
 
   return (
     <Box className="flex">

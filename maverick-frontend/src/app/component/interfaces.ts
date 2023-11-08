@@ -161,6 +161,27 @@ export interface CreatePlanFormData {
   billingperiod: string;
   intervalcount: number;
 }
+
+export interface UpdatePlanProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmitPlan: any;
+  formHandleSubmitPlan: any;
+  register: any;
+  errors: any;
+  open: boolean;
+  setOpen: any;
+  planName: string;
+  description: string;
+}
+
+export interface UpdatePlanFormData {
+  planname: string;
+  description: string;
+}
 export interface PlansProps {
   loading: boolean;
   showMessage: boolean;
@@ -172,4 +193,31 @@ export interface PlansProps {
   register: any;
   errors: any;
   plans: any;
+}
+
+export interface ActivateDeactivateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  handleActivateOrDeactivate: any;
+  open: boolean;
+  setOpen: any;
+  statusValue: string;
+  priceId: any;
+  planName: string
+}
+
+export interface ActivateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  handleActivate: any;
+  open: boolean;
+  setOpen: any;
+  priceId: any;
+  planName: string
 }

@@ -61,7 +61,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     }, []);
 
 
-    // Create or Update Team Name
+    // Update Team Name
 
     const submit = async (data: TeamsFormData) => {
         setShowMessage(true);
