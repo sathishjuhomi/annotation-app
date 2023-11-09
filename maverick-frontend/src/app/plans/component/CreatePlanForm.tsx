@@ -62,15 +62,13 @@ export default function CreatePlansForm(
   ];
 
   const intervalCount = [
-    { value: '1', label: '1' }, { value: '2', label: '2' },
-    { value: '3', label: '3' }, { value: '4', label: '4' },
-    { value: '5', label: '5' }, { value: '6', label: '6' },
-    { value: '7', label: '7' }, { value: '8', label: '8' },
-    { value: '9', label: '9' }, { value: '10', label: '10' },
-    { value: '11', label: '11' }, { value: '12', label: '12' },
-    // { value: 'custom', label: 'Custom' }
+    { value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3' },
+    { value: '4', label: '4' }, { value: '5', label: '5' }, { value: '6', label: '6' },
+    { value: '7', label: '7' }, { value: '8', label: '8' }, { value: '9', label: '9' },
+    { value: '10', label: '10' }, { value: '11', label: '11' }, { value: '12', label: '12' },
+    { value: 'custom', label: 'Custom' }
   ];
-  
+
 
   return (
     <div>
@@ -195,7 +193,9 @@ export default function CreatePlansForm(
                     margin="dense"
                     id="intervalCount"
                     label="Interval Count"
-                    onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
+                    value={selectedValue}
+                    onChange={handleSelectChange}
+                    // {...register("intervalCount")}
                     error={Boolean(errors?.intervalCount)}
                     helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
                   >
@@ -205,9 +205,40 @@ export default function CreatePlansForm(
                       </MenuItem>
                     ))}
                   </TextField>
+                  {selectedValue === 'custom' && (
+                    <TextField
+                      required
+                      className='w-full-six h-20 ml-6 border-greyplus'
+                      margin="dense"
+                      id="intervalCount"
+                      label="Enter Custom Value for interval count only in numbers"
+                      onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
+                      // {...register("intervalCount")}
+                      error={Boolean(errors?.intervalCount)}
+                      helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
+                    />
+                  )}
                 </div>
               )}
 
+
+              {/* <TextField
+                    select
+                    required
+                    className='w-full-six h-20 ml-6 border-greyplus'
+                    margin="dense"
+                    id="intervalCount"
+                    label="Interval Count"
+                    onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
+                    error={Boolean(errors?.intervalCount)}
+                    helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
+                  >
+                    {intervalCount.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField> */}
               {/* <TextField
                 select
                 required
@@ -260,10 +291,9 @@ export default function CreatePlansForm(
                       billingPeriod: selectedBillingPeriod === '' ? null : selectedBillingPeriod,
                       intervalCount: parseInt(selectedIntervalCount),
                     };
-
+                    console.log("Interval COunt: ", selectedIntervalCount)
                     formHandleSubmit(onSubmit(formData));
                   })}
-                // onClick={formHandleSubmit(onSubmit)}
                 >
                   Create
                 </Button>

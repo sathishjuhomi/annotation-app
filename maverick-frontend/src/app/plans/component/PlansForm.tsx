@@ -263,10 +263,10 @@ export default function PlansList({
                                         {plan.price.payment_type === 'one_time'? "One Time": plan.price.payment_type}
                                     </TableCell>
                                     <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
-                                        {plan.price.billing_period}
+                                        {plan.price.billing_period === null? '-': plan.price.billing_period}
                                     </TableCell>
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
-                                        {plan.price.interval_count}
+                                        {plan.price.interval_count === null? '-': plan.price.interval_count}
                                     </TableCell>
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
                                         {plan.is_active ?
