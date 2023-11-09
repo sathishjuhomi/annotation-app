@@ -195,7 +195,6 @@ export default function CreatePlansForm(
                     label="Interval Count"
                     value={selectedValue}
                     onChange={handleSelectChange}
-                    // {...register("intervalCount")}
                     error={Boolean(errors?.intervalCount)}
                     helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
                   >
@@ -213,64 +212,12 @@ export default function CreatePlansForm(
                       id="intervalCount"
                       label="Enter Custom Value for interval count only in numbers"
                       onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
-                      // {...register("intervalCount")}
                       error={Boolean(errors?.intervalCount)}
                       helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
                     />
                   )}
                 </div>
               )}
-
-
-              {/* <TextField
-                    select
-                    required
-                    className='w-full-six h-20 ml-6 border-greyplus'
-                    margin="dense"
-                    id="intervalCount"
-                    label="Interval Count"
-                    onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
-                    error={Boolean(errors?.intervalCount)}
-                    helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
-                  >
-                    {intervalCount.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
-              {/* <TextField
-                select
-                required
-                className='w-full-six h-20 ml-6 border-greyplus'
-                margin="dense"
-                id="intervalCount"
-                label="Interval Count"
-                value={selectedValue}
-                onChange={handleSelectChange}
-                // {...register("intervalCount")}
-                // error={Boolean(errors?.intervalCount)}
-                // helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
-              >
-                {intervalCount.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-              {selectedValue === 'custom' && (
-                <TextField
-                  required
-                  className='w-full-six h-20 ml-6 border-greyplus'
-                  margin="dense"
-                  id="intervalCount"
-                  label="Enter Custom Value for interval count"
-                  // {...register("intervalCount")}
-                  // error={Boolean(errors?.intervalCount)}
-                  // helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
-                />
-              )} */}
               <DialogActions>
                 <Button
                   className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
