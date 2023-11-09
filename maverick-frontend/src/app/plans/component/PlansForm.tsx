@@ -49,6 +49,11 @@ export default function PlansList({
     const [showMessageUpdate, setShowMessageUpdate] = React.useState(false);
     const [messageUpdate, setMessageUpdate] = React.useState("");
     const [messageColorUpdate, setMessageColorUpdate] = React.useState(Constants.INFO);
+    const [messageActiveDeactive, setMessageActiveDeactive] = React.useState("");
+    const [messageColorActiveDeactive, setMessageColorActiveDeactive] = React.useState(Constants.INFO);
+    const [activeLoading, setActiveLoading] = React.useState(false);
+    const [deactiveLoading, setDeactiveLoading] = React.useState(false);
+    const [showMessageActiveDeactive, setShowMessageActiveDeactive] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -118,10 +123,14 @@ export default function PlansList({
         }
     }
     const handleDeactivatePlan = async () => {
+        setShowMessageActiveDeactive(true);
+        // setDeactiveLoading(true);
+        const { props } = await DeactivatePlan(selectedPriceId);
         try {
-            const { props } = await DeactivatePlan(selectedPriceId);
-
+            const data = props.deactivate.detail
             if (props && props.deactivate) {
+                setMessageActiveDeactive(data);
+                setMessageColorActiveDeactive(Constants.SUCCESS);
                 location.reload()
                 return {
                     success: true,
@@ -138,6 +147,9 @@ export default function PlansList({
             }
         } catch (error) {
             console.error('Error fetching data:', error);
+            const data = props.deactivate.detail
+            setMessageActiveDeactive(data);
+            setMessageColorActiveDeactive(Constants.ERROR);
             return {
                 success: false,
                 message: 'An error occurred while deleting the team.',
@@ -147,10 +159,14 @@ export default function PlansList({
     };
 
     const handleActivatePlan = async () => {
+        setShowMessageActiveDeactive(true);
+        // setActiveLoading(true)
+        const { props } = await ActivatePlan(selectedPriceId);
         try {
-            const { props } = await ActivatePlan(selectedPriceId);
-            console.log(props, "APIID: ", selectedPriceId)
+            const data = props.activate.detail
             if (props && props.activate) {
+                setMessageActiveDeactive(data);
+                setMessageColorActiveDeactive(Constants.SUCCESS);
                 location.reload()
                 return {
                     success: true,
@@ -167,6 +183,9 @@ export default function PlansList({
             }
         } catch (error) {
             console.error('Error fetching data:', error);
+            const data = props.activate.detail;
+            setMessageActiveDeactive(data);
+            setMessageColorActiveDeactive(Constants.ERROR);
             return {
                 success: false,
                 message: 'An error occurred while deleting the team.',
@@ -183,7 +202,7 @@ export default function PlansList({
                     size="small"
                     variant="contained"
                     color='inherit'
-                    className="w-28 h-11 ml-auto normal-case font-Inter font-normal font-bold text-sm text-white bg-button hover:bg-lightgreen"
+                    className="w-28 h-11 ml-auto mr-2 normal-case font-Inter font-normal font-bold text-sm text-white bg-button hover:bg-lightgreen"
                     onClick={handleClickOpen}
                 >
                     Create Plan
@@ -226,10 +245,10 @@ export default function PlansList({
                                     key={plan.id}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
+                                    <TableCell className="text-left capitalize font-Inter font-normal leading-6 text-sm">
                                         {plan.plan.plan_name}
                                     </TableCell>
-                                    <TableCell className="text-left font-Inter font-normal leading-6 text-sm">
+                                    <TableCell className="text-left normal-case font-Inter font-normal leading-6 text-sm">
                                         {plan.plan.description}
                                     </TableCell>
                                     <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
@@ -238,13 +257,13 @@ export default function PlansList({
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
                                         {plan.price.currency}
                                     </TableCell>
-                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
                                         {plan.price.payment_mode}
                                     </TableCell>
-                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
-                                        {plan.price.payment_type}
+                                    <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
+                                        {plan.price.payment_type === 'one_time'? "One Time": plan.price.payment_type}
                                     </TableCell>
-                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                    <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
                                         {plan.price.billing_period}
                                     </TableCell>
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
@@ -259,11 +278,11 @@ export default function PlansList({
                                                     onClick={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
                                                 />
                                                 <DeactivateForm
-                                                    loading={loading}
-                                                    showMessage={showMessage}
-                                                    setShowMessage={setShowMessage}
-                                                    message={message}
-                                                    messageColor={messageColor}
+                                                    loading={deactiveLoading}
+                                                    showMessage={showMessageActiveDeactive}
+                                                    setShowMessage={setShowMessageActiveDeactive}
+                                                    message={messageActiveDeactive}
+                                                    messageColor={messageColorActiveDeactive}
                                                     handleDeactivate={handleDeactivatePlan}
                                                     open={openActivate}
                                                     setOpen={setOpenActivate}
@@ -278,11 +297,11 @@ export default function PlansList({
                                                     onClick={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
                                                 />
                                                 <ActivateForm
-                                                    loading={loading}
-                                                    showMessage={showMessage}
-                                                    setShowMessage={setShowMessage}
-                                                    message={message}
-                                                    messageColor={messageColor}
+                                                    loading={activeLoading}
+                                                    showMessage={showMessageActiveDeactive}
+                                                    setShowMessage={setShowMessageActiveDeactive}
+                                                    message={messageActiveDeactive}
+                                                    messageColor={messageColorActiveDeactive}
                                                     handleActivate={handleActivatePlan}
                                                     open={openDeactivate}
                                                     setOpen={setOpenDeactivate}

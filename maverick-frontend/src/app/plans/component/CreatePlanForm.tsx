@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, MenuItem, Paper, TextField, Typography } from '@mui/material';
 import { CreatePlanProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
-
+import { useForm } from 'react-hook-form';
 
 export default function CreatePlansForm(
   {
@@ -27,13 +27,31 @@ export default function CreatePlansForm(
     setOpen(false);
   };
 
+  const { handleSubmit } = useForm();
+
+  const [selectedPlanName, setSelectedPlanName] = React.useState('')
+  const [selectedDescription, setSelectedDescription] = React.useState('')
+  const [selectedPrice, setSelectedPrice] = React.useState('')
+  const [selectedCurrency, setSelectedCurrency] = React.useState('')
+  const [selectedPaymentMode, setSelectedPaymentMode] = React.useState('')
+  const [selectedPaymentType, setSelectedPaymentType] = React.useState('')
+  const [selectedBillingPeriod, setSelectedBillingPeriod] = React.useState('')
+  const [selectedIntervalCount, setSelectedIntervalCount] = React.useState('')
   const [selectedValue, setSelectedValue] = React.useState('');
 
+  //selectedPaymentType === 'Recurring'? '' : null
+
+  const handleSelectPaymentType = (event: any) => {
+    setSelectedPaymentType(event.target.value);
+  }
   const handleSelectChange = (event: any) => {
     setSelectedValue(event.target.value);
   };
 
-
+  const currencies = [
+    { value: "INR", label: "INR" },
+    { value: "USD", label: "USD" },
+    { value: "EUR", label: "EUR" }];
   const paymentMode = [{ value: 'card', label: 'Card' }];
   const paymentType = [{ value: 'recurring', label: 'Recurring' }, { value: 'one_time', label: 'One Time' }];
   const billingPeriod = [
@@ -42,6 +60,7 @@ export default function CreatePlansForm(
     { value: 'week', label: 'Week' },
     { value: 'day', label: 'Day' },
   ];
+  // month
   const intervalCount = [
     { value: '1', label: '1' }, { value: '2', label: '2' },
     { value: '3', label: '3' }, { value: '4', label: '4' },
@@ -51,6 +70,7 @@ export default function CreatePlansForm(
     { value: '11', label: '11' }, { value: '12', label: '12' },
     // { value: 'custom', label: 'Custom' }
   ];
+  
 
   return (
     <div>
@@ -67,12 +87,13 @@ export default function CreatePlansForm(
                 required
                 className='w-full-six h-20 ml-6 border-greyplus'
                 margin="dense"
-                id="planname"
+                id="planName"
                 label="Plan Name"
                 type="text"
-                {...register("planname")}
-                error={Boolean(errors?.planname)}
-                helperText={errors?.planname ? errors?.planname.message : " "}
+                onChange={(planName) => setSelectedPlanName(planName.target.value)}
+                // {...register("planName")}
+                error={Boolean(errors?.planName)}
+                helperText={errors?.planName ? errors?.planName.message : " "}
               />
               <TextField
                 required
@@ -81,7 +102,8 @@ export default function CreatePlansForm(
                 id="description"
                 label="Description"
                 type="text"
-                {...register("description")}
+                onChange={(description) => setSelectedDescription(description.target.value)}
+                // {...register("description")}
                 error={Boolean(errors?.description)}
                 helperText={errors?.description ? errors?.description.message : " "}
               />
@@ -92,31 +114,41 @@ export default function CreatePlansForm(
                 id="price"
                 label="Price"
                 type="text"
-                {...register("price")}
+                onChange={(price) => setSelectedPrice(price.target.value)}
+                // {...register("price")}
                 error={Boolean(errors?.price)}
                 helperText={errors?.price ? errors?.price.message : " "}
               />
               <TextField
                 required
+                select
                 className='w-full-six h-20 ml-6 border-greyplus'
                 margin="dense"
                 id="currency"
                 label="Currency"
                 type="text"
-                {...register("currency")}
+                onChange={(currency) => setSelectedCurrency(currency.target.value)}
+                // {...register("currency")}
                 error={Boolean(errors?.currency)}
                 helperText={errors?.currency ? errors?.currency.message : " "}
-              />
+              >
+                {currencies.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
               <TextField
                 select
                 required
                 className='w-full-six h-20 ml-6 border-greyplus'
                 margin="dense"
-                id="paymentmode"
+                id="paymentMode"
                 label="Payment Mode"
-                {...register("paymentmode")}
-                error={Boolean(errors?.paymentmode)}
-                helperText={errors?.paymentmode ? errors?.paymentmode.message : " "}
+                onChange={(paymentMode) => setSelectedPaymentMode(paymentMode.target.value)}
+                // {...register("paymentMode")}
+                error={Boolean(errors?.paymentMode)}
+                helperText={errors?.paymentMode ? errors?.paymentMode.message : " "}
               >
                 {paymentMode.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -129,11 +161,13 @@ export default function CreatePlansForm(
                 required
                 className='w-full-six h-20 ml-6 border-greyplus'
                 margin="dense"
-                id="paymenttype"
+                value={selectedPaymentType}
+                onChange={handleSelectPaymentType}
+                id="paymentType"
                 label="Payment Type"
-                {...register("paymenttype")}
-                error={Boolean(errors?.paymenttype)}
-                helperText={errors?.paymenttype ? errors?.paymenttype.message : " "}
+                // {...register("paymentType")}
+                error={Boolean(errors?.paymentType)}
+                helperText={errors?.paymentType ? errors?.paymentType.message : " "}
               >
                 {paymentType.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -141,54 +175,59 @@ export default function CreatePlansForm(
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField
-                select
-                required
-                className='w-full-six h-20 ml-6 border-greyplus'
-                margin="dense"
-                id="billingperiod"
-                label="Billing Period"
-                {...register("billingperiod")}
-                error={Boolean(errors?.billingperiod)}
-                helperText={errors?.billingperiod ? errors?.billingperiod.message : " "}
-              >
-                {billingPeriod.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-              <TextField
-                select
-                required
-                className='w-full-six h-20 ml-6 border-greyplus'
-                margin="dense"
-                id="intervalcount"
-                label="Interval Count"
-                {...register("intervalcount")}
-                error={Boolean(errors?.intervalcount)}
-                helperText={errors?.intervalcount ? errors?.intervalcount.message : " "}
-              >
-                {intervalCount.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              {selectedPaymentType === 'recurring' && (
+                <div>
+                  <TextField
+                    select
+                    required
+                    className='w-full-six h-20 ml-6 border-greyplus'
+                    margin="dense"
+                    id="billingPeriod"
+                    label="Billing Period"
+                    onChange={(billingPeriod) => setSelectedBillingPeriod(billingPeriod.target.value)}
+                    // {...register("billingPeriod")}
+                    error={Boolean(errors?.billingPeriod)}
+                    helperText={errors?.billingPeriod ? errors?.billingPeriod.message : " "}
+                  >
+                    {billingPeriod.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    select
+                    required
+                    className='w-full-six h-20 ml-6 border-greyplus'
+                    margin="dense"
+                    id="intervalCount"
+                    label="Interval Count"
+                    onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
+                    // {...register("intervalCount")}
+                    error={Boolean(errors?.intervalCount)}
+                    helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
+                  >
+                    {intervalCount.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
+              )}
 
               {/* <TextField
                 select
                 required
                 className='w-full-six h-20 ml-6 border-greyplus'
                 margin="dense"
-                id="intervalcount"
+                id="intervalCount"
                 label="Interval Count"
                 value={selectedValue}
                 onChange={handleSelectChange}
-                // {...register("intervalcount")}
-                // error={Boolean(errors?.intervalcount)}
-                // helperText={errors?.intervalcount ? errors?.intervalcount.message : " "}
+                // {...register("intervalCount")}
+                // error={Boolean(errors?.intervalCount)}
+                // helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
               >
                 {intervalCount.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -202,11 +241,11 @@ export default function CreatePlansForm(
                   required
                   className='w-full-six h-20 ml-6 border-greyplus'
                   margin="dense"
-                  id="intervalcount"
+                  id="intervalCount"
                   label="Enter Custom Value for interval count"
-                  // {...register("intervalcount")}
-                  // error={Boolean(errors?.intervalcount)}
-                  // helperText={errors?.intervalcount ? errors?.intervalcount.message : " "}
+                  // {...register("intervalCount")}
+                  // error={Boolean(errors?.intervalCount)}
+                  // helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
                 />
               )} */}
               <DialogActions>
@@ -214,10 +253,25 @@ export default function CreatePlansForm(
                   className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
                   onClick={handleClose}>Cancel</Button>
                 <Button
-                  className='w-32 h-11 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
+                  className='w-28 h-11 ml-4 -mr-2 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
                   variant='contained'
                   type="submit"
-                  onClick={formHandleSubmit(onSubmit)}
+                  onClick={handleSubmit((data) => {
+                    console.log("planName 1st: ", data.planname)
+                    const formData = {
+                      planName: selectedPlanName,
+                      description: selectedDescription,
+                      price: parseFloat(selectedPrice),
+                      currency: selectedCurrency,
+                      paymentMode: selectedPaymentMode,
+                      paymentType: selectedPaymentType,
+                      billingPeriod: selectedBillingPeriod === '' ? null : selectedBillingPeriod,
+                      intervalCount: parseInt(selectedIntervalCount),
+                    };
+
+                    formHandleSubmit(onSubmit(formData));
+                  })}
+                // onClick={formHandleSubmit(onSubmit)}
                 >
                   Create
                 </Button>

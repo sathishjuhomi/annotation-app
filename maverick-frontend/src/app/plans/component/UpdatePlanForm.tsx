@@ -3,23 +3,10 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, MenuItem, Paper, TextField, Typography } from '@mui/material';
-import { CreatePlanProps, UpdatePlanProps } from '@/app/component/interfaces';
+import { UpdatePlanProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
 
 export default function UpdatePlanForm(
-    // {
-    //     loading,
-    //     showMessage,
-    //     setShowMessage,
-    //     message,
-    //     messageColor,
-    //     onSubmit,
-    //     formHandleSubmit,
-    //     register,
-    //     errors,
-    //     open,
-    //     setOpen,
-    // }: CreatePlanProps
     {
       loading,
       showMessage,
@@ -57,13 +44,13 @@ export default function UpdatePlanForm(
                                 required
                                 className='w-full-six h-20 ml-6 border-greyplus'
                                 margin="dense"
-                                id="planname"
+                                id="planName"
                                 label="Plan Name"
                                 type="text"
                                 defaultValue={planName}
-                                {...register("planname")}
-                                error={Boolean(errors?.planname)}
-                                helperText={errors?.planname ? errors?.planname.message : " "}
+                                {...register("planName")}
+                                error={Boolean(errors?.planName)}
+                                helperText={errors?.planName ? errors?.planName.message : " "}
                             />
                             <TextField
                                 required
@@ -82,7 +69,7 @@ export default function UpdatePlanForm(
                                     className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
                                     onClick={handleClose}>Cancel</Button>
                                 <Button
-                                    className='w-32 h-11 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
+                                    className='w-28 h-11 mr-1 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
                                     variant='contained'
                                     type="submit"
                                     onClick={formHandleSubmitPlan(onSubmitPlan)}

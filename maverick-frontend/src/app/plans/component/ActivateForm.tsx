@@ -52,7 +52,7 @@ export default function Activate(
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
-                            className="w-20 h-11 mr-1 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black"
+                            className="rounded-md w-20 h-11 mr-1 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black"
                         >
                             No
                         </Button>
@@ -62,7 +62,7 @@ export default function Activate(
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
-                            className="w-20 h-11 mr-10 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
+                            className="rounded-md w-20 h-11 mr-10 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
                             onClick={() => handleActivate(priceId)}
                         >
                             Yes

@@ -3,7 +3,7 @@ import * as yup from "yup";
 import * as Constants from "../utils/constant";
 
 export const createPlanSchema = yup.object().shape({
-    planname: yup
+    planName: yup
     .string()
     .required(Constants.PLANNAME_REQUIRED),
     description: yup
@@ -15,22 +15,20 @@ export const createPlanSchema = yup.object().shape({
     currency: yup
     .string()
     .required(Constants.CURRENCY_REQUIRED),
-    paymentmode: yup
+    paymentMode: yup
     .string()
     .required(Constants.PAYMENTMODE_REQUIRED),
-    paymenttype: yup
+    paymentType: yup
     .string()
     .required(Constants.PAYMENTTYPE_REQUIRED),
-    billingperiod: yup
-    .string()
-    .required(Constants.BILLINGPERIOD_REQUIRED),
-    intervalcount: yup
-    .number()
-    .required(Constants.INTERVALCOUNT_REQUIRED),
+    billingPeriod: yup
+    .string(),
+    intervalCount: yup
+    .number(),
 });
 
 export const updatePlanSchema = yup.object().shape({
-    planname: yup
+    planName: yup
     .string()
     .required(Constants.PLANNAME_REQUIRED),
     description: yup

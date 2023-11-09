@@ -31,7 +31,7 @@ const Plans = () => {
 // Create Plan
     const submit = async (data: CreatePlanFormData) => {
       setShowMessage(true);
-      setLoading(true);
+      // setLoading(true);
       const response = await createPlan(data)
         .then(async (res) => {
           const response = await res.json();
@@ -60,7 +60,7 @@ const Plans = () => {
     async function fetchData() {
       const { props } = await planList();
       try {
-        console.log("Plans: ", props.plans.id);
+        console.log("Plans: ", props.plans);
         setPlans(props.plans);
       } catch (error) {
         const data = props.plans.detail;
@@ -75,7 +75,7 @@ const Plans = () => {
 
   return (
     <Box className="flex">
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
       <Box component="main" className="mt-10"
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - 240px)` } }}>
         <PlansForm

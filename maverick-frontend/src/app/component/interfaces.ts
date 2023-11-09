@@ -152,14 +152,14 @@ export interface CreatePlanProps {
 }
 
 export interface CreatePlanFormData {
-  planname: string;
+  planName: string;
   description: string;
   price: number;
   currency: string;
-  paymentmode: string;
-  paymenttype: string;
-  billingperiod: string;
-  intervalcount: number;
+  paymentMode: string;
+  paymentType: string;
+  billingPeriod: string;
+  intervalCount: number;
 }
 
 export interface UpdatePlanProps {
@@ -179,7 +179,7 @@ export interface UpdatePlanProps {
 }
 
 export interface UpdatePlanFormData {
-  planname: string;
+  planName: string;
   description: string;
 }
 export interface PlansProps {
@@ -193,20 +193,6 @@ export interface PlansProps {
   register: any;
   errors: any;
   plans: any;
-}
-
-export interface ActivateDeactivateProps {
-  loading: boolean;
-  showMessage: boolean;
-  setShowMessage: any;
-  message: string;
-  messageColor: string;
-  handleActivateOrDeactivate: any;
-  open: boolean;
-  setOpen: any;
-  statusValue: string;
-  priceId: any;
-  planName: string
 }
 
 export interface ActivateProps {
