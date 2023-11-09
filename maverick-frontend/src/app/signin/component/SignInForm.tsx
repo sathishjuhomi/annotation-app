@@ -120,7 +120,7 @@ export default function Signin({
               </Grid>
               <Grid className="flex justify-end ms-88 mb-4">
                 <Button
-                  className="font-Inter font-medium text-greyplus normal-case mt-2 ml-72 -mr-4"
+                  className="font-Inter font-medium text-greyplus normal-case mt-2 ml-48 -mr-4"
                   onClick={navigateToForgotPassword}
                 >
                   Forgot Password

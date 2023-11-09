@@ -377,7 +377,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     teamId={id}
                 />
                 <Button
-                    className="flex flex-end ml-auto -mt-12 mb-4 mr-2 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
+                    className="flex flex-end ml-auto -mt-12 mb-4 mr-1 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
                     variant="outlined"
                     onClick={handleClickOpenInvite}
                 >
