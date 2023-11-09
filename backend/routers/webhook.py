@@ -3,6 +3,8 @@ import os
 import uuid
 from typing import Optional
 from backend.db_handler.user_handler import user_db_handler
+from backend.schemas.response.user import DetailSchema
+from backend.service.webhook import webhook_service
 from fastapi import FastAPI, Header, HTTPException, status, APIRouter, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -28,8 +30,13 @@ if settings.WEBHOOK_SECRET_KEY:
 else:
     raise ValueError("WEBHOOK_SECRET_KEY is not defined in the configuration.")
 
+checkout_session_completed = "checkout.session.completed"
+checkout_session_expired = "checkout.session.expired"
 
-@webhook_router.post('/webhook', response_class=JSONResponse)
+
+@webhook_router.post('/webhook',
+                     description="This API endpoint allow us to capture envents from stripe",
+                     response_class=JSONResponse)
 async def webhook(
     request: Request,
     db: Session = Depends(get_db)
@@ -50,58 +57,14 @@ async def webhook(
         raise HTTPException(status_code=400, detail=str(e))
 
     # Handle the event
-    if event['type'] == 'checkout.session.async_payment_failed':
+    if event['type'] == checkout_session_completed:
         session = event['data']['object']
-        print('session ', session)
-    elif event['type'] == 'checkout.session.async_payment_succeeded':
+        webhook_service.create_subscription(session, db=db)
+
+    elif event['type'] == checkout_session_expired:
         session = event['data']['object']
-        print('session checkout.session.async_payment_succeeded', session)
-    elif event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        print("inside checkout session")
-        if 'customer_details' in session:
-            email = session['customer_details'].get('email')
-        else:
-            email = None
+        print('checkout.session.expired', session)
 
-        subscription_id = session.get("subscription")
-
-        if subscription_id:
-            subscription = stripe.Subscription.retrieve(subscription_id)
-            if 'items' in subscription and len(subscription['items']['data']) > 0:
-                price_id = subscription['items']['data'][0]['price']['id']
-            else:
-                price_id = None
-
-            user = user_db_handler.load_by_column(
-                db=db,
-                column_name="email",
-                value=email
-            )
-            print('user81', user)
-            customer_details = session.get("customer_details")
-            address = customer_details.address
-            print("address ", address)
-            user_address = {"address": address}
-            # print('user_address', user_address)
-            user_db_handler.update(db=db, db_obj=user, input_object=user_address)
-
-            if email and subscription_id and price_id:
-                subscription_obj = {
-                    "id": uuid.uuid4(),
-                    "user_id": user.id,
-                    "subscription_id": subscription_id,
-                    "price_id": price_id,
-                    "payment_status": session.get("payment_status")
-                }
-                subscription_db_handler.create(db=db, input_object=subscription_obj)
-            else:
-                print("Missing required data (email, subscription_id, or price_id)")
-
-        print('session checkout.session.completed', session)
-
-    elif event['type'] == 'checkout.session.expired':
-        session = event['data']['object']
     # ... handle other event types
     else:
         return JSONResponse(content={'success': False, 'error': 'Unhandled event type'}, status_code=200)
