@@ -60,7 +60,7 @@ export default function CreatePlansForm(
     { value: 'week', label: 'Week' },
     { value: 'day', label: 'Day' },
   ];
-  // month
+
   const intervalCount = [
     { value: '1', label: '1' }, { value: '2', label: '2' },
     { value: '3', label: '3' }, { value: '4', label: '4' },
@@ -91,7 +91,6 @@ export default function CreatePlansForm(
                 label="Plan Name"
                 type="text"
                 onChange={(planName) => setSelectedPlanName(planName.target.value)}
-                // {...register("planName")}
                 error={Boolean(errors?.planName)}
                 helperText={errors?.planName ? errors?.planName.message : " "}
               />
@@ -103,7 +102,6 @@ export default function CreatePlansForm(
                 label="Description"
                 type="text"
                 onChange={(description) => setSelectedDescription(description.target.value)}
-                // {...register("description")}
                 error={Boolean(errors?.description)}
                 helperText={errors?.description ? errors?.description.message : " "}
               />
@@ -115,7 +113,6 @@ export default function CreatePlansForm(
                 label="Price"
                 type="text"
                 onChange={(price) => setSelectedPrice(price.target.value)}
-                // {...register("price")}
                 error={Boolean(errors?.price)}
                 helperText={errors?.price ? errors?.price.message : " "}
               />
@@ -128,7 +125,6 @@ export default function CreatePlansForm(
                 label="Currency"
                 type="text"
                 onChange={(currency) => setSelectedCurrency(currency.target.value)}
-                // {...register("currency")}
                 error={Boolean(errors?.currency)}
                 helperText={errors?.currency ? errors?.currency.message : " "}
               >
@@ -146,7 +142,6 @@ export default function CreatePlansForm(
                 id="paymentMode"
                 label="Payment Mode"
                 onChange={(paymentMode) => setSelectedPaymentMode(paymentMode.target.value)}
-                // {...register("paymentMode")}
                 error={Boolean(errors?.paymentMode)}
                 helperText={errors?.paymentMode ? errors?.paymentMode.message : " "}
               >
@@ -165,7 +160,6 @@ export default function CreatePlansForm(
                 onChange={handleSelectPaymentType}
                 id="paymentType"
                 label="Payment Type"
-                // {...register("paymentType")}
                 error={Boolean(errors?.paymentType)}
                 helperText={errors?.paymentType ? errors?.paymentType.message : " "}
               >
@@ -185,7 +179,6 @@ export default function CreatePlansForm(
                     id="billingPeriod"
                     label="Billing Period"
                     onChange={(billingPeriod) => setSelectedBillingPeriod(billingPeriod.target.value)}
-                    // {...register("billingPeriod")}
                     error={Boolean(errors?.billingPeriod)}
                     helperText={errors?.billingPeriod ? errors?.billingPeriod.message : " "}
                   >
@@ -203,7 +196,6 @@ export default function CreatePlansForm(
                     id="intervalCount"
                     label="Interval Count"
                     onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
-                    // {...register("intervalCount")}
                     error={Boolean(errors?.intervalCount)}
                     helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
                   >

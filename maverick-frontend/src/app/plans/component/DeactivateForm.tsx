@@ -25,8 +25,6 @@ export default function Deactivate(
         setOpen(false);
     };
 
-    console.log("Deactivate PriceId: ", priceId)
-
     return (
         <div>
             <Dialog className='rounded-md' open={open} onClose={handleClose}>

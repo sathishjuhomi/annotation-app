@@ -89,7 +89,6 @@ export default function PlansList({
         setShowMessageUpdate(true);
         setUpdatePlanLoading(true);
         const { props } = await updatePlan(selectedPlanId, data);
-        console.log("Props: ", props)
         try {
             const data = props.update.detail;
             if (props && props.update) {

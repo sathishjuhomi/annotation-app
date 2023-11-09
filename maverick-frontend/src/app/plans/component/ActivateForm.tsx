@@ -25,8 +25,6 @@ export default function Activate(
         setOpen(false);
     };
 
-    console.log('ActivateForm: ', priceId)
-
     return (
         <div>
             <Dialog className='rounded-md' open={open} onClose={handleClose}>
