@@ -4,9 +4,10 @@ from unittest.mock import MagicMock, patch
 
 from backend.db_handler.subscription_handler import subscription_db_handler
 from backend.models.user import Users
-from backend.service.stripe import StripeService
+from backend.service.subscription import SubscriptionService
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+
 
 class TestStripeService(unittest.TestCase):
     def setUp(self):
@@ -33,15 +34,18 @@ class TestStripeService(unittest.TestCase):
         mock_subscription_delete.return_value = None
 
         # Create an instance of the service
-        stripe_service = StripeService()
+        stripe_service = SubscriptionService()
 
         # Call the method
-        result = stripe_service.cancel_subscription(subscription_id, decoded_token, self.db)
+        result = stripe_service.cancel_subscription(
+            subscription_id, decoded_token, self.db)
 
         # Assert the expected behavior
         mock_subscription_delete.assert_called_once_with(subscription_id)
-        mock_update.assert_called_once_with(db=self.db, db_obj=mock_subscription_data, input_object={"is_active": False})
-        self.assertEqual(result, {"detail": "Your subscription has been successfully cancelled"})
+        mock_update.assert_called_once_with(
+            db=self.db, db_obj=mock_subscription_data, input_object={"is_active": False})
+        self.assertEqual(
+            result, {"detail": "Your subscription has been successfully cancelled"})
 
     @patch("backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
     def test_cancel_subscription_invalid_user(self, mock_load_by_column):
@@ -59,15 +63,18 @@ class TestStripeService(unittest.TestCase):
         mock_load_by_column.return_value = mock_subscription_data
 
         # Create an instance of the service
-        stripe_service = StripeService()
+        stripe_service = SubscriptionService()
 
         # Call the method and expect an HTTPException
         with self.assertRaises(HTTPException) as context:
-            stripe_service.cancel_subscription(subscription_id, decoded_token, self.db)
+            stripe_service.cancel_subscription(
+                subscription_id, decoded_token, self.db)
 
         # Assert the expected HTTPException behavior
-        self.assertEqual(context.exception.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(str(context.exception.detail), "Only subscriber can cancel the subscription")
+        self.assertEqual(context.exception.status_code,
+                         status.HTTP_403_FORBIDDEN)
+        self.assertEqual(str(context.exception.detail),
+                         "Only subscriber can cancel the subscription")
 
     @patch("backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
     def test_cancel_subscription_inactive_subscription(self, mock_load_by_column):
@@ -85,15 +92,19 @@ class TestStripeService(unittest.TestCase):
         mock_load_by_column.return_value = mock_subscription_data
 
         # Create an instance of the service
-        stripe_service = StripeService()
+        stripe_service = SubscriptionService()
 
         # Call the method and expect an HTTPException
         with self.assertRaises(HTTPException) as context:
-            stripe_service.cancel_subscription(subscription_id, decoded_token, self.db)
+            stripe_service.cancel_subscription(
+                subscription_id, decoded_token, self.db)
 
         # Assert the expected HTTPException behavior
-        self.assertEqual(context.exception.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(str(context.exception.detail), "Subscription is already Inactive")
+        self.assertEqual(context.exception.status_code,
+                         status.HTTP_403_FORBIDDEN)
+        self.assertEqual(str(context.exception.detail),
+                         "Subscription is already Inactive")
+
 
 if __name__ == "__main__":
     unittest.main()

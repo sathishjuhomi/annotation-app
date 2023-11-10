@@ -1,12 +1,7 @@
 from backend.schemas.request.plan import CheckoutSessionRequestSchema
-from backend.schemas.response.user import DetailSchema
-from backend.service.stripe import stripe_service
-from backend.utils.utils import decode_token
 
 from fastapi.security import HTTPBearer
-from fastapi import APIRouter, Depends, status
-from sqlalchemy.orm import Session
-from backend.models.database import get_db
+from fastapi import APIRouter, status
 import stripe
 from starlette.responses import RedirectResponse
 
@@ -49,19 +44,3 @@ def create_checkout_session(
     )
 
 
-@stripe_router.get("/cancel-subscription/{subscription_id}",
-                   description="This API endpoint allow subscriber to cancel the subscription",
-                   response_model=DetailSchema
-                   )
-def cancel_subscription(
-        subscription_id: str,
-        authorization: str = Depends(bearer),
-        db: Session = Depends(get_db)
-):
-    token = authorization.credentials
-    decoded_token = decode_token(token=token)
-    return stripe_service.cancel_subscription(
-        db=db,
-        subscription_id=subscription_id,
-        decoded_token=decoded_token
-    )

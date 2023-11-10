@@ -1,12 +1,11 @@
-import stripe
 from backend.db_handler.subscription_handler import subscription_db_handler
-from fastapi import HTTPException, status
+from backend.utils.utils import admin_role_validataion
 from sqlalchemy.orm import Session
-
+from fastapi import HTTPException, status
+import stripe
 from backend.config import get_settings
 
 settings = get_settings()
-
 # Check if STRIPE_SECRET_KEY is defined
 if settings.STRIPE_SECRET_KEY:
     stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -14,7 +13,7 @@ else:
     raise ValueError("STRIPE_SECRET_KEY is not defined in the configuration.")
 
 
-class StripeService():
+class SubscriptionService():
     @staticmethod
     def cancel_subscription(
             subscription_id: str,
@@ -50,5 +49,30 @@ class StripeService():
         )
         return {"detail": "Your subscription has been successfully cancelled"}
 
+    @staticmethod
+    def subscription_obj_to_dict(subscription):
+        return {
+            'email': subscription.user.email,
+            'plan_name': subscription.plan.plan_name,
+            'subscription_id': subscription.subscription_id,
+            'subscribed_on': subscription.t_create,
+            'payment_status': subscription.payment_status,
+            'is_active': subscription.is_active,
+        }
 
-stripe_service = StripeService()
+    def get_subscribers(
+            self,
+            decoded_token: dict,
+            db: Session
+    ):
+        admin_role_validataion(decoded_token=decoded_token, db=db)
+
+        responses = subscription_db_handler.load_all(db=db)
+
+        result = [self.subscription_obj_to_dict(
+            response) for response in responses]
+
+        return result
+
+
+subscription_service = SubscriptionService()

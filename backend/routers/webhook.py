@@ -19,7 +19,7 @@ from backend.db_handler.subscription_handler import subscription_db_handler
 from backend.models.database import get_db
 from sqlalchemy.orm import Session
 
-webhook_router = APIRouter(prefix="/api/v1", tags=["Plans"])
+webhook_router = APIRouter(prefix="/api/v1", tags=["Webhook"])
 
 
 settings = get_settings()
