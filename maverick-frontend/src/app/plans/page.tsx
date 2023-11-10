@@ -34,7 +34,7 @@ const Plans = () => {
         .then(async (res) => {
           const response = await res.json();
           if (res.status === 201) {
-            setMessage(Constants.USER_SUCCESS);
+            setMessage(Constants.PLAN_CREATED_SUCCESS);
             setMessageColor(Constants.SUCCESS);
             location.reload()
           } else {
@@ -58,7 +58,6 @@ const Plans = () => {
     async function fetchData() {
       const { props } = await planList();
       try {
-        console.log("Plans: ", props.plans);
         setPlans(props.plans);
       } catch (error) {
         const data = props.plans.detail;

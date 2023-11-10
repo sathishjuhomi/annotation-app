@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, MenuItem, Paper, TextField, Typography } from '@mui/material';
 import { CreatePlanProps } from '@/app/component/interfaces';
 import Snackbar from '@/app/component/Snackbar';
 import { useForm } from 'react-hook-form';
@@ -42,10 +42,13 @@ export default function CreatePlansForm(
     setSelectedPaymentType(event.target.value);
   }
 
-  const currencies = [
-    { value: "INR", label: "INR" },
-    { value: "USD", label: "USD" },
-    { value: "EUR", label: "EUR" }];
+  const currencyCodes = require('currency-codes').data;
+
+  const currencies = currencyCodes.map((currency: any) => ({
+    value: currency.code,
+    label: `${currency.code} - ${currency.currency}`
+  }));
+
   const paymentMode = [{ value: 'card', label: 'Card' }];
   const paymentType = [{ value: 'recurring', label: 'Recurring' }, { value: 'one_time', label: 'One Time' }];
   const billingPeriod = [
@@ -107,24 +110,25 @@ export default function CreatePlansForm(
                 error={Boolean(errors?.price)}
                 helperText={errors?.price ? errors?.price.message : " "}
               />
-              <TextField
-                required
-                select
+              <Autocomplete
                 className='w-full-six h-20 ml-6 border-greyplus'
-                margin="dense"
                 id="currency"
-                label="Currency"
-                type="text"
-                onChange={(currency) => setSelectedCurrency(currency.target.value)}
-                error={Boolean(errors?.currency)}
-                helperText={errors?.currency ? errors?.currency.message : " "}
-              >
-                {currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+                options={currencies}
+                getOptionLabel={(option:any) => option.label}
+                value={currencies.find((currency: any) => currency.value === selectedCurrency) || null}
+                onChange={(event, newValue:any) => {
+                  setSelectedCurrency(newValue ? newValue.value : null);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required
+                    margin='dense'
+                    label="Currency"
+                    variant="outlined"
+                  />
+                )}
+              />
               <TextField
                 select
                 required
@@ -192,34 +196,34 @@ export default function CreatePlansForm(
                   />
                 </div>
               )}
-                  <DialogActions>
-                    <Button
-                      className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
-                      onClick={handleClose}>Cancel</Button>
-                    <Button
-                      className='w-28 h-11 ml-4 -mr-2 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
-                      variant='contained'
-                      type="submit"
-                      onClick={handleSubmit((data) => {
-                        console.log("planName 1st: ", data.planname)
-                        const formData = {
-                          planName: selectedPlanName,
-                          description: selectedDescription,
-                          price: parseFloat(selectedPrice),
-                          currency: selectedCurrency,
-                          paymentMode: selectedPaymentMode,
-                          paymentType: selectedPaymentType,
-                          billingPeriod: selectedBillingPeriod === '' ? null : selectedBillingPeriod,
-                          intervalCount: parseInt(selectedIntervalCount),
-                        };
-                        console.log("Interval COunt: ", selectedIntervalCount)
-                        formHandleSubmit(onSubmit(formData));
-                      })}
-                    >
-                      Create
-                    </Button>
-                  </DialogActions>
-                </Grid>
+              <DialogActions>
+                <Button
+                  className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
+                  onClick={handleClose}>Cancel</Button>
+                <Button
+                  className='w-28 h-11 ml-4 -mr-2 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
+                  variant='contained'
+                  type="submit"
+                  onClick={handleSubmit((data) => {
+                    console.log("planName 1st: ", data.planname)
+                    const formData = {
+                      planName: selectedPlanName,
+                      description: selectedDescription,
+                      price: parseFloat(selectedPrice),
+                      currency: selectedCurrency,
+                      paymentMode: selectedPaymentMode,
+                      paymentType: selectedPaymentType,
+                      billingPeriod: selectedBillingPeriod === '' ? null : selectedBillingPeriod,
+                      intervalCount: parseInt(selectedIntervalCount),
+                    };
+                    console.log("Currency: ", selectedCurrency)
+                    formHandleSubmit(onSubmit(formData));
+                  })}
+                >
+                  Create
+                </Button>
+              </DialogActions>
+            </Grid>
           </form>
         </DialogContent>
       </Dialog>
