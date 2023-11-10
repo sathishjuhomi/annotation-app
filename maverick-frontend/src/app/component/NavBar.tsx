@@ -65,6 +65,7 @@ export default function ResponsiveDrawer(props: Props) {
         router.push("/teams");
     };
     const navigateToSignin = () => {
+        localStorage.setItem('navBar', 'Installation');
         localStorage.setItem('access_token', "");
         router.push("/signin");
     };
