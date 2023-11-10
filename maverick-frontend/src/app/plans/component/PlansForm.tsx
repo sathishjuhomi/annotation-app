@@ -142,7 +142,6 @@ export default function PlansList({
     }
     const handleDeactivatePlan = async () => {
         setShowMessageActiveDeactive(true);
-        // setDeactiveLoading(true);
         const { props } = await DeactivatePlan(selectedPriceId);
         try {
             const data = props.deactivate.detail
@@ -178,7 +177,6 @@ export default function PlansList({
 
     const handleActivatePlan = async () => {
         setShowMessageActiveDeactive(true);
-        // setActiveLoading(true)
         const { props } = await ActivatePlan(selectedPriceId);
         try {
             const data = props.activate.detail
@@ -306,11 +304,6 @@ export default function PlansList({
                                                     defaultChecked
                                                     onChange={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
                                                 />
-                                                {/* <Chip
-                                                    className="w-20 h-8 text-left text-black hover:text-green hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
-                                                    label="Active"
-                                                    onClick={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
-                                                /> */}
                                                 <DeactivateForm
                                                     loading={deactiveLoading}
                                                     showMessage={showMessageActiveDeactive}
@@ -328,11 +321,6 @@ export default function PlansList({
                                                 <GreenSwitch {...label}
                                                     onChange={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
                                                 />
-                                                {/* <Chip
-                                                    className="w-20 h-8 text-left text-black hover:text-red hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
-                                                    label="InActive"
-                                                    onClick={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
-                                                /> */}
                                                 <ActivateForm
                                                     loading={activeLoading}
                                                     showMessage={showMessageActiveDeactive}
@@ -348,14 +336,6 @@ export default function PlansList({
                                             </div>
                                         }
                                     </TableCell>
-                                    {/* <TableCell>
-                                        <Button
-                                            className='text-greyplus hover:text-green hover:bg-white'
-                                            onClick={() => handleClickOpenUpdatePlan(plan.id, plan.plan.plan_name, plan.plan.description)}
-                                        >
-                                            <EditIcon />
-                                        </Button>
-                                    </TableCell> */}
                                 </TableRow>
                             )) : null}
                         </TableBody>

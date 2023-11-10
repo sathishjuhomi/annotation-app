@@ -37,26 +37,10 @@ export default function CreatePlansForm(
   const [selectedPaymentType, setSelectedPaymentType] = React.useState('')
   const [selectedBillingPeriod, setSelectedBillingPeriod] = React.useState('')
   const [selectedIntervalCount, setSelectedIntervalCount] = React.useState('')
-  const [selectedValue, setSelectedValue] = React.useState('');
-
-  //selectedPaymentType === 'Recurring'? '' : null
 
   const handleSelectPaymentType = (event: any) => {
     setSelectedPaymentType(event.target.value);
   }
-
-  const [inputError, setInputError] = React.useState(false);
-
-  const handleSelectIntervalCount = (event:any) => {
-    const inputValue = parseInt(event.target.value);
-    if (!isNaN(inputValue) && inputValue > 0) {
-      setSelectedIntervalCount(event.target.value);
-      setInputError(false); 
-    } else {
-      setSelectedIntervalCount('');
-      setInputError(true); 
-    }
-  };
 
   const currencies = [
     { value: "INR", label: "INR" },
@@ -202,14 +186,12 @@ export default function CreatePlansForm(
                     id="intervalCount"
                     label="Interval Count"
                     type="number"
-                    onChange={handleSelectIntervalCount}
-                    // onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
+                    onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
                     error={Boolean(errors?.price)}
                     helperText={errors?.price ? errors?.price.message : " "}
                   />
                 </div>
               )}
-              {/* !isNaN(inputValue) && inputValue >= 0 */}
                   <DialogActions>
                     <Button
                       className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
