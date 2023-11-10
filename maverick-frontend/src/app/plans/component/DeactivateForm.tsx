@@ -33,11 +33,11 @@ export default function Deactivate(
                         <DialogContentText className='ml-3 mr-10 mt-1 text-2xl text-black font-Inter font-bold leading-8'>
                             Are you sure you want to 
                         </DialogContentText>
-                        <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter font-bold leading-8'>
-                            Dectivate the plan <span className="capitalize text-2xl text-black font-Inter leading-8 font-normal"> {planName}</span>
+                        <DialogContentText className='ml-3 mr-3 lowercase text-2xl text-black font-Inter font-bold leading-8'>
+                            dectivate the {planName} 
                         </DialogContentText>
                         <DialogContentText className='ml-4 mr-42 mt-2 text-greyplus text-sm font-Inter font-normal leading-6'>
-                            It will impact all the status of the plan
+                            It will impact the status of the plan
                         </DialogContentText>
                     </Box>
                 </DialogContent>
@@ -50,7 +50,7 @@ export default function Deactivate(
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
-                            className="rounded-md w-20 h-11 mr-1 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black"
+                            className="rounded-md w-20 h-11 mr-2 mb-10 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack hover:border-black"
                         >
                             No
                         </Button>

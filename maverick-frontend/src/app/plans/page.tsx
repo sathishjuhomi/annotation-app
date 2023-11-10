@@ -31,7 +31,7 @@ const Plans = () => {
 // Create Plan
     const submit = async (data: CreatePlanFormData) => {
       setShowMessage(true);
-      setLoading(true);
+      // setLoading(true);
       const response = await createPlan(data)
         .then(async (res) => {
           const response = await res.json();

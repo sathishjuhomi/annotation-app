@@ -24,6 +24,8 @@ import { ActivatePlan, DeactivatePlan, updatePlan } from '../api/route';
 import * as Constants from "../../utils/constant";
 import DeactivateForm from './DeactivateForm';
 import ActivateForm from './ActivateForm';
+import { Switch } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
 
 export default function PlansList({
     loading,
@@ -54,7 +56,24 @@ export default function PlansList({
     const [activeLoading, setActiveLoading] = React.useState(false);
     const [deactiveLoading, setDeactiveLoading] = React.useState(false);
     const [showMessageActiveDeactive, setShowMessageActiveDeactive] = React.useState(false);
+    const label = {
+        inputProps: {
+            type: 'checkbox',
+            checked: true,
+        }
+    };
 
+    const GreenSwitch = styled(Switch)(({ theme }) => ({
+        '& .MuiSwitch-switchBase.Mui-checked': {
+            color: '#0DBE5E',
+            '&:hover': {
+                backgroundColor: alpha("#15d66e", theme.palette.action.hoverOpacity),
+            },
+        },
+        '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+            backgroundColor: "#15d66e",
+        },
+    }));
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -235,7 +254,8 @@ export default function PlansList({
                                 <TableCell className="text-center font-Inter font-bold leading-6 text-sm">Billing Period</TableCell>
                                 <TableCell className="text-center font-Inter font-bold leading-6 text-sm">Interval Count</TableCell>
                                 <TableCell className="text-center font-Inter font-bold leading-6 text-sm">Status</TableCell>
-                                <TableCell> </TableCell>
+                                <TableCell align='right'> </TableCell>
+                                <TableCell align='left'> </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -248,7 +268,7 @@ export default function PlansList({
                                         {plan.plan.plan_name}
                                     </TableCell>
                                     <TableCell className="text-left normal-case font-Inter font-normal leading-6 text-sm">
-                                        {plan.plan.description}
+                                        {plan.plan.description === null ? '-' : plan.plan.description}
                                     </TableCell>
                                     <TableCell className="text-right font-Inter font-normal leading-6 text-sm">
                                         {plan.price.price}
@@ -260,22 +280,37 @@ export default function PlansList({
                                         {plan.price.payment_mode}
                                     </TableCell>
                                     <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
-                                        {plan.price.payment_type === 'one_time'? "One Time": plan.price.payment_type}
+                                        {plan.price.payment_type === 'one_time' ? "One Time" : plan.price.payment_type}
                                     </TableCell>
                                     <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
-                                        {plan.price.billing_period === null? '-': plan.price.billing_period}
+                                        {plan.price.billing_period === null ? '-' : plan.price.billing_period}
                                     </TableCell>
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
-                                        {plan.price.interval_count === null? '-': plan.price.interval_count}
+                                        {plan.price.interval_count === null ? '-' : plan.price.interval_count}
                                     </TableCell>
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
+                                        {plan.is_active ? "Active" : "Inactive"}
+                                    </TableCell>
+                                    <TableCell align='left'>
+                                        <Button
+                                            className='text-greyplus hover:text-green hover:bg-white'
+                                            onClick={() => handleClickOpenUpdatePlan(plan.id, plan.plan.plan_name, plan.plan.description)}
+                                        >
+                                            <EditIcon />
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell align='left'>
                                         {plan.is_active ?
                                             <div>
-                                                <Chip
+                                                <GreenSwitch {...label}
+                                                    defaultChecked
+                                                    onChange={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
+                                                />
+                                                {/* <Chip
                                                     className="w-20 h-8 text-left text-black hover:text-green hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
                                                     label="Active"
                                                     onClick={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
-                                                />
+                                                /> */}
                                                 <DeactivateForm
                                                     loading={deactiveLoading}
                                                     showMessage={showMessageActiveDeactive}
@@ -290,11 +325,14 @@ export default function PlansList({
                                                 />
                                             </div>
                                             : <div>
-                                                <Chip
+                                                <GreenSwitch {...label}
+                                                    onChange={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
+                                                />
+                                                {/* <Chip
                                                     className="w-20 h-8 text-left text-black hover:text-red hover:bg-white capitalize font-Inter font-normal leading-6 text-sm"
                                                     label="InActive"
                                                     onClick={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
-                                                />
+                                                /> */}
                                                 <ActivateForm
                                                     loading={activeLoading}
                                                     showMessage={showMessageActiveDeactive}
@@ -310,14 +348,14 @@ export default function PlansList({
                                             </div>
                                         }
                                     </TableCell>
-                                    <TableCell>
+                                    {/* <TableCell>
                                         <Button
                                             className='text-greyplus hover:text-green hover:bg-white'
                                             onClick={() => handleClickOpenUpdatePlan(plan.id, plan.plan.plan_name, plan.plan.description)}
                                         >
                                             <EditIcon />
                                         </Button>
-                                    </TableCell>
+                                    </TableCell> */}
                                 </TableRow>
                             )) : null}
                         </TableBody>

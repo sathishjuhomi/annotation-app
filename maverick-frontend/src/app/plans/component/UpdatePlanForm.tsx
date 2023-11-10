@@ -53,7 +53,6 @@ export default function UpdatePlanForm(
                                 helperText={errors?.planName ? errors?.planName.message : " "}
                             />
                             <TextField
-                                required
                                 className='w-full-six h-20 ml-6 border-greyplus'
                                 margin="dense"
                                 id="description"

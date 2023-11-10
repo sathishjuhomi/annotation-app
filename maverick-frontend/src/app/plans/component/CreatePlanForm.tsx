@@ -44,8 +44,18 @@ export default function CreatePlansForm(
   const handleSelectPaymentType = (event: any) => {
     setSelectedPaymentType(event.target.value);
   }
-  const handleSelectChange = (event: any) => {
-    setSelectedValue(event.target.value);
+
+  const [inputError, setInputError] = React.useState(false);
+
+  const handleSelectIntervalCount = (event:any) => {
+    const inputValue = parseInt(event.target.value);
+    if (!isNaN(inputValue) && inputValue > 0) {
+      setSelectedIntervalCount(event.target.value);
+      setInputError(false); 
+    } else {
+      setSelectedIntervalCount('');
+      setInputError(true); 
+    }
   };
 
   const currencies = [
@@ -78,7 +88,7 @@ export default function CreatePlansForm(
           You can create your new plan here
         </DialogContentText>
         <DialogContent>
-          <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
+          <form onSubmit={formHandleSubmit(onSubmit)}>
             <Grid className='mt-2'>
               <TextField
                 autoFocus
@@ -93,7 +103,6 @@ export default function CreatePlansForm(
                 helperText={errors?.planName ? errors?.planName.message : " "}
               />
               <TextField
-                required
                 className='w-full-six h-20 ml-6 border-greyplus'
                 margin="dense"
                 id="description"
@@ -109,7 +118,7 @@ export default function CreatePlansForm(
                 margin="dense"
                 id="price"
                 label="Price"
-                type="text"
+                type="number"
                 onChange={(price) => setSelectedPrice(price.target.value)}
                 error={Boolean(errors?.price)}
                 helperText={errors?.price ? errors?.price.message : " "}
@@ -187,65 +196,48 @@ export default function CreatePlansForm(
                     ))}
                   </TextField>
                   <TextField
-                    select
                     required
                     className='w-full-six h-20 ml-6 border-greyplus'
                     margin="dense"
                     id="intervalCount"
                     label="Interval Count"
-                    value={selectedValue}
-                    onChange={handleSelectChange}
-                    error={Boolean(errors?.intervalCount)}
-                    helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
-                  >
-                    {intervalCount.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  {selectedValue === 'custom' && (
-                    <TextField
-                      required
-                      className='w-full-six h-20 ml-6 border-greyplus'
-                      margin="dense"
-                      id="intervalCount"
-                      label="Enter Custom Value for interval count only in numbers"
-                      onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
-                      error={Boolean(errors?.intervalCount)}
-                      helperText={errors?.intervalCount ? errors?.intervalCount.message : " "}
-                    />
-                  )}
+                    type="number"
+                    onChange={handleSelectIntervalCount}
+                    // onChange={(intervalCount) => setSelectedIntervalCount(intervalCount.target.value)}
+                    error={Boolean(errors?.price)}
+                    helperText={errors?.price ? errors?.price.message : " "}
+                  />
                 </div>
               )}
-              <DialogActions>
-                <Button
-                  className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
-                  onClick={handleClose}>Cancel</Button>
-                <Button
-                  className='w-28 h-11 ml-4 -mr-2 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
-                  variant='contained'
-                  type="submit"
-                  onClick={handleSubmit((data) => {
-                    console.log("planName 1st: ", data.planname)
-                    const formData = {
-                      planName: selectedPlanName,
-                      description: selectedDescription,
-                      price: parseFloat(selectedPrice),
-                      currency: selectedCurrency,
-                      paymentMode: selectedPaymentMode,
-                      paymentType: selectedPaymentType,
-                      billingPeriod: selectedBillingPeriod === '' ? null : selectedBillingPeriod,
-                      intervalCount: parseInt(selectedIntervalCount),
-                    };
-                    console.log("Interval COunt: ", selectedIntervalCount)
-                    formHandleSubmit(onSubmit(formData));
-                  })}
-                >
-                  Create
-                </Button>
-              </DialogActions>
-            </Grid>
+              {/* !isNaN(inputValue) && inputValue >= 0 */}
+                  <DialogActions>
+                    <Button
+                      className="w-28 h-11 text-white font-Inter font-bold leading-6 normal-case bg-git hover:bg-lightblack"
+                      onClick={handleClose}>Cancel</Button>
+                    <Button
+                      className='w-28 h-11 ml-4 -mr-2 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen'
+                      variant='contained'
+                      type="submit"
+                      onClick={handleSubmit((data) => {
+                        console.log("planName 1st: ", data.planname)
+                        const formData = {
+                          planName: selectedPlanName,
+                          description: selectedDescription,
+                          price: parseFloat(selectedPrice),
+                          currency: selectedCurrency,
+                          paymentMode: selectedPaymentMode,
+                          paymentType: selectedPaymentType,
+                          billingPeriod: selectedBillingPeriod === '' ? null : selectedBillingPeriod,
+                          intervalCount: parseInt(selectedIntervalCount),
+                        };
+                        console.log("Interval COunt: ", selectedIntervalCount)
+                        formHandleSubmit(onSubmit(formData));
+                      })}
+                    >
+                      Create
+                    </Button>
+                  </DialogActions>
+                </Grid>
           </form>
         </DialogContent>
       </Dialog>
@@ -259,7 +251,7 @@ export default function CreatePlansForm(
       ) : null}
       {loading ? (
         <Box
-          className="text-greyplus mt-2 flex justify-center items-center"
+          className="text-greyplus m-10 flex justify-center items-center"
         >
           <CircularProgress color="inherit" />
         </Box>

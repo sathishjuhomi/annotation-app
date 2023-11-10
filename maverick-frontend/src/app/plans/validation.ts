@@ -7,8 +7,7 @@ export const createPlanSchema = yup.object().shape({
     .string()
     .required(Constants.PLANNAME_REQUIRED),
     description: yup
-    .string()
-    .required(Constants.DESCRIPTION_REQUIRED),
+    .string(),
     price: yup
     .number()
     .required(Constants.PRICE_REQUIRED),
@@ -32,6 +31,5 @@ export const updatePlanSchema = yup.object().shape({
     .string()
     .required(Constants.PLANNAME_REQUIRED),
     description: yup
-    .string()
-    .required(Constants.DESCRIPTION_REQUIRED),
+    .string(),
 });
