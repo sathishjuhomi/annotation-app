@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class UpdatePlanSchema(BaseModel):
     plan_name: str
-    description: str
+    description: str | None
 
 
 class UpdatePriceSchema(BaseModel):

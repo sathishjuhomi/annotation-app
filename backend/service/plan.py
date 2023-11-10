@@ -45,11 +45,15 @@ class PlanService():
     @staticmethod
     def create_product(plan_data: dict) -> dict:
         try:
-            product = stripe.Product.create(
-                id=plan_data["id"],
-                name=plan_data["plan_name"],
-                description=plan_data["description"]
-            )
+            product_params = {
+                "id": plan_data["id"],
+                "name": plan_data["plan_name"]
+            }
+
+            if plan_data["description"] is not None and plan_data["description"] != "":
+                product_params["description"] = plan_data["description"]
+
+            product = stripe.Product.create(**product_params)
             return product
         except Exception as e:
             raise HTTPException(
