@@ -41,7 +41,7 @@ def create_plan(
 
 
 @plan_router.get(
-    "/plans",
+    "/plans/{get-all-plans}",
     description="This API will get all the Plans",
     response_model=List[PlanResponseSchema],
     responses={
@@ -54,13 +54,14 @@ def create_plan(
     }
 )
 def get_plans(
+    get_all_plans: bool,
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer)
 ) -> Any:
     token = authorization.credentials
     decoded_token = decode_token(token=token)
     admin_role_validataion(decoded_token=decoded_token, db=db)
-    return plan_service.get_all_plans(db)
+    return plan_service.get_all_plans(plans=get_all_plans, db=db)
 
 
 @plan_router.patch(

@@ -115,12 +115,22 @@ class PlanService():
                 detail=f"Failed to create price plan: {str(e)}"
             )
 
-    def get_all_plans(self, db: Session):
-        response = plan_db_handler.load_all_by_column(
-            db=db,
-            column_name="is_deleted",
-            value=False
-        )
+    def get_all_plans(self, plans, db: Session):
+        filters = {
+            'is_active': True,
+            'is_deleted': False,
+        }
+
+        if not plans:
+            response = plan_db_handler.load_all_by_columns(
+                db=db, filters=filters)
+        else:
+            response = plan_db_handler.load_all_by_column(
+                db=db,
+                column_name="is_deleted",
+                value=False
+            )
+
         db_responses = [row.__dict__ for row in response]
         return self.map_db_responses_to_schemas(db_responses=db_responses)
 
