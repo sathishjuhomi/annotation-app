@@ -253,13 +253,13 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     return (
         <Box className="flex flex-col">
-            <Paper className="ml-4 w-full-tt shadow-none">
-                <Box className=" rounded-md flex w-full-tt h-12 mt-2 bg-beige">
-                    <Typography className="pt-3 ml-8 font-Inter font-normal leading-6 text-sm text-black">
+            <Paper className="ml-6 w-full-tt shadow-none">
+                <Box className=" rounded-md flex w-full-tt h-16 mt-2 bg-beige">
+                    <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
                         Your in FREE Plan, for more feature
                     </Typography>
                     <Button
-                        className="mt-2 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
+                        className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
                     >
                         Upgrade Now
                     </Button>
@@ -268,6 +268,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     <TableBody>
                         {teamMembers.map((teamMember) => (
                             <TableRow
+                                className="h-16"
                                 key={teamMember['team_member_id']}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
@@ -288,7 +289,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     <Typography className="pt-1">|</Typography>
                                     <Button
                                         size="small"
-                                        className="ml-2 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
+                                        className="ml-2 mr-1 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
                                         onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
                                     >
                                         Delete
@@ -383,7 +384,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     teamId={id}
                 />
                 <Button
-                    className="flex flex-end ml-auto -mt-12 mb-4 mr-8 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
+                    className="flex flex-end ml-auto -mt-12 mb-4 mr-6 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
                     variant="outlined"
                     onClick={handleClickOpenInvite}
                 >
