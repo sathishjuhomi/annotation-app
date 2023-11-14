@@ -253,7 +253,17 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     return (
         <Box className="flex flex-col">
-            <Paper className="w-full-tt shadow-none">
+            <Paper className="ml-4 w-full-tt shadow-none">
+                <Box className=" rounded-md flex w-full-tt h-12 mt-2 bg-beige">
+                    <Typography className="pt-3 ml-8 font-Inter font-normal leading-6 text-sm text-black">
+                        Your in FREE Plan, for more feature
+                    </Typography>
+                    <Button
+                        className="mt-2 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
+                    >
+                        Upgrade Now
+                    </Button>
+                </Box>
                 <Table aria-label="simple table">
                     <TableBody>
                         {teamMembers.map((teamMember) => (
@@ -261,28 +271,24 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                 key={teamMember['team_member_id']}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell className="font-Inter font-normal leading-6 text-smtext-black" component="th" scope="row">
+                                <TableCell className="pl-8 font-Inter font-normal leading-6 text-sm text-black" component="th" scope="row">
                                     {teamMember['email']}
                                 </TableCell>
                                 <TableCell className="font-Inter font-normal leading-6 text-sm text-greyplus" align="right">
                                     {getTeamMemberRoles(teamMember['roles'])}
                                 </TableCell>
-                                <TableCell className="text-base" align="right">
+                                <TableCell className="flex">
                                     <Button
                                         size="small"
-                                        className="-mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                        className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
                                         onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
                                     >
                                         Edit
                                     </Button>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography className="-mr-4">|</Typography>
-                                </TableCell>
-                                <TableCell>
+                                    <Typography className="pt-1">|</Typography>
                                     <Button
                                         size="small"
-                                        className="-ml-10 -mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
+                                        className="ml-2 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
                                         onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
                                     >
                                         Delete
@@ -305,7 +311,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                         </div>
                         <Box className='ml-20 -mt-24'>
                             <DialogContentText className='ml-3 mr-10 mt-1 text-2xl text-black font-Inter font-bold leading-8'>
-                                Are you sure you want to delete 
+                                Are you sure you want to delete
                             </DialogContentText>
                             <DialogContentText className='ml-3 mr-3 text-2xl text-black font-Inter leading-8'>
                                 <b>the person</b> ({selectedTeamMemberEmailId})
@@ -355,7 +361,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
             </Paper>
             <Box className='mt-5'>
                 <Button
-                    className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 mr-36 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
+                    className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 w-36 h-11 mr-44 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
                     size="small"
                     onClick={handleClickOpen}
                 >
@@ -377,7 +383,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     teamId={id}
                 />
                 <Button
-                    className="flex flex-end ml-auto -mt-12 mb-4 mr-1 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
+                    className="flex flex-end ml-auto -mt-12 mb-4 mr-8 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
                     variant="outlined"
                     onClick={handleClickOpenInvite}
                 >
