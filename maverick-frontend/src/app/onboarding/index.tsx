@@ -78,17 +78,17 @@ export default function Onboarding() {
             not on the initial setup and repetitive tasks
           </Typography>
         </Box>
-        <div className="ml-40 -mb-10 ">
+        <div className="ml-64 -mb-10 ">
           <Image
             src={imageOne}
             alt='ImageOne'
-            className="ml-11 w-image1 max-h-80 rounded-2xl"
+            className="ml-16 w-image1 max-h-80 rounded-2xl"
             quality={100}
             placeholder='blur'
           />
         </div>
       </Box>
-      <div className="flex justify-end flex-row mt-12 -mb-96 mr-5">
+      <div className="flex justify-end flex-row mt-12 -mb-96 mr-7">
         <Image
           src={imageTwo}
           alt='ImageTwo'
