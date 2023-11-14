@@ -112,7 +112,7 @@ export default function Signin({
                   Don't have an account?
                 </Typography>
                 <Button
-                  className="text-button font-Inter font-semibold normal-case mt-0 -ml-1 text-sm leading-7 mr-56 hover:bg-white"
+                  className="text-button font-Inter font-semibold normal-case mt-0 -ml-1 text-sm leading-7 mr-60 hover:bg-white"
                   onClick={navigateToSignUp}
                 >
                   Register here
@@ -120,10 +120,10 @@ export default function Signin({
               </Grid>
               <Grid className="flex justify-end ms-88 mb-4">
                 <Button
-                  className="font-Inter font-medium text-greyplus normal-case mt-2 ml-48 -mr-4"
+                  className="font-Inter font-medium text-greyplus normal-case mt-2 ml-64"
                   onClick={navigateToForgotPassword}
                 >
-                  Forgot Password
+                  Forgot Password ?
                 </Button>
               </Grid>
             </Box>

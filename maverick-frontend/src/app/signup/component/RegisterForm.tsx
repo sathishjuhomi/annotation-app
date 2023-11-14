@@ -102,7 +102,7 @@ export default function SignUp({
                   Already have an account?
                 </Typography>
                 <Button
-                  className="text-button font-Inter normal-case font-medium mt-2 -ml-2 text-sm leading-7"
+                  className="text-button font-Inter normal-case font-semibold mt-2 -ml-2 text-sm leading-7"
                   onClick={navigateToSignIn}
                 >
                   Login
