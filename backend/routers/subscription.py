@@ -14,7 +14,7 @@ subscription_router = APIRouter(prefix="/api/v1", tags=["Subscription"])
 bearer = HTTPBearer()
 
 
-@subscription_router.post('/subscribed-users',
+@subscription_router.get('/subscribed-users',
                           description="This API endpoint displays subscribers in admin dashboard",
                           response_model=List[SubscriptionResponseSchema] | DetailSchema
                           )
@@ -27,7 +27,7 @@ def get_all_subscribed_users(
     return subscription_service.get_subscribers(decoded_token, db)
 
 
-@subscription_router.get("/cancel-subscription/{subscription_id}",
+@subscription_router.patch("/cancel-subscription/{subscription_id}",
                          description="This API endpoint allow subscriber to cancel the subscription",
                          response_model=DetailSchema
                          )

@@ -1,4 +1,5 @@
 from typing import Any, List
+from backend.utils.utils import admin_role_validataion, decode_token
 from pydantic import UUID4
 from backend.schemas.request.plan import PlanRequestSchema, PriceStateRequestSchema, UpdatePlanSchema, UpdatePriceSchema
 from backend.schemas.response.plan import PlanResponseSchema
@@ -11,7 +12,6 @@ from backend.models.database import get_db
 
 
 plan_router = APIRouter(prefix="/api/v1", tags=["Plans"])
-
 
 bearer = HTTPBearer()
 
@@ -30,12 +30,13 @@ bearer = HTTPBearer()
 def create_plan(
     request_payload: PlanRequestSchema,
     db: Session = Depends(get_db),
-    # authorization: str = Depends(bearer)
+    authorization: str = Depends(bearer)
 ) -> Any:
     # print('inside plan')
-    # token = authorization.credentials
+    token = authorization.credentials
     # print('token', token)
-    # _ = decode_token(token=token)
+    decoded_token = decode_token(token=token)
+    admin_role_validataion(decoded_token=decoded_token, db=db)
     return plan_service.create_plan(request_payload=request_payload, db=db)
 
 
@@ -53,8 +54,12 @@ def create_plan(
     }
 )
 def get_plans(
-    db: Session = Depends(get_db)
-):
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer)
+) -> Any:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
+    admin_role_validataion(decoded_token=decoded_token, db=db)
     return plan_service.get_all_plans(db)
 
 
@@ -74,8 +79,12 @@ def get_plans(
 def update_plan(
     id: UUID4,
     request_payload: UpdatePlanSchema,
-    db: Session = Depends(get_db)
-):
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer)
+) -> Any:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
+    admin_role_validataion(decoded_token=decoded_token, db=db)
     return plan_service.update_plan(id, request_payload, db)
 
 
@@ -94,8 +103,12 @@ def update_plan(
 )
 def deactivate_plan(
     price_id: str,
-    db: Session = Depends(get_db)
-):
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer)
+) -> Any:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
+    admin_role_validataion(decoded_token=decoded_token, db=db)
     return plan_service.update_price_state(active="False", price_id=price_id, db=db)
 
 
@@ -114,6 +127,10 @@ def deactivate_plan(
 )
 def activate_plan(
     price_id: str,
-    db: Session = Depends(get_db)
-):
+    db: Session = Depends(get_db),
+    authorization: str = Depends(bearer)
+) -> Any:
+    token = authorization.credentials
+    decoded_token = decode_token(token=token)
+    admin_role_validataion(decoded_token=decoded_token, db=db)
     return plan_service.update_price_state(active="True", price_id=price_id, db=db)
