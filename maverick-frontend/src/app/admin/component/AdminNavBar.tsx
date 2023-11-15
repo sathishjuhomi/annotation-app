@@ -56,17 +56,17 @@ export default function ResponsiveDrawer(props: Props) {
     }, []);
 
     const router = useRouter();
-    const navigateToInstallation = () => {
-        localStorage.setItem('navBar', 'Installation')
-        router.push("/docs/installation");
+    const navigateToSubscription = () => {
+        // localStorage.setItem('navBar', 'Installation')
+        router.push("/admin/subscription");
     };
     const navigateToPlans = () => {
-        localStorage.setItem('navBar', 'Plans')
+        // localStorage.setItem('navBar', 'Plans')
         router.push("/admin/plans");
     };
     const navigateToSignin = () => {
-        localStorage.setItem('navBar', 'Installation');
-        localStorage.setItem('access_token', "");
+        // localStorage.setItem('navBar', 'Installation');
+        // localStorage.setItem('access_token', "");
         router.push("/signin");
     };
 
@@ -151,12 +151,12 @@ export default function ResponsiveDrawer(props: Props) {
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         <ListItemButton
-                            className={navBar === "Installation" || navBar === "null" ?
-                                "pl-4 bg-lightgrey"
-                                :
-                                "pl-4"
-                            }
-                            // onClick={navigateToInstallation}
+                            // className={navBar === "Installation" || navBar === "null" ?
+                            //     "pl-4 bg-lightgrey"
+                            //     :
+                            //     "pl-4"
+                            // }
+                            onClick={navigateToSubscription}
                         >
                             <Image
                                 src={Docs}
@@ -165,16 +165,16 @@ export default function ResponsiveDrawer(props: Props) {
                                 quality={100}
                                 placeholder='blur'
                             />
-                            <ListItemText className='ml-2 text-greyplus font-Inter font-normal text-sm leading-6'>Subscribtion</ListItemText>
+                            <ListItemText className='ml-2 text-greyplus font-Inter font-normal text-sm leading-6'>Subscription</ListItemText>
                         </ListItemButton>
                     </List>
                 </Collapse>
                 <ListItemButton
-                    className={navBar === "Teams" ?
-                        "pl-4 bg-lightgrey"
-                        :
-                        "pl-4"
-                    }
+                    // className={navBar === "Teams" ?
+                    //     "pl-4 bg-lightgrey"
+                    //     :
+                    //     "pl-4"
+                    // }
                     onClick={navigateToPlans}>
                     <Image
                         src={Teams}
