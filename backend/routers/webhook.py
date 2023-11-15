@@ -1,21 +1,9 @@
-import json
-import os
-import uuid
-from typing import Optional
-from backend.db_handler.user_handler import user_db_handler
-from backend.schemas.response.user import DetailSchema
 from backend.service.webhook import webhook_service
-from fastapi import FastAPI, Header, HTTPException, status, APIRouter, Depends
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi import HTTPException, APIRouter, Depends
 from starlette.responses import JSONResponse
 from starlette.requests import Request
-from starlette.responses import RedirectResponse
-from pydantic import BaseModel
 import stripe
 from backend.config import get_settings
-from backend.db_handler.subscription_handler import subscription_db_handler
 from backend.models.database import get_db
 from sqlalchemy.orm import Session
 

@@ -24,8 +24,9 @@ class WebhookService():
 
         email = session['customer_details'].get('email')
         subscription_id = session.get("subscription")
-        subscription = stripe.Subscription.retrieve(subscription_id)
-        price_id = subscription['items']['data'][0]['price']['id']
+        metadata = session.get("metadata")
+        price_id = metadata["price_id"]
+        team_id = metadata["team_id"]
 
         user = user_db_handler.load_by_column(
             db=db,
@@ -37,7 +38,6 @@ class WebhookService():
         address = customer_details.address
 
         user_address = {"address": address}
-        # print('user_address', user_address)
         user_db_handler.update(db=db, db_obj=user, input_object=user_address)
 
         if not email and subscription_id and price_id:
@@ -49,6 +49,7 @@ class WebhookService():
         subscription_obj = {
             "id": uuid.uuid4(),
             "user_id": user.id,
+            "team_id": team_id,
             "subscription_id": subscription_id,
             "price_id": price_id,
             "payment_status": session.get("payment_status")
