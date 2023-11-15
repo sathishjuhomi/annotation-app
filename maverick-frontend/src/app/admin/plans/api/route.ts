@@ -29,15 +29,16 @@ export async function createPlan(formData: CreatePlanFormData) {
 }
 
 //View Plan
-export async function planList() {
+export async function planList(getAllPlans: boolean) {
   const accessToken = localStorage.getItem('access_token');
-  const res = await fetch("http://127.0.0.1:8000/api/v1/plans", {
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/plans?get_all_plans=${getAllPlans}`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
       "authorization": `Bearer ${accessToken}`,
     },
   });
+
 
   const data = await res.json();
   return {
@@ -49,6 +50,7 @@ export async function planList() {
 
 // Update Plan
 export async function updatePlan(planId: string, formData: UpdatePlanFormData) {
+  const accessToken = localStorage.getItem('access_token');
   const body = {
     plan_name: formData.planName,
     description: formData.description,
@@ -57,10 +59,10 @@ export async function updatePlan(planId: string, formData: UpdatePlanFormData) {
     method: "PATCH",
     headers: {
       "Content-type": "application/json",
+      "authorization": `Bearer ${accessToken}`,
     },
     body: JSON.stringify(body),
   });
-  console.log("API DATA: ", body)
   const data = await res.json();
   return {
     props: {
@@ -71,10 +73,12 @@ export async function updatePlan(planId: string, formData: UpdatePlanFormData) {
 
 // Deactivate Plan
 export async function  DeactivatePlan(priceId: string) {
+  const accessToken = localStorage.getItem('access_token');
   const res = await fetch(`http://127.0.0.1:8000/api/v1/plans/${priceId}/deactivate`, {
     method: "PATCH",
     headers: {
       "content-type": "application/json",
+      "authorization": `Bearer ${accessToken}`,
     }
   });
   const data = await res.json();
@@ -87,10 +91,12 @@ export async function  DeactivatePlan(priceId: string) {
 
 // Activate Plan
 export async function  ActivatePlan(priceId: string) {
+  const accessToken = localStorage.getItem('access_token');
   const res = await fetch(`http://127.0.0.1:8000/api/v1/plans/${priceId}/activate`, {
     method: "PATCH",
     headers: {
       "content-type": "application/json",
+      "authorization": `Bearer ${accessToken}`,
     }
   });
   const data = await res.json();

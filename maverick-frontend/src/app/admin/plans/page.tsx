@@ -57,7 +57,7 @@ const Plans = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const { props } = await planList();
+      const { props } = await planList(true);
       try {
         setPlans(props.plans);
       } catch (error) {
