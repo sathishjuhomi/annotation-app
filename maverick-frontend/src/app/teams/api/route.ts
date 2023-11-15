@@ -200,3 +200,22 @@ export async function updateTeamMemberRole(team_id: string, team_member_id: stri
     }
   };
 }
+
+//View Active Plan
+export async function activePlanList() {
+  const accessToken = localStorage.getItem('access_token');
+  const res = await fetch("http://127.0.0.1:8000/api/v1/plans", {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      "authorization": `Bearer ${accessToken}`,
+    },
+  });
+
+  const data = await res.json();
+  return {
+    props: {
+      plans: data
+    }
+  };
+}

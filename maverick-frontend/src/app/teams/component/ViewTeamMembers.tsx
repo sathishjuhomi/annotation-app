@@ -24,6 +24,8 @@ import teamMember from '@/app/component/teammember.jpg';
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import UpdateATeamMember from "./UpdateRolesForm";
+import UpgradePlanForm from "./UpgradePlanForm";
+import { activePlanList } from "../api/route";
 
 const ViewTeamAndTeamMembers = (props: any) => {
     const id = props.id;
@@ -31,12 +33,14 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const [dataLoading, setDataLoading] = React.useState(false);
     const [teamUpdateLoading, setTeamUpdateLoading] = React.useState(false);
     const [inviteLoading, setInviteLoading] = React.useState(false);
+    const [upgradeLoading, setUpgradeLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("");
     const [teamId, setTeamId] = React.useState("");
     const [teamMembers, setTeamMembers] = React.useState([]);
+    const [plans, setPlans] = React.useState([]);
     const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState('');
     const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
     const [selectedTeamMemberEmailId, setSelectedTeamMemberEmailId] = React.useState('');
@@ -250,6 +254,28 @@ const ViewTeamAndTeamMembers = (props: any) => {
         }
     }
 
+    // Upgrade Plan
+    const [openUpgrade, setOpenUpgrade] = React.useState(false);
+    const handleOpenUpgrade = () => {
+        setOpenUpgrade(true);
+    };
+
+    // View Plans
+    useEffect(() => {
+        async function fetchData() {
+            const { props } = await activePlanList();
+            try {
+                setPlans(props.plans);
+            } catch (error) {
+                const data = props.plans.detail;
+                setMessage(data);
+                setMessageColor(Constants.ERROR);
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        fetchData();
+    }, []);
 
     return (
         <Box className="flex flex-col">
@@ -260,9 +286,21 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     </Typography>
                     <Button
                         className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
+                        onClick={handleOpenUpgrade}
                     >
                         Upgrade Now
                     </Button>
+                    <UpgradePlanForm
+                        // loading={upgradeLoading}
+                        // showMessage={showMessage}
+                        // setShowMessage={setShowMessage}
+                        // message={message}
+                        // messageColor={messageColor}
+                        open={openUpgrade}
+                        setOpen={setOpenUpgrade}
+                        plans={plans}
+                    // handleUpgrade={}
+                    />
                 </Box>
                 <Table aria-label="simple table">
                     <TableBody>
