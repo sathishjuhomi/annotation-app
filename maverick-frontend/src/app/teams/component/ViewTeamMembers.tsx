@@ -263,7 +263,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     // View Plans
     useEffect(() => {
         async function fetchData() {
-            const { props } = await activePlanList();
+            const { props } = await activePlanList(false);
             try {
                 setPlans(props.plans);
             } catch (error) {

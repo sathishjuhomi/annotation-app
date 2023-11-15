@@ -201,10 +201,9 @@ export async function updateTeamMemberRole(team_id: string, team_member_id: stri
   };
 }
 
-//View Active Plan
-export async function activePlanList() {
+export async function activePlanList(getAllPlans: boolean) {
   const accessToken = localStorage.getItem('access_token');
-  const res = await fetch("http://127.0.0.1:8000/api/v1/plans", {
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/plans?get_all_plans=${getAllPlans}`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
