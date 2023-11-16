@@ -98,7 +98,7 @@ class TestPlanService(unittest.TestCase):
 
         plan_service = PlanService()
 
-        result = plan_service.get_all_plans(self.db)
+        result = plan_service.get_all_plans(plans=True, db=self.db)
 
         self.assertIsInstance(result, list)
         self.assertEqual(len(result), 1)

@@ -8,23 +8,50 @@ import Dialog from "@mui/material/Dialog";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-
+import { upgradePlan } from "../api/route";
+import * as Constants from "../../utils/constant";
 
 const UpgradePlanForm = (
     {
-        // loading,
-        // showMessage,
-        // setShowMessage,
-        // message,
-        // messageColor,
         open,
         setOpen,
         plans,
-        // handleUpgrade,
+        teamId
     }: UpgradePlanProps
 ) => {
     const handleClose = () => {
         setOpen(false);
+    };
+    const [selectedPriceId, setSelectedPriceId] = React.useState('');
+    const [selectedPaymentType, setSelectedPaymentType] = React.useState('');
+    const [upgradeLoading, setUpgradeLoading] = React.useState(false);
+    const [showMessage, setShowMessage] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [messageColor, setMessageColor] = React.useState(Constants.INFO);
+
+    const handleUpgrade = async (teamId: string, priceId: string, paymentType: string) => {
+        setSelectedPriceId(priceId);
+        setSelectedPaymentType(paymentType);
+        setShowMessage(true);
+        setUpgradeLoading(true);
+        const { props } = await upgradePlan(teamId, priceId, paymentType)
+        const data = props.data
+        try {
+            if (props && props.data) {
+                setUpgradeLoading(false);
+                window.location.href = data.url
+            } else {
+                const errorMessage = data.detail;
+                setMessage(errorMessage);
+                setMessageColor(Constants.ERROR);
+            }
+        }
+        catch (error) {
+            const errorMessage = props.data.detail;
+            console.error('Error fetching data:', error);
+            setMessage(errorMessage);
+            setMessageColor(Constants.ERROR);
+        }
     };
 
     return (
@@ -66,6 +93,7 @@ const UpgradePlanForm = (
                                 variant='contained'
                                 type="submit"
                                 size="small"
+                                onClick={() => handleUpgrade(teamId, plan.price_id, plan.price.payment_type)}
                             >
                                 Buy Plan
                             </Button>

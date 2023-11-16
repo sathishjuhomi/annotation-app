@@ -8,7 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
-import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole } from "../api/route";
+import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole, upgradePlan } from "../api/route";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import * as Constants from "../../utils/constant";
 import Snackbar from "@/app/component/Snackbar";
@@ -33,7 +33,6 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const [dataLoading, setDataLoading] = React.useState(false);
     const [teamUpdateLoading, setTeamUpdateLoading] = React.useState(false);
     const [inviteLoading, setInviteLoading] = React.useState(false);
-    const [upgradeLoading, setUpgradeLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
@@ -291,15 +290,10 @@ const ViewTeamAndTeamMembers = (props: any) => {
                         Upgrade Now
                     </Button>
                     <UpgradePlanForm
-                        // loading={upgradeLoading}
-                        // showMessage={showMessage}
-                        // setShowMessage={setShowMessage}
-                        // message={message}
-                        // messageColor={messageColor}
                         open={openUpgrade}
                         setOpen={setOpenUpgrade}
                         plans={plans}
-                    // handleUpgrade={}
+                        teamId={id}
                     />
                 </Box>
                 <Table aria-label="simple table">

@@ -222,13 +222,8 @@ export interface DeactivateProps {
 }
 
 export interface UpgradePlanProps {
-  // loading: boolean;
-  // showMessage: boolean;
-  // setShowMessage: any;
-  // message: string;
-  // messageColor: string;
   open: boolean;
   setOpen: any;
   plans: any;
-  // handleUpgrade: any;
+  teamId: string;
 }

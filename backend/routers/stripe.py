@@ -14,7 +14,7 @@ stripe_router = APIRouter(prefix="/api/v1", tags=["Stripe"])
 bearer = HTTPBearer()
 
 
-@stripe_router.post('/create-checkout-session/plans/{price_id}/{team_id}',
+@stripe_router.post('/checkout-session/teams/{team_id}',
                     description="This API endpoint displays checkout page for subscribers"
                     )
 def create_checkout_session(
@@ -43,10 +43,7 @@ def create_checkout_session(
         customer_email= decoded_token["email"],
         success_url='http://localhost:3000/signin',
         cancel_url='http://localhost:3000/signin',
-
-
         # payment_method_types=(os.getenv('PAYMENT_METHOD_TYPES') or 'card').split(','),
-
         mode=payment_mode,
         line_items=[{
             'price': price_id,
@@ -57,9 +54,7 @@ def create_checkout_session(
         # phone_number_collection={"enabled": True}
     )
     print(checkout_session)
-    return RedirectResponse(
-        checkout_session.url,
-        status.HTTP_303_SEE_OTHER
-    )
+    redirect_url = {"url": checkout_session.url}
 
+    return redirect_url
 
