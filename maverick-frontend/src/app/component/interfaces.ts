@@ -227,3 +227,8 @@ export interface UpgradePlanProps {
   plans: any;
   teamId: string;
 }
+
+
+export interface SubscriptionsProps {
+  subscriptions: any;
+}
