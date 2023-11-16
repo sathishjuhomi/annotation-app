@@ -29,7 +29,6 @@ def create_checkout_session(
     plan_data = request_payload.model_dump()
     filters = {
         "team_id": team_id,
-        "price_id": price_id,
         "is_active": True
     }
     subscription_data = subscription_db_handler.load_all_by_columns(db=db, filters=filters)
