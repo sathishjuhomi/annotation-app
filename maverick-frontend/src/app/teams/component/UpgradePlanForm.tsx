@@ -56,34 +56,37 @@ const UpgradePlanForm = (
 
     return (
         <Dialog className='rounded-md' open={open} onClose={handleClose}>
-            <Paper className=" max-w-72 flex flex-row bg-grey justify-between">
-                {plans.length > 0 ? plans.map((plan: any) => (
-                    <Card className="w-96 max-h-72 m-2 flex flex-col justify-between">
+            <Paper className="flex flex-wrap bg-grey flex-basis-30%">
+                {plans.length > 0 ? plans.map((plan: any, index: number) => (
+                    <Card
+                        key={index}
+                        className="m-2 flex flex-col justify-between"
+                    >
                         <CardContent>
                             <Typography className="mb-3 capitalize text-xl text-black font-Inter font-bold">
                                 {plan.plan.plan_name}
                             </Typography>
                             <Typography
-                                className="mt-auto normal-case text-greyplus text-sm font-Inter font-normal leading-6"
+                                className="mt-auto mb-2 normal-case text-greyplus text-sm font-Inter font-normal leading-6"
                                 variant="body2"
                             >
-                                {plan.plan.description === null ? 
-                                'No description has specified' 
-                                : plan.plan.description}
+                                {plan.plan.description === null ?
+                                    'No description has specified'
+                                    : plan.plan.description}
                             </Typography>
                             <Typography
                                 className="mt-auto text-2xl text-black font-Inter font-bold"
                             >
                                 {plan.price.currency} {plan.price.price}
                                 <span className="text-base text-greyplus font-Inter font-thin">
-                                {plan.price.payment_type === 'one_time' ? " " 
-                                : ` /${plan.price.interval_count > 1 ? `${plan.price.interval_count} ${plan.price.billing_period}s`
-                                : `${plan.price.interval_count} ${plan.price.billing_period}`} `}
+                                    {plan.price.payment_type === 'one_time' ? " "
+                                        : ` /${plan.price.interval_count > 1 ? `${plan.price.interval_count} ${plan.price.billing_period}s`
+                                            : `${plan.price.interval_count} ${plan.price.billing_period}`} `}
                                 </span>
                                 <br />
                                 <p className="text-base text-greyplus font-Inter font-thin">
-                                {plan.price.payment_type === 'one_time' ? "One-time billing" 
-                                : 'Billed recursively'}
+                                    {plan.price.payment_type === 'one_time' ? "One-time billing"
+                                        : 'Billed recursively'}
                                 </p>
                             </Typography>
                         </CardContent>
