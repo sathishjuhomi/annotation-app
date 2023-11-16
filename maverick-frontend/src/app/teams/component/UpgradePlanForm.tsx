@@ -29,9 +29,9 @@ const UpgradePlanForm = (
 
     return (
         <Dialog className='rounded-md' open={open} onClose={handleClose}>
-            <Paper className=" flex flex-row bg-grey justify-between">
+            <Paper className=" max-w-72 flex flex-row bg-grey justify-between">
                 {plans.length > 0 ? plans.map((plan: any) => (
-                    <Card className="w-64 max-h-72 m-2 flex flex-col justify-between">
+                    <Card className="w-96 max-h-72 m-2 flex flex-col justify-between">
                         <CardContent>
                             <Typography className="mb-3 capitalize text-xl text-black font-Inter font-bold">
                                 {plan.plan.plan_name}
@@ -45,7 +45,7 @@ const UpgradePlanForm = (
                                 : plan.plan.description}
                             </Typography>
                             <Typography
-                                className="mt-10 text-2xl text-black font-Inter font-bold"
+                                className="mt-auto text-2xl text-black font-Inter font-bold"
                             >
                                 {plan.price.currency} {plan.price.price}
                                 <span className="text-base text-greyplus font-Inter font-thin">

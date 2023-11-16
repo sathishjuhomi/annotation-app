@@ -19,10 +19,14 @@ table_name = "users"
 def upgrade():
     op.create_table(
         table_name,
-        sa.Column("id", sa.dialects.postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column("id", sa.dialects.postgresql.UUID(
+            as_uuid=True), nullable=False),
         sa.Column("email", sa.String(), nullable=False),
         sa.Column("password_hash", sa.String(), nullable=False),
         sa.Column("password_salt", sa.String(), nullable=False),
+        sa.Column("address", sa.JSON, nullable=True),
+        sa.Column('admin', sa.Boolean,
+                  nullable=False, server_default='false'),
         sa.Column(
             "t_create",
             sa.TIMESTAMP(timezone=True),

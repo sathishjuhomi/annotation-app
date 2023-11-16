@@ -2,6 +2,7 @@ import { CreatePlanFormData, UpdatePlanFormData } from "@/app/component/interfac
 
 // Create Plan
 export async function createPlan(formData: CreatePlanFormData) {
+  const accessToken = localStorage.getItem('access_token');
   const body = {
     plan: {
       plan_name: formData.planName,
@@ -20,6 +21,7 @@ export async function createPlan(formData: CreatePlanFormData) {
     method: "POST",
     headers: {
       "Content-type": "application/json",
+      "authorization": `Bearer ${accessToken}`,
     },
     body: JSON.stringify(body),
   });

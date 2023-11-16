@@ -95,7 +95,9 @@ def update_team(
 ):
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    team_member_service.role_validation(decoded_token, db)
+    filters = {"email": decoded_token["email"],
+               "team_id": str(id)}
+    _ = team_member_service.role_validation(filters, db)
     team = team_service.get_team(db, id=id, name=request_payload.team_name)
     return team_service.update_team(request_payload, team, db)
 
@@ -164,7 +166,10 @@ async def delete_team(
     token = authorization.credentials
     decoded_token = decode_token(token=token)
     # Check if the inviter has 'owner' or 'admin' roles
-    team_member_service.role_validation(decoded_token, db)
+    decoded_token = decode_token(token=token)
+    filters = {"email": decoded_token["email"],
+               "team_id": str(id)}
+    _ = team_member_service.role_validation(filters, db)
     team = team_service.get_team(db, id=id)
     await team_member_service.delete_team_members(
         db, id, decoded_token["id"])
