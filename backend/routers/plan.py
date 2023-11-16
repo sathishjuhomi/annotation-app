@@ -41,7 +41,7 @@ def create_plan(
 
 
 @plan_router.get(
-    "/plans/{get-all-plans}",
+    "/plans",
     description="This API will get all the Plans",
     response_model=List[PlanResponseSchema],
     responses={
