@@ -51,7 +51,12 @@ const config: Config = {
         'image1': '504px',
         'full-tt': '958px',
         'full-six':'513px',
+        'full-sixty': '660px',
+        'full-fivesixty': '560',
       },
+      height: {
+        'full-plus': '830px',
+      }
     },
   },
   plugins: [],
