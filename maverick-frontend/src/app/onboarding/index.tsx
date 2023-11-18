@@ -6,9 +6,9 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import Logo from '../component/mavericklogo.jpg';
+import imageOne from '../component/image1.jpg';
+import imageTwo from '../component/image2.jpg';
 import Image from 'next/image'
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from '@mui/icons-material/Menu';
 
 
 export default function Onboarding() {
@@ -21,21 +21,10 @@ export default function Onboarding() {
     router.push("/signup");
   };
 
-  const [open, setOpen] = React.useState(true);
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
   return (
     <Box className="display-flex">
       <Toolbar>
-        <div className="flex-grow p-8 hidden sm:flex justify-center items-center">
+        <div className="flex-grow p-8 hidden sm:block">
           <Image
             src={Logo}
             alt='Maverick App'
@@ -44,16 +33,16 @@ export default function Onboarding() {
             placeholder='blur'
           />
         </div>
-        <div>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className="mr-2 hidden sm:block"
+        <div className="hidden sm:block">
+          <Button className="text-greyplus font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey" onClick={navigateToSignUp}>
+            Sign Up
+          </Button>
+          <Button
+            className="text-greyplus font-medium font-Inter text-base leading-8 normal-case hover:bg-lightgrey"
+            onClick={navigateToSignIn}
           >
-            <MenuIcon />
-          </IconButton>
+            Login
+          </Button>
         </div>
       </Toolbar>
       <Box className="flex flex-row ">
@@ -64,22 +53,50 @@ export default function Onboarding() {
             gutterBottom
           >
             Accelerate product
-            <br />
+          </Typography>
+          <Typography
+            className="text-black font-Inter font-bold text-left text-4xl -mt-4 leading-10 -tracking-1 "
+            variant="h2"
+            gutterBottom
+          >
             development in Next.js
-            <br />
+          </Typography>
+          <Typography
+            className="text-black font-Inter font-bold text-left text-4xl -mt-4 leading-10 -tracking-1 "
+            variant="h2"
+            gutterBottom
+          >
             and Python
           </Typography>
           <Typography className="text-black font-Inter font-normal text-left text-lg leading-7 tracking-normal">
-            Maverick stands out as the top Next.js
-            <br />
-            and Python SaaS template available.
-            <br />
-            Concentrate on your business not on
-            <br />
-            the initial setup and repetitive tasks
+            Maverick stands out as the top Next.js and Python
+          </Typography>
+          <Typography className="text-black font-Inter font-normal text-left text-lg -mt-1 leading-7 tracking-normal">
+            SaaS template available.Concentrate on your business
+          </Typography>
+          <Typography className="text-black font-Inter font-normal text-left text-lg -mt-1 leading-7 tracking-normal">
+            not on the initial setup and repetitive tasks
           </Typography>
         </Box>
+        <div className="ml-64 -mb-10 ">
+          <Image
+            src={imageOne}
+            alt='ImageOne'
+            className="ml-16 w-image1 max-h-80 rounded-2xl"
+            quality={100}
+            placeholder='blur'
+          />
+        </div>
       </Box>
+      <div className="flex justify-end flex-row mt-12 -mb-96 mr-7">
+        <Image
+          src={imageTwo}
+          alt='ImageTwo'
+          className="w-72 max-h-96 mt-2 rounded-2xl"
+          quality={100}
+          placeholder='blur'
+        />
+      </div>
     </Box>
   );
 }

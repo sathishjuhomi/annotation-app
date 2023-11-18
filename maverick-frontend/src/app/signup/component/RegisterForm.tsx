@@ -35,17 +35,17 @@ export default function SignUp({
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
-        <Paper elevation={5} className="w-full-sixty h-full-eight ml-8 mr-8 mt-28 mb-8 flex flex-col  bg-white">
-          <Typography className="text-black font-Inter font-bold text-left text-3xl ml-6 mt-10 leading-10 -tracking-1">
+        <Paper elevation={5} className="w-paper max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
+          <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
             Sign Up
           </Typography>
           <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
-            <Box className="ml-2 mr-2 flex flex-col">
-              <Grid className="ml-2 mr-2 border-inherit border-1 rounded-none">
+            <Box className="mt-1 mr-2 ml-2 flex flex-row">
+              <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
-                  className="w-full"
+                  className="w-full-fourtyplus h-8"
                   id="email"
                   label="Email ID"
                   name="email"
@@ -55,10 +55,10 @@ export default function SignUp({
                   helperText={errors?.email ? errors?.email.message : " "}
                 />
               </Grid>
-              <Grid className="ml-2 mr-2 border-inherit border-1 rounded-none">
+              <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
-                  className="w-full"
+                  className="w-full-fourtyplus h-8"
                   name="password"
                   label="Password"
                   type="password"
@@ -69,10 +69,10 @@ export default function SignUp({
                   helperText={errors?.password ? errors?.password.message : " "}
                 />
               </Grid>
-              <Grid className="ml-2 mr-2 border-inherit border-1 rounded-none">
+              <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
-                  className="w-full"
+                  className="w-full-fourtyplus h-8"
                   name="passwordConfirm"
                   label="Confirm Password"
                   type="password"
@@ -91,22 +91,25 @@ export default function SignUp({
                 type="submit"
                 color="inherit"
                 variant="contained"
-                className="text-white w-full-fivesixty h-20 bg-button ml-2 mr-2 mt-2 font-Inter font-bold text-2xl leading-8 normal-case hover:bg-lightgreen"
+                className="text-white w-button h-14 bg-button ml-2 mr-2 normal-case hover:bg-lightgreen"
               >
                 Signup
               </Button>
             </Box>
-              <Grid className='ml-2 mb-5 flex flex-row items-center justify-center'>
-                <Typography className="font-Inter font-medium text-greyplus mt-8 mr-1 text-xl leading-9">
+            <Grid container justifyContent="flex-end" className="ml-4 mb-4 flex flex-col">
+              <Grid className='ml-2 flex flex-row'>
+                <Typography className="font-Inter font-medium text-greyplus mt-4 mr-1 text-sm leading-7">
                   Already have an account?
                 </Typography>
                 <Button
-                  className="text-button font-Inter normal-case font-bold mt-8 -ml-2 text-xl leading-9"
+                  className="text-button font-Inter normal-case font-semibold mt-2 -ml-2 text-sm leading-7"
                   onClick={navigateToSignIn}
                 >
                   Login
                 </Button>
               </Grid>
+            </Grid>
+
           </form>
           {message !== "" ? (
             <Snackbar
@@ -126,6 +129,16 @@ export default function SignUp({
         </Paper>
         <br></br>
       </Box>
+      <div className="flex justify-end flex-row mt-3 mr-80 mb-3">
+        <Image
+          src={imageThree}
+          alt='ImageThree'
+          className="mr-4 w-72 h-40 rounded-2xl"
+          quality={100}
+          placeholder='blur'
+        />
+      </div>
+      <br></br>
     </Box>
   );
 }
