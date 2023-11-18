@@ -35,8 +35,8 @@ export default function SignUp({
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
-        <Paper elevation={5} className="w-full-sixty max-h-7xl ml-8 mr-8 mt-28 mb-8 flex flex-col  bg-white">
-          <Typography className="text-black font-Inter font-bold text-left text-3xl ml-6 mt-6 leading-10 -tracking-1">
+        <Paper elevation={5} className="w-full-sixty h-full-eight ml-8 mr-8 mt-28 mb-8 flex flex-col  bg-white">
+          <Typography className="text-black font-Inter font-bold text-left text-3xl ml-6 mt-10 leading-10 -tracking-1">
             Sign Up
           </Typography>
           <br />
@@ -91,7 +91,7 @@ export default function SignUp({
                 type="submit"
                 color="inherit"
                 variant="contained"
-                className="text-white w-full-fivesixty h-20 bg-button ml-2 mr-2 mt-2 font-Inter font-bold text-lg leading-8 normal-case hover:bg-lightgreen"
+                className="text-white w-full-fivesixty h-20 bg-button ml-2 mr-2 mt-2 font-Inter font-bold text-2xl leading-8 normal-case hover:bg-lightgreen"
               >
                 Signup
               </Button>

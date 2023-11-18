@@ -56,6 +56,7 @@ const config: Config = {
       },
       height: {
         'full-plus': '830px',
+        'full-eight': '800px',
       }
     },
   },

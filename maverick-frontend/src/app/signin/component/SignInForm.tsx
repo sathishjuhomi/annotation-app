@@ -44,8 +44,8 @@ export default function Signin({
   return (
     <Box> <br></br>
       <Box className='flex flex-row'>
-        <Paper elevation={5} className="w-full-sixty h-full-plus ml-8 mr-8 mt-28 mb-8 flex flex-col  bg-white">
-          <Typography className=" ml-10 mt-6 text-black font-Inter font-bold text-left text-2xl leading-10 -tracking-1">
+        <Paper elevation={5} className="w-full-sixty h-full-plus ml-8 mr-12 mt-28 mb-8 flex flex-col  bg-white">
+          <Typography className=" ml-10 mt-10 text-black font-Inter font-bold text-left text-3xl leading-10 -tracking-1">
             Login
           </Typography>
           <br />
@@ -59,17 +59,17 @@ export default function Signin({
                   startIcon={<Image
                     src={google}
                     alt='Google'
-                    className="w-6 h-6"
+                    className="w-11 h-11"
                     quality={100}
                     placeholder='blur'
                   />}
-                  className='w-52 h-16 mb-1 ml-6 bg-border text-black normal-case font-Inter hover:bg-lightgrey'
+                  className='max-w-xl h-24 mb-1 ml-6 bg-border text-black text-lg normal-case font-Inter font-semibold hover:bg-lightgrey'
                 >
                   Login with Google
                 </Button>
               </Grid>
-              <Typography className="mt-4 flex flex-row items-center justify-center font-Inter font-normal text-sm"> OR </Typography>
-              <Grid className="ml-6 border-inherit border-1 rounded-none">
+              <Typography className="mt-6 flex flex-row items-center justify-center text-lightgrey font-Inter font-semibold text-sm"> OR </Typography>
+              <Grid className="mt-4 ml-6 border-inherit border-1 rounded-none">
                 <TextField
                   required
                   className="w-full"
@@ -101,7 +101,7 @@ export default function Signin({
                 color="inherit"
                 onClick={formHandleSubmit(onSubmit)}
                 variant="contained"
-                className="text-white w-full-fivesixty h-20 bg-button ml-6  mt-2 font-Inter font-bold text-lg leading-8 normal-case hover:bg-lightgreen"
+                className="text-white w-full-fivesixty h-20 bg-button ml-6  mt-2 font-Inter font-bold text-2xl leading-8 normal-case hover:bg-lightgreen"
               >
                 Login
               </Button>
