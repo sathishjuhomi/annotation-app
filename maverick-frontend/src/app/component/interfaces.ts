@@ -221,6 +221,20 @@ export interface DeactivateProps {
   planName: string
 }
 
+export interface ActivateDeactivateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  handleActivateOrDeactivate: any;
+  open: boolean;
+  setOpen: any;
+  statusValue: string;
+  priceId: any;
+  planName: string
+}
+
 export interface UpgradePlanProps {
   open: boolean;
   setOpen: any;

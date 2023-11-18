@@ -12,7 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import CircularProgress from '@mui/material/CircularProgress';
 import CreatePlanForm from './CreatePlanForm';
 import Snackbar from '@/app/component/Snackbar';
-import Chip from '@mui/material/Chip';
 import { PlansProps, UpdatePlanFormData } from '@/app/component/interfaces';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,10 +21,9 @@ import UpdatePlanForm from './UpdatePlanForm';
 import { updatePlanSchema } from '../validation';
 import { ActivatePlan, DeactivatePlan, updatePlan } from '../api/route';
 import * as Constants from "../../utils/constant";
-import DeactivateForm from './DeactivateForm';
-import ActivateForm from './ActivateForm';
 import { Switch } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
+import ActivateDeactivateForm from './ActivateDeactivateForm';
 
 export default function PlansList({
     loading,
@@ -304,7 +302,21 @@ export default function PlansList({
                                                     defaultChecked
                                                     onChange={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
                                                 />
-                                                <DeactivateForm
+
+                                                <ActivateDeactivateForm
+                                                    loading={deactiveLoading}
+                                                    showMessage={showMessageActiveDeactive}
+                                                    setShowMessage={setShowMessageActiveDeactive}
+                                                    message={messageActiveDeactive}
+                                                    messageColor={messageColorActiveDeactive}
+                                                    handleActivateOrDeactivate={handleDeactivatePlan}
+                                                    open={openActivate}
+                                                    setOpen={setOpenActivate}
+                                                    statusValue="Deactivate"
+                                                    priceId={selectedPriceId}
+                                                    planName={selectedPlanName}
+                                                />
+                                                {/* <DeactivateForm
                                                     loading={deactiveLoading}
                                                     showMessage={showMessageActiveDeactive}
                                                     setShowMessage={setShowMessageActiveDeactive}
@@ -315,13 +327,26 @@ export default function PlansList({
                                                     setOpen={setOpenActivate}
                                                     priceId={selectedPriceId}
                                                     planName={selectedPlanName}
-                                                />
+                                                /> */}
                                             </div>
                                             : <div>
                                                 <GreenSwitch {...label}
                                                     onChange={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
                                                 />
-                                                <ActivateForm
+                                                <ActivateDeactivateForm
+                                                    loading={activeLoading}
+                                                    showMessage={showMessageActiveDeactive}
+                                                    setShowMessage={setShowMessageActiveDeactive}
+                                                    message={messageActiveDeactive}
+                                                    messageColor={messageColorActiveDeactive}
+                                                    handleActivateOrDeactivate={handleActivatePlan}
+                                                    open={openDeactivate}
+                                                    setOpen={setOpenDeactivate}
+                                                    statusValue='Activate'
+                                                    priceId={selectedPriceId}
+                                                    planName={selectedPlanName}
+                                                />
+                                                {/* <ActivateForm
                                                     loading={activeLoading}
                                                     showMessage={showMessageActiveDeactive}
                                                     setShowMessage={setShowMessageActiveDeactive}
@@ -332,7 +357,7 @@ export default function PlansList({
                                                     setOpen={setOpenDeactivate}
                                                     priceId={selectedPriceId}
                                                     planName={selectedPlanName}
-                                                />
+                                                /> */}
                                             </div>
                                         }
                                     </TableCell>
