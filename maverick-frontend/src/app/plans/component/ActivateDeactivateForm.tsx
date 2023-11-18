@@ -26,8 +26,6 @@ export default function ActivateOrDeactivate(
         setOpen(false);
     };
 
-    console.log("status: ", statusValue , handleActivateOrDeactivate)
-
     return (
         <div>
             <Dialog className='rounded-md' open={open} onClose={handleClose}>
