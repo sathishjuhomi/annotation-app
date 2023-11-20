@@ -36,12 +36,12 @@ export default function SignUp({
     <Box> <br></br>
       <Box className='flex flex-row'>
         <Paper elevation={5} className="w-paper max-h-56 ml-14 mr-2 -mt-6 mb-2 flex flex-col  bg-white">
-          <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
+          <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1">
             Sign Up
           </Typography>
           <br />
           <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
-            <Box className="mt-1 mr-2 ml-2 flex flex-row">
+            <Box className="mr-2 ml-2 flex flex-row">
               <Grid className="mb-1 ml-4 border-inherit border-1 rounded-none">
                 <TextField
                   required
@@ -96,13 +96,13 @@ export default function SignUp({
                 Signup
               </Button>
             </Box>
-            <Grid container justifyContent="flex-end" className="ml-4 mb-4 flex flex-col">
+            <Grid className="ml-4 mb-4 flex flex-col item-end justify-end ">
               <Grid className='ml-2 flex flex-row'>
-                <Typography className="font-Inter font-medium text-greyplus mt-4 mr-1 text-sm leading-7">
+                <Typography className=" mt-4 font-Inter font-medium text-greyplus text-sm leading-7">
                   Already have an account?
                 </Typography>
                 <Button
-                  className="text-button font-Inter normal-case font-semibold mt-2 -ml-2 text-sm leading-7"
+                  className="mt-3 text-button font-Inter normal-case font-semibold text-sm leading-7 hover:bg-white"
                   onClick={navigateToSignIn}
                 >
                   Login

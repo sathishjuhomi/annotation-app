@@ -90,7 +90,7 @@ export default function ResetPassword({
             <Grid className="flex justify-end mt-0 mb-4 mr-5">
               <Grid item>
                 <Button
-                  className="mr-2 text-greyplus font-Inter normal-case font-medium text-sm leading-7"
+                  className="mr-2 text-greyplus font-Inter normal-case font-medium text-sm leading-7 hover:bg-white"
                   onClick={navigateToSignIn}
                 >
                   Back to Login
