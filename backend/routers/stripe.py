@@ -39,24 +39,30 @@ def create_checkout_session(
         )
     payment_mode = "subscription" if plan_data["payment_type"] == "recurring" else "payment"
 
-    checkout_session = stripe.checkout.Session.create(
-        customer_email= decoded_token["email"],
-        success_url='http://localhost:3000/signin',
-        cancel_url='http://localhost:3000/signin',
-        # payment_method_types=(os.getenv('PAYMENT_METHOD_TYPES') or 'card').split(','),
-        mode=payment_mode,
-        line_items=[{
+    stripe_params = {
+        'customer_email': decoded_token["email"],
+        'success_url': 'http://localhost:3000/signin',
+        'cancel_url': 'http://localhost:3000/signin',
+        'mode': payment_mode,
+        'line_items': [{
             'price': price_id,
             'quantity': 1,
         }],
-        billing_address_collection='required', # Collect billing address
-        metadata={"team_id":team_id, "price_id":price_id} # data that we need in webhook output
-        # phone_number_collection={"enabled": True}
-    )
+        'billing_address_collection': 'required',  # Collect billing address
+        'metadata': {"team_id": team_id, "price_id": price_id},  # Data needed in webhook output
+    }
+
+    # Add invoice_creation parameter when payment_mode is "payment"
+    if payment_mode == "payment":
+        stripe_params['invoice_creation'] = {"enabled": True}
+
+    checkout_session = stripe.checkout.Session.create(**stripe_params)
+
     print(checkout_session)
     return RedirectResponse(
         checkout_session.url,
         status.HTTP_303_SEE_OTHER
     )
+
 
 

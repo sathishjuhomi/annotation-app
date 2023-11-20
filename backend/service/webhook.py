@@ -2,9 +2,12 @@ from backend.config import get_settings
 import stripe
 import uuid
 from backend.db_handler.subscription_handler import subscription_db_handler
+from backend.utils.email_receipt import send_receipt_email
+
 from sqlalchemy.orm import Session
 from backend.db_handler.user_handler import user_db_handler
 from fastapi import HTTPException, status
+
 
 settings = get_settings()
 
@@ -17,7 +20,7 @@ else:
 
 class WebhookService():
     @staticmethod
-    def create_subscription(
+    async def create_subscription(
             session,
             db: Session
     ):
@@ -27,6 +30,20 @@ class WebhookService():
         metadata = session.get("metadata")
         price_id = metadata["price_id"]
         team_id = metadata["team_id"]
+        invoice_id = session.get("invoice")
+        
+        invoice = stripe.Invoice.retrieve(invoice_id)
+        customer_email = invoice.get("customer_email")
+        charge_id = invoice.get("charge")
+
+        charge = stripe.Charge.retrieve(
+        charge_id,
+        )
+
+        receipt_url = charge.get("receipt_url")
+
+
+        await send_receipt_email(email_to=customer_email, receipt_url=receipt_url)
 
         user = user_db_handler.load_by_column(
             db=db,
