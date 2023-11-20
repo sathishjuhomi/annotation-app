@@ -69,7 +69,7 @@ export default function ForgotPassword({
             </Box>
             <Grid className="flex justify-end mb-4 mr-5">
               <Button
-                className="text-greyplus font-Inter normal-case font-medium text-sm leading-7"
+                className="text-greyplus font-Inter normal-case font-medium text-sm leading-7 hover:bg-white"
                 onClick={navigateToSignIn}
               >
                 Back to Login
