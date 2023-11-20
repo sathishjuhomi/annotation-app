@@ -31,7 +31,8 @@ def create_checkout_session(
         "team_id": team_id,
         "is_active": True
     }
-    subscription_data = subscription_db_handler.load_all_by_columns(db=db, filters=filters)
+    subscription_data = subscription_db_handler.load_all_by_columns(
+        db=db, filters=filters)
     if subscription_data:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -49,7 +50,8 @@ def create_checkout_session(
             'quantity': 1,
         }],
         'billing_address_collection': 'required',  # Collect billing address
-        'metadata': {"team_id": team_id, "price_id": price_id},  # Data needed in webhook output
+        # Data needed in webhook output
+        'metadata': {"team_id": team_id, "price_id": price_id},
     }
 
     # Add invoice_creation parameter when payment_mode is "payment"
@@ -59,10 +61,5 @@ def create_checkout_session(
     checkout_session = stripe.checkout.Session.create(**stripe_params)
 
     print(checkout_session)
-    return RedirectResponse(
-        checkout_session.url,
-        status.HTTP_303_SEE_OTHER
-    )
-
-
-
+    redirect_url = {"url": checkout_session.url}
+    return redirect_url
