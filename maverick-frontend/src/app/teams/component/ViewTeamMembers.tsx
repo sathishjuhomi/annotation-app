@@ -281,7 +281,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
             <Paper className="ml-6 w-full-tt shadow-none">
                 <Box className=" rounded-md flex w-full-tt h-16 mt-2 bg-beige">
                     <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
-                        Your in FREE Plan, for more feature
+                        You are in FREE Plan, for more feature
                     </Typography>
                     <Button
                         className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"

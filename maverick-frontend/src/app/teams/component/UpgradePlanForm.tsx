@@ -86,7 +86,7 @@ const UpgradePlanForm = (
                                 <br />
                                 <p className="text-base text-greyplus font-Inter font-thin">
                                     {plan.price.payment_type === 'one_time' ? "One-time billing"
-                                        : 'Billed recursively'}
+                                        : 'Billed iteratively'}
                                 </p>
                             </Typography>
                         </CardContent>

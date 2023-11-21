@@ -284,9 +284,14 @@ export default function PlansList({
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
                                         {plan.price.interval_count === null ? '-' : plan.price.interval_count}
                                     </TableCell>
-                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
-                                        {plan.is_active ? "Active" : "Inactive"}
-                                    </TableCell>
+                                    {plan.is_active ?
+                                        <TableCell className="text-green text-center font-Inter font-normal leading-6 text-sm">
+                                            Active
+                                        </TableCell>
+                                        :
+                                        <TableCell className="text-red text-center font-Inter font-normal leading-6 text-sm">
+                                            Inactive
+                                        </TableCell>}
                                     <TableCell align='left'>
                                         <Button
                                             className='text-greyplus hover:text-green hover:bg-white'
