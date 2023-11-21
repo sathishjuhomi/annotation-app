@@ -23,8 +23,8 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     FRONTEND_SERVER_HOST: str
-    STRIPE_SECRET_KEY:str
-    WEBHOOK_SECRET_KEY:str
+    STRIPE_SECRET_KEY: str
+    WEBHOOK_SECRET_KEY: str
 
     # store the values in .env file
     model_config = SettingsConfigDict(env_file=ENV_FILE_PATH)
