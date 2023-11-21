@@ -1,3 +1,4 @@
+from backend.schemas.response.subscription import SubscriptionValidationResponseSchema
 from pydantic import BaseModel, UUID4, EmailStr
 from typing import List
 
@@ -27,3 +28,4 @@ class GetTeamMembersByTeamId(BaseModel):
 class GetTeamMembersByTeamIdResponseSchema(BaseModel):
     team: TeamResponseSchema
     team_members: List[GetTeamMembersByTeamId]
+    subscription_detail: SubscriptionValidationResponseSchema

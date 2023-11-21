@@ -9,3 +9,9 @@ class SubscriptionResponseSchema(BaseModel):
     subscribed_on: datetime
     payment_status: str
     is_active: bool
+
+
+class SubscriptionValidationResponseSchema(BaseModel):
+    subscription_status: str
+    plan_name: str
+    price_id: str
