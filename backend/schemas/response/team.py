@@ -28,4 +28,4 @@ class GetTeamMembersByTeamId(BaseModel):
 class GetTeamMembersByTeamIdResponseSchema(BaseModel):
     team: TeamResponseSchema
     team_members: List[GetTeamMembersByTeamId]
-    subscription_detail: SubscriptionValidationResponseSchema
+    subscription_detail: SubscriptionValidationResponseSchema | None

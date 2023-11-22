@@ -55,8 +55,7 @@ class TeamMemberService():
         team_member = team_member_db_handler.load_all_by_columns(
             db=db, filters=filters)
         # Check if the inviter has 'owner' or 'admin' roles
-        if ((team_member[0].roles['owner'] == False) or
-                (team_member[0].roles['admin'] == False)):
+        if not (team_member[0].roles['owner'] or team_member[0].roles['admin']):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only Owner or Admin can modify the team"
