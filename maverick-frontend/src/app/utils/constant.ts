@@ -8,6 +8,7 @@ export const USER_SUCCESS = "User created successfully";
 export const INFO = "info";
 export const SUCCESS = "success";
 export const ERROR = "error";
+export const EMAIL_SENT = "Recovery mail sent successfully";
 export const TEAMNAME_REQUIRED = "Team name is required";
 export const TEAM_CREATED_SUCCESSFULLY = "Team created successfully";
 export const CREATE_TEAM = "Create Team";

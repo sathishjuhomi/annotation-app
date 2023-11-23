@@ -30,7 +30,7 @@ const ForgotPassword = () => {
       .then(async (res) => {
         const response = await res.json();
         if (res.status === 200) {
-          setMessage(response.message);
+          setMessage(Constants.EMAIL_SENT);
           setMessageColor(Constants.SUCCESS);
         } else {
           const data = response.detail;

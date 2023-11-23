@@ -46,7 +46,7 @@ export default function Signin({
             Login
           </Typography>
           <br />
-          <form noValidate>
+          <form onSubmit={formHandleSubmit(onSubmit)} noValidate>
             <Box className="mr-2 flex flex-row">
               <Grid item>
                 <Button
