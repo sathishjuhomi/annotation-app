@@ -51,21 +51,21 @@ export default function acceptTeamInvitation(
                     <Typography className="text-black font-bold text-xl ml-5">Join the {teamDetail !== null ? teamDetail['team_name'] : ""}</Typography>
                     <br></br>
                     <Typography className="text-black ml-5">
-                        {teamDetail !== null ? teamDetail['invited_by'] : ""} invited you to the team
+                        {teamDetail !== null ? teamDetail['invited_by'] : ""} invited you to the team {teamDetail !== null ? teamDetail['team_name'] : ""}
                     </Typography>
                     <br></br>
                     <Button
                         type="submit"
                         className="ml-5 mb-6 mt-2 text-white font-Inter font-bold leading-6 normal-case bg-green hover:bg-lightgreen"
                         variant="contained"
-                        onClick={onSubmit}
+                        onClick={() => onSubmit(invite_token)}
                     >
                         Accept
                     </Button>
                     <Button
                         className="ml-5 mb-6 mt-2 text-red border-red font-Inter font-bold leading-6 normal-case bg-white hover:border-red"
                         variant="outlined"
-                        onClick={declineInviteTeam}
+                        onClick={() => declineInviteTeam(invite_token)}
                     >
                         Decline
                     </Button>
