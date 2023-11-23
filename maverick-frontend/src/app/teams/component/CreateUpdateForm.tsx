@@ -128,7 +128,6 @@ export default function CreateOrUpdateForm(
                             </Button>
                             <div>
                                 <DeleteTeamForm
-                                    loading={loading}
                                     showMessage={showMessage}
                                     setShowMessage={setShowMessage}
                                     message={message}

@@ -125,7 +125,6 @@ export interface UpdateATeamMemberFormData {
 }
 
 export interface DeleteTeamProps {
-  loading: boolean;
   showMessage: boolean;
   setShowMessage: any;
   message: string;

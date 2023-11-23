@@ -9,7 +9,6 @@ import Image from 'next/image';
 
 export default function DeleteTeam(
     {
-        loading,
         showMessage,
         setShowMessage,
         message,
@@ -83,14 +82,6 @@ export default function DeleteTeam(
                     messageColor={messageColor}
                 />
             ) : null}
-            {loading ? (
-                <Box
-                    className="text-greyplus mt-2 flex justify-center items-center"
-                >
-                    <CircularProgress color="inherit" />
-                </Box>
-            ) : null}
-
         </div>
     )
 
