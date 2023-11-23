@@ -242,8 +242,8 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     return (
         <Box className="flex flex-col">
-            <Paper className="ml-6 w-full-tt shadow-none">
-                <Box className=" rounded-md flex w-full-tt h-16 mt-2 bg-beige">
+            <Paper className="ml-6 w-auto shadow-none">
+                <Box className=" rounded-md flex w-auto h-16 mt-2 bg-beige">
                     <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
                         You are in FREE Plan, for more feature
                     </Typography>
@@ -264,7 +264,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     <TableBody>
                         {teamMembers.map((teamMember) => (
                             <TableRow
-                                className="h-16"
+                                className="w-auto h-16"
                                 key={teamMember['team_member_id']}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
