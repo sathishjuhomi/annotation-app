@@ -108,42 +108,6 @@ const ViewTeamAndTeamMembers = (props: any) => {
         setOpen(true);
     };
 
-    // Delete Team
-
-    const [openDeleteTeam, setOpenDeleteTeam] = React.useState(false);
-    const handleClickOpenDeleteTeam = () => {
-        setOpenDeleteTeam(true);
-    };
-
-    const handleCloseDeleteTeam = () => {
-        setOpenDeleteTeam(false);
-    };
-
-    const router = useRouter();
-
-    const handleDeleteTeam = async (teamId: string) => {
-        setShowMessage(true);
-        setLoading(true);
-        const { props } = await deleteTeam(id)
-        try {
-            if (props && props.delete) {
-                setMessage(Constants.TEAM_DELETED_SUCCESSFULLY);
-                setMessageColor(Constants.SUCCESS);
-                location.reload()
-            } else {
-                const data = props.delete.detail;
-                setMessage(data);
-                setMessageColor(Constants.ERROR);
-            }
-            setLoading(false);
-        } catch (error) {
-            const data = props.delete.detail;
-            setMessage(data);
-            setMessageColor(Constants.ERROR);
-            console.error('Error fetching data:', error);
-        }
-    }
-
     // Invite A Team Member 
 
     const { register: createOrUpdateRegister,
