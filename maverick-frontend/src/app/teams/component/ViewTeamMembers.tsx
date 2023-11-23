@@ -8,7 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
-import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole } from "../api/route";
+import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole, upgradePlan } from "../api/route";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import * as Constants from "../../utils/constant";
 import Snackbar from "@/app/component/Snackbar";
@@ -24,6 +24,8 @@ import teamMember from '@/app/component/teammember.jpg';
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import UpdateATeamMember from "./UpdateRolesForm";
+import UpgradePlanForm from "./UpgradePlanForm";
+import { activePlanList } from "../api/route";
 
 const ViewTeamAndTeamMembers = (props: any) => {
     const id = props.id;
@@ -37,6 +39,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const [teamName, setTeamName] = React.useState("");
     const [teamId, setTeamId] = React.useState("");
     const [teamMembers, setTeamMembers] = React.useState([]);
+    const [plans, setPlans] = React.useState([]);
     const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState('');
     const [selectedTeamMemberIdForEdit, setSelectedTeamMemberIdForEdit] = React.useState(null);
     const [selectedTeamMemberEmailId, setSelectedTeamMemberEmailId] = React.useState('');
@@ -61,7 +64,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     }, []);
 
 
-    // Create or Update Team Name
+    // Update Team Name
 
     const submit = async (data: TeamsFormData) => {
         setShowMessage(true);
@@ -250,39 +253,75 @@ const ViewTeamAndTeamMembers = (props: any) => {
         }
     }
 
+    // Upgrade Plan
+    const [openUpgrade, setOpenUpgrade] = React.useState(false);
+    const handleOpenUpgrade = () => {
+        setOpenUpgrade(true);
+    };
+
+    // View Plans
+    useEffect(() => {
+        async function fetchData() {
+            const { props } = await activePlanList(false);
+            try {
+                setPlans(props.plans);
+            } catch (error) {
+                const data = props.plans.detail;
+                setMessage(data);
+                setMessageColor(Constants.ERROR);
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        fetchData();
+    }, []);
 
     return (
         <Box className="flex flex-col">
-            <Paper className="w-full-tt shadow-none">
+            <Paper className="ml-6 w-full-tt shadow-none">
+                <Box className=" rounded-md flex w-full-tt h-16 mt-2 bg-beige">
+                    <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
+                        You are in FREE Plan, for more feature
+                    </Typography>
+                    <Button
+                        className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
+                        onClick={handleOpenUpgrade}
+                    >
+                        Upgrade Now
+                    </Button>
+                    <UpgradePlanForm
+                        open={openUpgrade}
+                        setOpen={setOpenUpgrade}
+                        plans={plans}
+                        teamId={id}
+                    />
+                </Box>
                 <Table aria-label="simple table">
                     <TableBody>
                         {teamMembers.map((teamMember) => (
                             <TableRow
+                                className="h-16"
                                 key={teamMember['team_member_id']}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell className="font-Inter font-normal leading-6 text-smtext-black" component="th" scope="row">
+                                <TableCell className="pl-8 font-Inter font-normal leading-6 text-sm text-black" component="th" scope="row">
                                     {teamMember['email']}
                                 </TableCell>
                                 <TableCell className="font-Inter font-normal leading-6 text-sm text-greyplus" align="right">
                                     {getTeamMemberRoles(teamMember['roles'])}
                                 </TableCell>
-                                <TableCell className="text-base" align="right">
+                                <TableCell className="flex">
                                     <Button
                                         size="small"
-                                        className="-mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                        className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
                                         onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
                                     >
                                         Edit
                                     </Button>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography className="-mr-4">|</Typography>
-                                </TableCell>
-                                <TableCell>
+                                    <Typography className="pt-1">|</Typography>
                                     <Button
                                         size="small"
-                                        className="-ml-10 -mr-4 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
+                                        className="ml-2 mr-1 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
                                         onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
                                     >
                                         Delete
@@ -305,7 +344,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                         </div>
                         <Box className='ml-20 -mt-24'>
                             <DialogContentText className='ml-3 mr-10 mt-1 text-2xl text-black font-Inter font-bold leading-8'>
-                                Are you sure you want to delete 
+                                Are you sure you want to delete
                             </DialogContentText>
                             <DialogContentText className='ml-3 mr-10 text-2xl text-black font-Inter leading-8'>
                                 <b>the person</b> <p className="text-xl">({selectedTeamMemberEmailId})</p>
@@ -355,7 +394,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
             </Paper>
             <Box className='mt-5'>
                 <Button
-                    className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 mr-36 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
+                    className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 w-36 h-11 mr-44 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
                     size="small"
                     onClick={handleClickOpen}
                 >
@@ -377,7 +416,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     teamId={id}
                 />
                 <Button
-                    className="flex flex-end ml-auto -mt-12 mb-4 mr-2 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
+                    className="flex flex-end ml-auto -mt-12 mb-4 mr-6 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
                     variant="outlined"
                     onClick={handleClickOpenInvite}
                 >

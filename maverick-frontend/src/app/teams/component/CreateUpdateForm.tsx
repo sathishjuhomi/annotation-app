@@ -166,9 +166,9 @@ export default function CreateOrUpdateForm(
             ) : null}
             {loading ? (
                 <Box
-                    className="text-greyplus mt-2 text-greyplus mt-2 flex justify-center items-center"
+                    className="text-greyplus flex justify-center items-center"
                 >
-                    <CircularProgress color="inherit" />
+                    <CircularProgress color="inherit" className='mt-4'/>
                 </Box>
             ) : null}
         </div >

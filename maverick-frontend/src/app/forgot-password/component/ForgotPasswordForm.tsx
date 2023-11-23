@@ -61,7 +61,7 @@ export default function ForgotPassword({
                 type="submit"
                 color="inherit"
                 variant="contained"
-                className="w-button2 h-14 text-white bg-button ml-4 mr-2 normal-case hover:bg-lightgreen"
+                className="w-button2 h-14 text-white bg-button ml-6 mr-2 normal-case hover:bg-lightgreen"
               >
                 Forgot Password
               </Button>
@@ -69,7 +69,7 @@ export default function ForgotPassword({
             </Box>
             <Grid className="flex justify-end mb-4 mr-5">
               <Button
-                className="text-greyplus font-Inter normal-case font-medium text-sm leading-7"
+                className="text-greyplus font-Inter normal-case font-medium text-sm leading-7 hover:bg-white"
                 onClick={navigateToSignIn}
               >
                 Back to Login

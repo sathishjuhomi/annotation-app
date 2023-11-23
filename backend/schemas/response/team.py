@@ -6,11 +6,6 @@ class TeamResponseSchema(BaseModel):
     id: UUID4
     team_name: str
     created_by_id: UUID4
-    # is_deleted: bool
-
-
-# class DeleteTeamResponseSchema(DetailSchema):
-#     deleted_team: TeamResponseSchema
 
 
 class GetTeamsResponseSchema(BaseModel):

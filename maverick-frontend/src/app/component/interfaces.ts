@@ -115,7 +115,7 @@ export interface UpdateATeamMemberProps {
   setOpen: any;
   teamId: string;
   teamMemberId: any;
-  teamMemberEmailId:string;
+  teamMemberEmailId: string;
 }
 
 export interface UpdateATeamMemberFormData {
@@ -124,7 +124,7 @@ export interface UpdateATeamMemberFormData {
   owner: boolean;
 }
 
-export interface DeleteTeamProps{
+export interface DeleteTeamProps {
   loading: boolean;
   showMessage: boolean;
   setShowMessage: any;
@@ -135,4 +135,114 @@ export interface DeleteTeamProps{
   teamTitle: string;
   teamId: string;
   handleDeleteTeam: any;
+}
+
+export interface CreatePlanProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+  register: any;
+  errors: any;
+  open: boolean;
+  setOpen: any;
+}
+
+export interface CreatePlanFormData {
+  planName: string;
+  description: string;
+  price: number;
+  currency: string;
+  paymentMode: string;
+  paymentType: string;
+  billingPeriod: string;
+  intervalCount: number;
+}
+
+export interface UpdatePlanProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmitPlan: any;
+  formHandleSubmitPlan: any;
+  register: any;
+  errors: any;
+  open: boolean;
+  setOpen: any;
+  planName: string;
+  description: string;
+}
+
+export interface UpdatePlanFormData {
+  planName: string;
+  description: string;
+}
+export interface PlansProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  onSubmit: any;
+  formHandleSubmit: any;
+  register: any;
+  errors: any;
+  plans: any;
+}
+
+export interface ActivateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  handleActivate: any;
+  open: boolean;
+  setOpen: any;
+  priceId: any;
+  planName: string
+}
+
+export interface DeactivateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  handleDeactivate: any;
+  open: boolean;
+  setOpen: any;
+  priceId: any;
+  planName: string
+}
+
+export interface ActivateDeactivateProps {
+  loading: boolean;
+  showMessage: boolean;
+  setShowMessage: any;
+  message: string;
+  messageColor: string;
+  handleActivateOrDeactivate: any;
+  open: boolean;
+  setOpen: any;
+  statusValue: string;
+  priceId: any;
+  planName: string
+}
+
+export interface UpgradePlanProps {
+  open: boolean;
+  setOpen: any;
+  plans: any;
+  teamId: string;
+}
+
+
+export interface SubscriptionsProps {
+  subscriptions: any;
 }

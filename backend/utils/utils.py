@@ -4,7 +4,7 @@ from typing import Final
 from backend.db_handler.user_handler import user_db_handler
 from jose import jwt
 from passlib.context import CryptContext
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 from backend.config import get_settings
 
@@ -69,3 +69,15 @@ def get_user_detail(decoded_token: str, db):
     user_detail = user_db_handler.load_by_column(
         db=db, column_name='email', value=email)
     return user_detail
+
+
+def admin_role_validataion(decoded_token: dict, db):
+    user = user_db_handler.load_by_column(db=db,
+                                          column_name="email",
+                                          value=decoded_token["email"])
+
+    if not user.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only Admin can access the admin dashdoard"
+        )

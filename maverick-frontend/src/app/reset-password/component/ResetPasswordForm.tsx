@@ -89,14 +89,8 @@ export default function ResetPassword({
             </Box>
             <Grid className="flex justify-end mt-0 mb-4 mr-5">
               <Grid item>
-                {/* <Link
-                  href="/signin"
-                  variant="body2"
-                  className="text-greyplus font-Inter font-medium text-sm leading-7">
-                  Back to Login
-                </Link> */}
                 <Button
-                  className="text-greyplus font-Inter normal-case font-medium text-sm leading-7"
+                  className="mr-2 text-greyplus font-Inter normal-case font-medium text-sm leading-7 hover:bg-white"
                   onClick={navigateToSignIn}
                 >
                   Back to Login

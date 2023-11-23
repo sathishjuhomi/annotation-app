@@ -34,7 +34,10 @@ export default function Onboarding() {
           />
         </div>
         <div className="hidden sm:block">
-          <Button className="text-greyplus font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey" onClick={navigateToSignUp}>
+          <Button
+            className="text-greyplus font-medium font-Inter text-base leading-8 normal-case mr-2 hover:bg-lightgrey"
+            onClick={navigateToSignUp}
+          >
             Sign Up
           </Button>
           <Button
@@ -49,46 +52,33 @@ export default function Onboarding() {
         <Box className="flex flex-col box-border max-w-lg max-h-36 mt-16 ml-14">
           <Typography
             className="text-black font-Inter font-bold text-left text-4xl leading-10 -tracking-1 "
-            variant="h2"
             gutterBottom
           >
             Accelerate product
-          </Typography>
-          <Typography
-            className="text-black font-Inter font-bold text-left text-4xl -mt-4 leading-10 -tracking-1 "
-            variant="h2"
-            gutterBottom
-          >
+            <br/>
             development in Next.js
-          </Typography>
-          <Typography
-            className="text-black font-Inter font-bold text-left text-4xl -mt-4 leading-10 -tracking-1 "
-            variant="h2"
-            gutterBottom
-          >
+            <br/>
             and Python
           </Typography>
           <Typography className="text-black font-Inter font-normal text-left text-lg leading-7 tracking-normal">
             Maverick stands out as the top Next.js and Python
-          </Typography>
-          <Typography className="text-black font-Inter font-normal text-left text-lg -mt-1 leading-7 tracking-normal">
+            <br/>
             SaaS template available.Concentrate on your business
-          </Typography>
-          <Typography className="text-black font-Inter font-normal text-left text-lg -mt-1 leading-7 tracking-normal">
+            <br/>
             not on the initial setup and repetitive tasks
           </Typography>
         </Box>
-        <div className="ml-40 -mb-10 ">
+        <div className="ml-64 -mb-10 ">
           <Image
             src={imageOne}
             alt='ImageOne'
-            className="ml-11 w-image1 max-h-80 rounded-2xl"
+            className="ml-16 w-image1 max-h-80 rounded-2xl"
             quality={100}
             placeholder='blur'
           />
         </div>
       </Box>
-      <div className="flex justify-end flex-row mt-12 -mb-96 mr-5">
+      <div className="flex justify-end flex-row mt-12 -mb-96 mr-7">
         <Image
           src={imageTwo}
           alt='ImageTwo'

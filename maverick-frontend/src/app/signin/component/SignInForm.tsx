@@ -1,10 +1,7 @@
 "use client";
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -45,16 +42,15 @@ export default function Signin({
     <Box> <br></br>
       <Box className='flex flex-row'>
         <Paper elevation={5} className="w-paper max-h-56 ml-14 mr-2 -mt-5 mb-2 flex flex-col  bg-white">
-          <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1" component="h1" variant="h5">
+          <Typography className="text-black font-Inter font-bold text-left text-2xl ml-6 mt-6 leading-10 -tracking-1">
             Login
           </Typography>
           <br />
           <form noValidate>
-            <Box className="mt-1 mr-2 flex flex-row">
+            <Box className="mr-2 flex flex-row">
               <Grid item>
                 <Button
                   type="submit"
-                  style={{ width: '214px', height: '55px' }}
                   onClick={handleOauth}
                   startIcon={<Image
                     src={google}
@@ -74,7 +70,7 @@ export default function Signin({
                   required
                   className="w-full-fourty h-16"
                   id="email"
-                  label="Email Address"
+                  label="Email ID"
                   name="email"
                   autoComplete="email"
                   {...register("email")}
@@ -107,23 +103,23 @@ export default function Signin({
               </Button>
             </Box>
             <Box className="mt-1 flex flex-row">
-              <Grid className='flex flex-row ml-3'>
-                <Typography className="font-Inter font-medium text-greyplus ml-4 mt-4 mr-1 text-sm leading-7">
+              <Grid className='flex flex-row ml-3 mb-4'>
+                <Typography className="font-Inter font-medium text-greyplus ml-4 mt-4 text-sm leading-7">
                   Don't have an account?
                 </Typography>
                 <Button
-                  className="text-button font-Inter font-semibold normal-case mt-0 -ml-1 text-sm leading-7 mr-56 hover:bg-white"
+                  className=" mt-3 text-button font-Inter font-semibold normal-case text-sm leading-7 hover:bg-white"
                   onClick={navigateToSignUp}
                 >
                   Register here
                 </Button>
               </Grid>
-              <Grid className="flex justify-end ms-88 mb-4">
+              <Grid className="flex items-end justify-end mb-4 ml-auto mr-8">
                 <Button
-                  className="font-Inter font-medium text-greyplus normal-case mt-2 ml-72 -mr-4"
+                  className="font-Inter font-medium text-greyplus normal-case mt-2"
                   onClick={navigateToForgotPassword}
                 >
-                  Forgot Password
+                  Forgot Password?
                 </Button>
               </Grid>
             </Box>

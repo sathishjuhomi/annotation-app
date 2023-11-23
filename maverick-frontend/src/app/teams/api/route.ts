@@ -200,3 +200,42 @@ export async function updateTeamMemberRole(team_id: string, team_member_id: stri
     }
   };
 }
+
+export async function activePlanList(getAllPlans: boolean) {
+  const accessToken = localStorage.getItem('access_token');
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/plans?get_all_plans=${getAllPlans}`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      "authorization": `Bearer ${accessToken}`,
+    },
+  });
+
+  const data = await res.json();
+  return {
+    props: {
+      plans: data
+    }
+  };
+}
+
+export async function upgradePlan(teamId: string, priceId: string, paymentType: string) {
+  const accessToken = localStorage.getItem('access_token');
+  const body = {payment_type: paymentType}
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/checkout-session/teams/${teamId}?price_id=${priceId}`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "authorization": `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(body),
+    });
+  const data = await res.json();
+  console.log("Route data: ", data)
+  return {
+    props: {
+      data: data
+    }
+  };
+}
