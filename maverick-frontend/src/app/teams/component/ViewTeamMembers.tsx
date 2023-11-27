@@ -48,9 +48,11 @@ const ViewTeamAndTeamMembers = (props: any) => {
     useEffect(() => {
         async function fetchData() {
             const { props } = await getTeamAndTeamMembers(id);
+            console.log("Teams and members: ", props)
             try {
                 const teamNameValue = props.teamMembers.team["team_name"];
                 const teamMembers = props.teamMembers.team_members;
+                console.log("team members: ", props.teamMembers.team_members.is_action)
                 setTeamName(teamNameValue);
                 setTeamMembers(teamMembers);
             } catch (error) {
@@ -244,6 +246,20 @@ const ViewTeamAndTeamMembers = (props: any) => {
         <Box className="flex flex-col">
             <Paper className="ml-6 w-auto shadow-none">
                 <Box className=" rounded-md flex w-auto h-16 mt-2 bg-beige">
+                    {/* {teamMembers.map((teamMember) => (
+                        <div>
+
+                            <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
+                                You are in FREE Plan, for more feature
+                            </Typography>
+                            <Button
+                                className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
+                                onClick={handleOpenUpgrade}
+                            >
+                                Upgrade Now
+                            </Button>
+                        </div>
+                    ))} */}
                     <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
                         You are in FREE Plan, for more feature
                     </Typography>
@@ -275,6 +291,8 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     {getTeamMemberRoles(teamMember['roles'])}
                                 </TableCell>
                                 <TableCell className="flex">
+                                {/* {teamMember['is_action'] ?  */}
+                                <div className="flex flex-row ml-auto">
                                     <Button
                                         size="small"
                                         className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
@@ -290,6 +308,9 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     >
                                         Delete
                                     </Button>
+                                    </div>
+                                     {/* :  */}
+                                     {/* <div className="mt-8"> </div>} */}
                                 </TableCell>
                             </TableRow>
                         ))}
