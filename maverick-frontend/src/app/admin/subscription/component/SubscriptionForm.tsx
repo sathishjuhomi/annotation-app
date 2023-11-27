@@ -48,7 +48,7 @@ export default function SubscriptionList(
                                     {subscription.team_name}
                                 </TableCell>
                                 <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
-                                    {subscription.subscription_id}
+                                    {subscription.subscription_id === null ? "-" : subscription.subscription_id}
                                 </TableCell>
                                 <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
                                     {subscription.subscribed_on}
