@@ -29,15 +29,18 @@ class SubscriptionService():
         if subscription_db_response:
             if subscription_db_response[0].subscription_id:
                 subscription_id = subscription_db_response[0].subscription_id
-                subscription_response = stripe.Subscription.retrieve(subscription_id)
+                subscription_response = stripe.Subscription.retrieve(
+                    subscription_id)
                 subscription_status = subscription_response.get("status")
                 current_period_start = subscription_response.get(
                     "current_period_start")
-                current_period_end = subscription_response.get("current_period_end")
+                current_period_end = subscription_response.get(
+                    "current_period_end")
 
                 subscription_start_datetime = datetime.fromtimestamp(
                     current_period_start)
-                subscription_end_datetime = datetime.fromtimestamp(current_period_end)
+                subscription_end_datetime = datetime.fromtimestamp(
+                    current_period_end)
 
                 current_datetime = datetime.now()
 
@@ -51,7 +54,8 @@ class SubscriptionService():
                         input_object=update_subscription_status
                     )
 
-                data_response = subscription_response.get("items", {}).get("data", [])
+                data_response = subscription_response.get(
+                    "items", {}).get("data", [])
                 plan_id = data_response[0]["price"]["product"]
                 price_id = data_response[0]["price"]["id"]
 

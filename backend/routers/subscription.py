@@ -15,9 +15,9 @@ bearer = HTTPBearer()
 
 
 @subscription_router.get('/subscribed-users',
-                          description="This API endpoint displays subscribers in admin dashboard",
-                          response_model=List[SubscriptionResponseSchema] | DetailSchema
-                          )
+                         description="This API endpoint displays subscribers in admin dashboard",
+                         response_model=List[SubscriptionResponseSchema] | DetailSchema
+                         )
 def get_all_subscribed_users(
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer)
@@ -28,9 +28,9 @@ def get_all_subscribed_users(
 
 
 @subscription_router.patch("/cancel-subscription/{subscription_id}",
-                         description="This API endpoint allow subscriber to cancel the subscription",
-                         response_model=DetailSchema
-                         )
+                           description="This API endpoint allow subscriber to cancel the subscription",
+                           response_model=DetailSchema
+                           )
 def cancel_subscription(
         subscription_id: str,
         authorization: str = Depends(bearer),

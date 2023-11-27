@@ -37,6 +37,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const [message, setMessage] = React.useState("");
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("");
+    const [actionButtons, setActionButtons] = React.useState("");
     const [teamId, setTeamId] = React.useState("");
     const [teamMembers, setTeamMembers] = React.useState([]);
     const [plans, setPlans] = React.useState([]);
@@ -52,9 +53,11 @@ const ViewTeamAndTeamMembers = (props: any) => {
             try {
                 const teamNameValue = props.teamMembers.team["team_name"];
                 const teamMembers = props.teamMembers.team_members;
-                console.log("team members: ", props.teamMembers.team_members.is_action)
+                const actionButtons = props.teamMembers.is_action;
+                console.log("team members: ", props.teamMembers.is_action)
                 setTeamName(teamNameValue);
                 setTeamMembers(teamMembers);
+                setActionButtons(actionButtons);
             } catch (error) {
                 const data = props.teamMembers.detail;
                 setMessage(data);
@@ -245,37 +248,24 @@ const ViewTeamAndTeamMembers = (props: any) => {
     return (
         <Box className="flex flex-col">
             <Paper className="ml-6 w-auto shadow-none">
-                <Box className=" rounded-md flex w-auto h-16 mt-2 bg-beige">
-                    {/* {teamMembers.map((teamMember) => (
-                        <div>
-
-                            <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
-                                You are in FREE Plan, for more feature
-                            </Typography>
-                            <Button
-                                className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
-                                onClick={handleOpenUpgrade}
-                            >
-                                Upgrade Now
-                            </Button>
-                        </div>
-                    ))} */}
-                    <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
-                        You are in FREE Plan, for more feature
-                    </Typography>
-                    <Button
-                        className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
-                        onClick={handleOpenUpgrade}
-                    >
-                        Upgrade Now
-                    </Button>
-                    <UpgradePlanForm
-                        open={openUpgrade}
-                        setOpen={setOpenUpgrade}
-                        plans={plans}
-                        teamId={id}
-                    />
-                </Box>
+                {actionButtons ?
+                    <Box className=" rounded-md flex w-auto h-16 mt-2 bg-beige">
+                        <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
+                            You are in FREE Plan, for more feature
+                        </Typography>
+                        <Button
+                            className="mt-4 h-8 ml-auto mr-6 normal-case font-Inter font-bold leading-6 text-sm text-black hover:bg-beige"
+                            onClick={handleOpenUpgrade}
+                        >
+                            Upgrade Now
+                        </Button>
+                        <UpgradePlanForm
+                            open={openUpgrade}
+                            setOpen={setOpenUpgrade}
+                            plans={plans}
+                            teamId={id}
+                        />
+                    </Box> : null}
                 <Table aria-label="simple table">
                     <TableBody>
                         {teamMembers.map((teamMember) => (
@@ -291,26 +281,27 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     {getTeamMemberRoles(teamMember['roles'])}
                                 </TableCell>
                                 <TableCell className="flex">
-                                {/* {teamMember['is_action'] ?  */}
-                                <div className="flex flex-row ml-auto">
-                                    <Button
-                                        size="small"
-                                        className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
-                                        onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Typography className="pt-1">|</Typography>
-                                    <Button
-                                        size="small"
-                                        className="ml-2 mr-1 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
-                                        onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
-                                    >
-                                        Delete
-                                    </Button>
-                                    </div>
-                                     {/* :  */}
-                                     {/* <div className="mt-8"> </div>} */}
+                                    {teamMember['is_action'] ? "True" : teamMember['is_action']}
+                                    {actionButtons ?
+                                        <div className="flex flex-row ml-auto">
+                                            <Button
+                                                size="small"
+                                                className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                                onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Typography className="pt-1">|</Typography>
+                                            <Button
+                                                size="small"
+                                                className="ml-2 mr-1 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
+                                                onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </div>
+                                        :
+                                        <div className="mt-8"> </div>}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -376,51 +367,53 @@ const ViewTeamAndTeamMembers = (props: any) => {
                     teamMemberId={selectedTeamMemberIdForEdit}
                     teamMemberEmailId={selectedTeamMemberEmailId}
                 />
-            </Paper>
-            <Box className='mt-5'>
-                <Button
-                    className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 w-36 h-11 mr-44 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
-                    size="small"
-                    onClick={handleClickOpen}
-                >
-                    {"Update Team"}
-                </Button>
-                <CreateUpdateForm
-                    loading={dataLoading}
-                    showMessage={showMessage}
-                    setShowMessage={setShowMessage}
-                    message={message}
-                    messageColor={messageColor}
-                    onSubmit={submit}
-                    formHandleSubmit={createOrUpdateTeam}
-                    register={createOrUpdateRegister}
-                    errors={createOrUpdateTeamErrors}
-                    open={open}
-                    setOpen={setOpen}
-                    teamTitle={teamName}
-                    teamId={id}
-                />
-                <Button
-                    className="flex flex-end ml-auto -mt-12 mb-4 mr-6 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
-                    variant="outlined"
-                    onClick={handleClickOpenInvite}
-                >
-                    {"Invite Member"}
-                </Button>
-                <InviteTeamMember
-                    loading={inviteLoading}
-                    showMessage={showMessage}
-                    setShowMessage={setShowMessage}
-                    message={message}
-                    messageColor={messageColor}
-                    onSubmit={onInviteTeamMember}
-                    formHandleSubmitInvite={inviteTeamMember}
-                    register={inviteTeamMemberRegister}
-                    errors={inviteTeamMemberErrors}
-                    open={openInvite}
-                    setOpen={setOpenInvite}
-                />
-            </Box>
+            </Paper >
+            {actionButtons ?
+                <Box className='mt-5'>
+                    <Button
+                        className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 w-36 h-11 mr-44 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
+                        size="small"
+                        onClick={handleClickOpen}
+                    >
+                        {"Update Team"}
+                    </Button>
+                    <CreateUpdateForm
+                        loading={dataLoading}
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        message={message}
+                        messageColor={messageColor}
+                        onSubmit={submit}
+                        formHandleSubmit={createOrUpdateTeam}
+                        register={createOrUpdateRegister}
+                        errors={createOrUpdateTeamErrors}
+                        open={open}
+                        setOpen={setOpen}
+                        teamTitle={teamName}
+                        teamId={id}
+                    />
+                    <Button
+                        className="flex flex-end ml-auto -mt-12 mb-4 mr-6 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
+                        variant="outlined"
+                        onClick={handleClickOpenInvite}
+                    >
+                        {"Invite Member"}
+                    </Button>
+                    <InviteTeamMember
+                        loading={inviteLoading}
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        message={message}
+                        messageColor={messageColor}
+                        onSubmit={onInviteTeamMember}
+                        formHandleSubmitInvite={inviteTeamMember}
+                        register={inviteTeamMemberRegister}
+                        errors={inviteTeamMemberErrors}
+                        open={openInvite}
+                        setOpen={setOpenInvite}
+                    />
+                </Box>
+                : null}
             {
                 message !== "" ? (
                     <Snackbar

@@ -29,13 +29,41 @@ class TeamMemberService():
         return team_member_data
 
     @staticmethod
-    def get_team_members_detail_with_team_id(db: Session, id, decoded_token: dict):
+    def check_loggedin_team_member_role(id, db: Session, decoded_token: dict):
+        '''
+        filter the team member from team member table with loggedin email, 
+        check if the user is owner or admin,
+        return True or flase,
+
+        This method helps to show action buttons in frontend like edit, delete, upgrade 
+        only to the owner or admin.
+        '''
+        loggedin_email = decoded_token["email"]
+        filters = {
+            'team_id': id,
+            'email': loggedin_email,
+            'is_deleted': False,
+            'is_declined': False
+        }
+        team_member = team_member_db_handler.load_all_by_columns(
+            db=db, filters=filters)
+        if not team_member:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"{loggedin_email} doesn't exist"
+            )
+        is_action = (team_member[0].roles.get('owner')
+                     or team_member[0].roles.get('admin'))
+
+        return is_action
+
+    @staticmethod
+    def get_team_members_detail_with_team_id(db: Session, id):
         filters = {
             'team_id': id,
             'is_deleted': False,
             'is_declined': False
         }
-        loggedin_email = decoded_token.get('email')
         team_members = team_member_db_handler.load_all_by_columns(
             db=db, filters=filters)
         team_members_details = [
@@ -44,9 +72,7 @@ class TeamMemberService():
                 "email": team_member.email,
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
-                "invite_token": team_member.invite_token,
-                "is_action": (team_member.email == loggedin_email) and
-                            (team_member.roles.get('owner') or team_member.roles.get('admin'))
+                "invite_token": team_member.invite_token
             }
             for team_member in team_members
         ]

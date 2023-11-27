@@ -31,12 +31,12 @@ class WebhookService():
         price_id = metadata["price_id"]
         team_id = metadata["team_id"]
         invoice_id = session.get("invoice")
-        
+
         invoice = stripe.Invoice.retrieve(invoice_id)
         charge_id = invoice.get("charge")
 
         charge = stripe.Charge.retrieve(
-        charge_id,
+            charge_id,
         )
 
         receipt_url = charge.get("receipt_url")
