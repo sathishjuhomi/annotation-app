@@ -13,7 +13,7 @@ class Subscription(Base, TimestampMixIn):
         "users.id"), nullable=False)
     team_id = Column(UUID(as_uuid=True), ForeignKey(
         "teams.id"), nullable=False)
-    subscription_id = Column(String, nullable=False)
+    subscription_id = Column(String, nullable=True) #for one time payment we don't get subscription id
     price_id = Column(String, ForeignKey('plans.price_id'), nullable=False)
     payment_status = Column(String, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
