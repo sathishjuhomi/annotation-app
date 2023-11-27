@@ -5,6 +5,7 @@ from datetime import datetime
 class SubscriptionResponseSchema(BaseModel):
     email: EmailStr
     plan_name: str
+    team_name: str
     subscription_id: str
     subscribed_on: datetime
     payment_status: str

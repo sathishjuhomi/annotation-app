@@ -10,13 +10,13 @@ class Subscription(Base, TimestampMixIn):
 
     id = Column(UUID(as_uuid=True), primary_key=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey(
-        "users.id"), nullable=True)
+        "users.id"), nullable=False)
     team_id = Column(UUID(as_uuid=True), ForeignKey(
         "teams.id"), nullable=False)
-    subscription_id = Column(String, nullable=True)
-    price_id = Column(String, ForeignKey('plans.price_id'), nullable=True)
-    payment_status = Column(String, nullable=True)
-    is_active = Column(Boolean, default=True, nullable=True)
+    subscription_id = Column(String, nullable=False)
+    price_id = Column(String, ForeignKey('plans.price_id'), nullable=False)
+    payment_status = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
 
     user = relationship("Users")
     plan = relationship("Plan")

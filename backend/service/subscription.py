@@ -106,6 +106,7 @@ class SubscriptionService():
         return {
             'email': subscription.user.email,
             'plan_name': subscription.plan.plan_name,
+            'team_name': subscription.team.team_name,
             'subscription_id': subscription.subscription_id,
             'subscribed_on': subscription.t_create,
             'payment_status': subscription.payment_status,
