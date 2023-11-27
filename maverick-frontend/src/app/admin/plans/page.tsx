@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { createPlanSchema } from "./validation";
 import { CreatePlanFormData } from "./../../component/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Constants from "./../../utils/constant";
+import * as Constants from "../../utils/constant";
 import { createPlan, planList } from "./api/route";
 import AdminNavBar from "../component/AdminNavBar";
 
@@ -28,32 +28,32 @@ const Plans = () => {
     resolver: yupResolver(createPlanSchema),
   });
 
-// Create Plan
-    const submit = async (data: CreatePlanFormData) => {
-      setShowMessage(true);
-      const response = await createPlan(data)
-        .then(async (res) => {
-          const response = await res.json();
-          if (res.status === 201) {
-            setMessage(Constants.PLAN_CREATED_SUCCESS);
-            setMessageColor(Constants.SUCCESS);
-            location.reload()
-          } else {
-            const data = response.detail;
-            setMessage(data);
-            setMessageColor(Constants.ERROR);
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          setMessage(error);
-          setLoading(false);
+  // Create Plan
+  const submit = async (data: CreatePlanFormData) => {
+    setShowMessage(true);
+    const response = await createPlan(data)
+      .then(async (res) => {
+        const response = await res.json();
+        if (res.status === 201) {
+          setMessage(Constants.PLAN_CREATED_SUCCESS);
+          setMessageColor(Constants.SUCCESS);
+          location.reload()
+        } else {
+          const data = response.detail;
+          setMessage(data);
           setMessageColor(Constants.ERROR);
-        });
-    };
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        setMessage(error);
+        setLoading(false);
+        setMessageColor(Constants.ERROR);
+      });
+  };
 
-    
-// View Plans
+
+  // View Plans
 
   useEffect(() => {
     async function fetchData() {
@@ -72,8 +72,8 @@ const Plans = () => {
   }, []);
 
   return (
-    <Box className="flex mt-5">
-      <AdminNavBar></AdminNavBar>
+    <Box className="flex mt-2">
+      <AdminNavBar />
       <Box component="main" className="mb-4"
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - 240px)` } }}>
         <PlansForm

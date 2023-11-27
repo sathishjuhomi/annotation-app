@@ -9,8 +9,6 @@ export async function subscriptionList() {
         "authorization": `Bearer ${accessToken}`,
       },
     });
-  
-  
     const data = await res.json();
     return {
       props: {

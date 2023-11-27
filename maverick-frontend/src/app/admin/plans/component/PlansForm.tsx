@@ -12,7 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import CircularProgress from '@mui/material/CircularProgress';
 import CreatePlanForm from './CreatePlanForm';
 import Snackbar from '@/app/component/Snackbar';
-import Chip from '@mui/material/Chip';
 import { PlansProps, UpdatePlanFormData } from '@/app/component/interfaces';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,10 +21,9 @@ import UpdatePlanForm from './UpdatePlanForm';
 import { updatePlanSchema } from '../validation';
 import { ActivatePlan, DeactivatePlan, updatePlan } from '../api/route';
 import * as Constants from "../../../utils/constant";
-import DeactivateForm from './DeactivateForm';
-import ActivateForm from './ActivateForm';
 import { Switch } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
+import ActivateDeactivateForm from './ActivateDeactivateForm';
 
 export default function PlansList({
     loading,
@@ -286,9 +284,14 @@ export default function PlansList({
                                     <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
                                         {plan.price.interval_count === null ? '-' : plan.price.interval_count}
                                     </TableCell>
-                                    <TableCell className="text-center font-Inter font-normal leading-6 text-sm">
-                                        {plan.is_active ? "Active" : "Inactive"}
-                                    </TableCell>
+                                    {plan.is_active ?
+                                        <TableCell className="text-green text-center font-Inter font-normal leading-6 text-sm">
+                                            Active
+                                        </TableCell>
+                                        :
+                                        <TableCell className="text-red text-center font-Inter font-normal leading-6 text-sm">
+                                            Inactive
+                                        </TableCell>}
                                     <TableCell align='left'>
                                         <Button
                                             className='text-greyplus hover:text-green hover:bg-white'
@@ -304,15 +307,17 @@ export default function PlansList({
                                                     defaultChecked
                                                     onChange={() => handleClickOpenActive(plan.price_id, plan.plan.plan_name)}
                                                 />
-                                                <DeactivateForm
+
+                                                <ActivateDeactivateForm
                                                     loading={deactiveLoading}
                                                     showMessage={showMessageActiveDeactive}
                                                     setShowMessage={setShowMessageActiveDeactive}
                                                     message={messageActiveDeactive}
                                                     messageColor={messageColorActiveDeactive}
-                                                    handleDeactivate={handleDeactivatePlan}
+                                                    handleActivateOrDeactivate={handleDeactivatePlan}
                                                     open={openActivate}
                                                     setOpen={setOpenActivate}
+                                                    statusValue="deactivate"
                                                     priceId={selectedPriceId}
                                                     planName={selectedPlanName}
                                                 />
@@ -321,15 +326,16 @@ export default function PlansList({
                                                 <GreenSwitch {...label}
                                                     onChange={() => handleClickOpenDeactivate(plan.price_id, plan.plan.plan_name)}
                                                 />
-                                                <ActivateForm
+                                                <ActivateDeactivateForm
                                                     loading={activeLoading}
                                                     showMessage={showMessageActiveDeactive}
                                                     setShowMessage={setShowMessageActiveDeactive}
                                                     message={messageActiveDeactive}
                                                     messageColor={messageColorActiveDeactive}
-                                                    handleActivate={handleActivatePlan}
+                                                    handleActivateOrDeactivate={handleActivatePlan}
                                                     open={openDeactivate}
                                                     setOpen={setOpenDeactivate}
+                                                    statusValue='activate'
                                                     priceId={selectedPriceId}
                                                     planName={selectedPlanName}
                                                 />
