@@ -29,13 +29,13 @@ class TeamMemberService():
         return team_member_data
 
     @staticmethod
-    def get_team_members_detail_with_team_id(db: Session, id):
+    def get_team_members_detail_with_team_id(db: Session, id, decoded_token: dict):
         filters = {
             'team_id': id,
             'is_deleted': False,
             'is_declined': False
         }
-
+        loggedin_email = decoded_token.get('email')
         team_members = team_member_db_handler.load_all_by_columns(
             db=db, filters=filters)
         team_members_details = [
@@ -44,7 +44,9 @@ class TeamMemberService():
                 "email": team_member.email,
                 "is_activated": team_member.is_activated,
                 "roles": team_member.roles,
-                "invite_token": team_member.invite_token
+                "invite_token": team_member.invite_token,
+                "is_action": (team_member.email == loggedin_email) and
+                            (team_member.roles.get('owner') or team_member.roles.get('admin'))
             }
             for team_member in team_members
         ]
