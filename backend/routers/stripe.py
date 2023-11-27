@@ -1,5 +1,6 @@
 from backend.db_handler.subscription_handler import subscription_db_handler
 from backend.schemas.request.plan import CheckoutSessionRequestSchema
+from backend.service.team_member import team_member_service
 from backend.utils.utils import decode_token
 from pydantic import UUID4
 from fastapi.security import HTTPBearer
@@ -26,35 +27,55 @@ def create_checkout_session(
 ):
     token = authorization.credentials
     decoded_token = decode_token(token=token)
+    filters = {"email": decoded_token["email"],
+               "team_id": str(team_id)}
+    _ = team_member_service.role_validation(filters, db)
+    customer_id = decoded_token["id"]
+    customer_email = decoded_token["email"]
     plan_data = request_payload.model_dump()
     filters = {
         "team_id": team_id,
         "is_active": True
     }
-    subscription_data = subscription_db_handler.load_all_by_columns(db=db, filters=filters)
+    subscription_data = subscription_db_handler.load_all_by_columns(
+        db=db, filters=filters)
     if subscription_data:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Team subscription already exist"
-        )
+        return {"url":"http://localhost:3000/teams"}
+        # raise HTTPException(
+        #     status_code=status.HTTP_409_CONFLICT,
+        #     detail="Team subscription already exist"
+        # )
+        
     payment_mode = "subscription" if plan_data["payment_type"] == "recurring" else "payment"
-
-    checkout_session = stripe.checkout.Session.create(
-        customer_email= decoded_token["email"],
-        success_url='http://localhost:3000/signin',
-        cancel_url='http://localhost:3000/signin',
-        # payment_method_types=(os.getenv('PAYMENT_METHOD_TYPES') or 'card').split(','),
-        mode=payment_mode,
-        line_items=[{
+    try:
+        customer = stripe.Customer.retrieve(customer_id)
+    except stripe.error.StripeError as e:
+        customer = None
+    if not customer:
+        customer = stripe.Customer.create(
+            id=customer_id,
+            email=customer_email,
+    )
+    stripe_params = {
+        'customer': customer.id,
+        # 'customer_email': decoded_token["email"],
+        'success_url': 'http://localhost:3000/signin',
+        'cancel_url': 'http://localhost:3000/signin',
+        'mode': payment_mode,
+        'line_items': [{
             'price': price_id,
             'quantity': 1,
         }],
-        billing_address_collection='required', # Collect billing address
-        metadata={"team_id":team_id, "price_id":price_id} # data that we need in webhook output
-        # phone_number_collection={"enabled": True}
-    )
-    print(checkout_session)
+        'billing_address_collection': 'required',  # Collect billing address
+        # Data needed in webhook output
+        'metadata': {"team_id": team_id, "price_id": price_id},
+    }
+
+    # Add invoice_creation parameter when payment_mode is "payment"
+    if payment_mode == "payment":
+        stripe_params['invoice_creation'] = {"enabled": True}
+
+    checkout_session = stripe.checkout.Session.create(**stripe_params)
+
     redirect_url = {"url": checkout_session.url}
-
     return redirect_url
-

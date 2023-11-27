@@ -45,7 +45,7 @@ export default function SubscriptionList(
                                     {subscription.plan_name}
                                 </TableCell>
                                 <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
-                                    Maverick
+                                    {subscription.team_name}
                                 </TableCell>
                                 <TableCell className="text-center capitalize font-Inter font-normal leading-6 text-sm">
                                     {subscription.subscription_id}

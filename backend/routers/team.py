@@ -1,6 +1,7 @@
 from typing import List
 import logging
 from backend.db_handler.team_member_handler import team_member_db_handler
+from backend.service.subscription import subscription_service
 from pydantic import UUID4
 import uuid
 from fastapi.security import HTTPBearer
@@ -121,9 +122,12 @@ def get_team_by_id(
     _ = decode_token(token=token)
 
     team = team_service.get_team(db, id=id)
+
+    response = subscription_service.validate_subscription(db=db, team_id=id)
+
     team_members_details = team_member_service.get_team_members_detail_with_team_id(
         db, id)
-    return {"team": team, "team_members": team_members_details}
+    return {"team": team, "team_members": team_members_details, "subscription_detail": response}
 
 
 @team_router.get(

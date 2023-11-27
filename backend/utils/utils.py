@@ -79,5 +79,5 @@ def admin_role_validataion(decoded_token: dict, db):
     if not user.admin:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only Admin can access the admin dashdoard"
+            detail="Only admin have access to certain functionalities and controls."
         )

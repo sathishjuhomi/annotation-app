@@ -47,7 +47,7 @@ async def webhook(
     # Handle the event
     if event['type'] == checkout_session_completed:
         session = event['data']['object']
-        webhook_service.create_subscription(session, db=db)
+        await webhook_service.create_subscription(session, db=db)
 
     elif event['type'] == checkout_session_expired:
         session = event['data']['object']

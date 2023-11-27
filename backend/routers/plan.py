@@ -1,7 +1,7 @@
 from typing import Any, List
 from backend.utils.utils import admin_role_validataion, decode_token
 from pydantic import UUID4
-from backend.schemas.request.plan import PlanRequestSchema, PriceStateRequestSchema, UpdatePlanSchema, UpdatePriceSchema
+from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema
 from backend.schemas.response.plan import PlanResponseSchema
 from backend.schemas.response.user import DetailSchema
 from backend.service.plan import plan_service
@@ -32,9 +32,7 @@ def create_plan(
     db: Session = Depends(get_db),
     authorization: str = Depends(bearer)
 ) -> Any:
-    # print('inside plan')
     token = authorization.credentials
-    # print('token', token)
     decoded_token = decode_token(token=token)
     admin_role_validataion(decoded_token=decoded_token, db=db)
     return plan_service.create_plan(request_payload=request_payload, db=db)
@@ -60,7 +58,8 @@ def get_plans(
 ) -> Any:
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    admin_role_validataion(decoded_token=decoded_token, db=db)
+    if get_all_plans:
+        admin_role_validataion(decoded_token=decoded_token, db=db)
     return plan_service.get_all_plans(plans=get_all_plans, db=db)
 
 
