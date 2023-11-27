@@ -105,7 +105,7 @@ def update_team(
 
 @team_router.get(
     "/teams/{id}",
-    description="Get a team by ID",
+    description="Get a team by ID with team member details",
     response_model=GetTeamMembersByTeamIdResponseSchema,
     responses={
         status.HTTP_404_NOT_FOUND: {
@@ -119,14 +119,14 @@ def get_team_by_id(
     db: Session = Depends(get_db)
 ):
     token = authorization.credentials
-    _ = decode_token(token=token)
+    decoded_token = decode_token(token=token)
 
     team = team_service.get_team(db, id=id)
 
     response = subscription_service.validate_subscription(db=db, team_id=id)
 
     team_members_details = team_member_service.get_team_members_detail_with_team_id(
-        db, id)
+        db, id, decoded_token)
     return {"team": team, "team_members": team_members_details, "subscription_detail": response}
 
 

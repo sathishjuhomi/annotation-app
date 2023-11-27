@@ -23,6 +23,7 @@ class GetTeamMembersByTeamId(BaseModel):
     is_activated: bool
     roles: dict
     invite_token: str | None
+    is_action: bool
 
 
 class GetTeamMembersByTeamIdResponseSchema(BaseModel):
