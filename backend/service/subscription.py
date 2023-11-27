@@ -27,43 +27,48 @@ class SubscriptionService():
         subscription_db_response = subscription_db_handler.load_all_by_columns(
             db=db, filters=filters)
         if subscription_db_response:
-            subscription_id = subscription_db_response[0].subscription_id
-            subscription_response = stripe.Subscription.retrieve(subscription_id)
-            subscription_status = subscription_response.get("status")
-            current_period_start = subscription_response.get(
-                "current_period_start")
-            current_period_end = subscription_response.get("current_period_end")
+            if subscription_db_response[0].subscription_id:
+                subscription_id = subscription_db_response[0].subscription_id
+                subscription_response = stripe.Subscription.retrieve(
+                    subscription_id)
+                subscription_status = subscription_response.get("status")
+                current_period_start = subscription_response.get(
+                    "current_period_start")
+                current_period_end = subscription_response.get(
+                    "current_period_end")
 
-            subscription_start_datetime = datetime.fromtimestamp(
-                current_period_start)
-            subscription_end_datetime = datetime.fromtimestamp(current_period_end)
+                subscription_start_datetime = datetime.fromtimestamp(
+                    current_period_start)
+                subscription_end_datetime = datetime.fromtimestamp(
+                    current_period_end)
 
-            current_datetime = datetime.now()
+                current_datetime = datetime.now()
 
-            if not (subscription_start_datetime <= current_datetime <= subscription_end_datetime):
-                update_subscription_status = {
-                    "payment_status": subscription_status,
-                    "is_active": False
+                if not (subscription_start_datetime <= current_datetime <= subscription_end_datetime):
+                    update_subscription_status = {
+                        "payment_status": subscription_status,
+                        "is_active": False
+                    }
+                    subscription_db_handler.update(
+                        db=db, db_obj=subscription_db_response[0],
+                        input_object=update_subscription_status
+                    )
+
+                data_response = subscription_response.get(
+                    "items", {}).get("data", [])
+                plan_id = data_response[0]["price"]["product"]
+                price_id = data_response[0]["price"]["id"]
+
+                plan_db_response = plan_db_handler.load_by_column(
+                    db=db, column_name="id", value=plan_id)
+
+                plan_name = plan_db_response.plan_name
+                response = {
+                    "subscription_status": subscription_status,
+                    "plan_name": plan_name,
+                    "price_id": price_id
                 }
-                subscription_db_handler.update(
-                    db=db, db_obj=subscription_db_response[0],
-                    input_object=update_subscription_status
-                )
-
-            data_response = subscription_response.get("items", {}).get("data", [])
-            plan_id = data_response[0]["price"]["product"]
-            price_id = data_response[0]["price"]["id"]
-
-            plan_db_response = plan_db_handler.load_by_column(
-                db=db, column_name="id", value=plan_id)
-
-            plan_name = plan_db_response.plan_name
-            response = {
-                "subscription_status": subscription_status,
-                "plan_name": plan_name,
-                "price_id": price_id
-            }
-            return response
+                return response
         return None
 
     @staticmethod

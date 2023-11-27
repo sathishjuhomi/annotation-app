@@ -126,8 +126,20 @@ def get_team_by_id(
     response = subscription_service.validate_subscription(db=db, team_id=id)
 
     team_members_details = team_member_service.get_team_members_detail_with_team_id(
-        db, id, decoded_token)
-    return {"team": team, "team_members": team_members_details, "subscription_detail": response}
+        db, id)
+
+    is_action = team_member_service.check_loggedin_team_member_role(
+        id=id,
+        db=db,
+        decoded_token=decoded_token
+    )
+
+    return {
+        "team": team,
+        "team_members": team_members_details,
+        "subscription_detail": response,
+        "is_action": is_action
+    }
 
 
 @team_router.get(
