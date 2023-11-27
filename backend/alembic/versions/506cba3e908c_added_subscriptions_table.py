@@ -27,7 +27,7 @@ def upgrade():
             as_uuid=True), sa.ForeignKey('users.id'), nullable=False),
         sa.Column('team_id', sa.dialects.postgresql.UUID(
             as_uuid=True), sa.ForeignKey('teams.id'), nullable=False),
-        sa.Column('subscription_id', sa.String(), nullable=False),
+        sa.Column('subscription_id', sa.String(), nullable=True),
         sa.Column('price_id', sa.String(), sa.ForeignKey(
             'plans.price_id'), nullable=False),
         sa.Column('payment_status', sa.String(), nullable=False),

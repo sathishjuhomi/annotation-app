@@ -55,9 +55,9 @@ class WebhookService():
         user_address = {"address": address}
         user_db_handler.update(db=db, db_obj=user, input_object=user_address)
 
-        if not (customer_email and subscription_id and price_id):
+        if subscription_id and not (customer_email and price_id):
             raise HTTPException(
-                status_code=status.status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Missing required details to update database"
             )
 
