@@ -8,7 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import { useEffect } from 'react';
-import { deleteTeam, deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole, upgradePlan } from "../api/route";
+import { deleteTeamMember, getTeamAndTeamMembers, inviteATeamMember, updateTeamMemberRole } from "../api/route";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import * as Constants from "../../utils/constant";
 import Snackbar from "@/app/component/Snackbar";
@@ -22,7 +22,6 @@ import { InviteATeamMemberFormData } from "@/app/component/interfaces";
 import { updateTeam } from "../api/route";
 import teamMember from '@/app/component/teammember.jpg';
 import Image from 'next/image'
-import { useRouter } from "next/navigation";
 import UpdateATeamMember from "./UpdateRolesForm";
 import UpgradePlanForm from "./UpgradePlanForm";
 import { activePlanList } from "../api/route";
@@ -39,7 +38,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const [teamName, setTeamName] = React.useState("");
     const [actionButtons, setActionButtons] = React.useState("");
     const [upgradeButton, setUpgradeButton] = React.useState("");
-    const [teamId, setTeamId] = React.useState("");
+    // const [teamId, setTeamId] = React.useState("");
     const [teamMembers, setTeamMembers] = React.useState([]);
     const [plans, setPlans] = React.useState([]);
     const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState('');
@@ -283,24 +282,24 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     {getTeamMemberRoles(teamMember['roles'])}
                                 </TableCell>
                                 {actionButtons ?
-                                <TableCell className="flex flex-wrap">
-                                            <Button
-                                                size="small"
-                                                className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
-                                                onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
-                                            >
-                                                Edit
-                                            </Button>
-                                            <Typography className="pt-1">|</Typography>
-                                            <Button
-                                                size="small"
-                                                className="ml-2 mr-1 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
-                                                onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
-                                            >
-                                                Delete
-                                            </Button>
-                                </TableCell>
-                                : <div className="mt-8"> </div>}
+                                    <TableCell className="flex flex-wrap">
+                                        <Button
+                                            size="small"
+                                            className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                            onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Typography className="pt-1">|</Typography>
+                                        <Button
+                                            size="small"
+                                            className="ml-2 mr-1 font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-red hover:bg-white"
+                                            onClick={() => handleClickOpenDelete(id, teamMember['team_member_id'], teamMember['email'])}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </TableCell>
+                                    : null }
                             </TableRow>
                         ))}
                     </TableBody>
