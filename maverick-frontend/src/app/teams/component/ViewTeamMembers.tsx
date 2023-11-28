@@ -247,7 +247,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
 
     return (
         <Box className="flex flex-col">
-            <Paper className="ml-6 w-auto shadow-none">
+            <Paper className="w-auto shadow-none">
                 {actionButtons ?
                     <Box className=" rounded-md flex w-auto h-16 mt-2 bg-beige">
                         <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
@@ -286,7 +286,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                         <div className="flex flex-row ml-auto">
                                             <Button
                                                 size="small"
-                                                className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                                className="font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
                                                 onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
                                             >
                                                 Edit
