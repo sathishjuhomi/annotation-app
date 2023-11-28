@@ -28,6 +28,8 @@ class SubscriptionService():
             db=db, filters=filters)
         if subscription_db_response:
             if subscription_db_response[0].subscription_id:
+                # In recurring subscription we have subscription id so we need to check the recurring payment in stripe if it occur periodically
+                # stripe doc for subscription objects https://stripe.com/docs/api/subscriptions/object
                 subscription_id = subscription_db_response[0].subscription_id
                 subscription_response = stripe.Subscription.retrieve(
                     subscription_id)
@@ -67,6 +69,14 @@ class SubscriptionService():
                     "subscription_status": subscription_status,
                     "plan_name": plan_name,
                     "price_id": price_id
+                }
+                return response
+            else:
+                # One time payment will not have any subscripiton id by default so we can check our db for status.
+                response = {
+                    "subscription_status": "active" if subscription_db_response[0].is_active else "unpaid",
+                    "plan_name": subscription_db_response[0].plan.plan_name,
+                    "price_id": subscription_db_response[0].price_id
                 }
                 return response
         return None
