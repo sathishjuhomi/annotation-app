@@ -285,7 +285,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                     <TableCell className="flex flex-wrap">
                                         <Button
                                             size="small"
-                                            className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                            className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white"
                                             onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
                                         >
                                             Edit
@@ -368,7 +368,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
             {actionButtons ?
                 <Box className='mt-5'>
                     <Button
-                        className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 w-36 h-11 mr-44 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
+                        className="flex flex-col ml-auto mt-2 w-28 h-5 mb-4 w-36 h-11 mr-36 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-white hover:text-lightgreen"
                         size="small"
                         onClick={handleClickOpen}
                     >
@@ -390,7 +390,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                         teamId={id}
                     />
                     <Button
-                        className="flex flex-end ml-auto -mt-12 mb-4 mr-6 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
+                        className="flex flex-end ml-auto -mt-12 mb-4 w-36 h-11 normal-case font-Inter leading-6 text-sm bg-white text-green font-bold border-green hover:bg-grey hover:border-green"
                         variant="outlined"
                         onClick={handleClickOpenInvite}
                     >
