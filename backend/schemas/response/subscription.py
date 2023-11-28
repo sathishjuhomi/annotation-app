@@ -14,5 +14,5 @@ class SubscriptionResponseSchema(BaseModel):
 
 class SubscriptionValidationResponseSchema(BaseModel):
     subscription_status: str
-    plan_name: str
-    price_id: str
+    plan_name: str | None
+    price_id: str | None

@@ -65,21 +65,24 @@ class SubscriptionService():
                     db=db, column_name="id", value=plan_id)
 
                 plan_name = plan_db_response.plan_name
-                response = {
-                    "subscription_status": subscription_status,
-                    "plan_name": plan_name,
-                    "price_id": price_id
-                }
-                return response
+
             else:
                 # One time payment will not have any subscripiton id by default so we can check our db for status.
-                response = {
-                    "subscription_status": "active" if subscription_db_response[0].is_active else "unpaid",
-                    "plan_name": subscription_db_response[0].plan.plan_name,
-                    "price_id": subscription_db_response[0].price_id
-                }
-                return response
-        return None
+                subscription_status = "active" if subscription_db_response[0].is_active else "unpaid"
+                plan_name = subscription_db_response[0].plan.plan_name
+                price_id = subscription_db_response[0].price_id
+
+        else:
+            # No subscription found
+            subscription_status = "inactive"
+            plan_name = None
+            price_id = None
+
+        return {
+            "subscription_status": subscription_status,
+            "plan_name": plan_name,
+            "price_id": price_id
+        }
 
     @staticmethod
     def cancel_subscription(
