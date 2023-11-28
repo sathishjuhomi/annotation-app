@@ -67,6 +67,7 @@ export default function ResponsiveDrawer(props: Props) {
     const navigateToSignin = () => {
         localStorage.setItem('navBar', 'Installation');
         localStorage.setItem('access_token', "");
+        localStorage.setItem('emailId', "");
         router.push("/signin");
     };
 

@@ -41,6 +41,11 @@ const Teams = () => {
         if (teamName === null) {
           localStorage.setItem('teamName', props.teams[0]['team_name']);
         }
+        const accessToken = localStorage.getItem('access_token');
+        if ((accessToken === null || accessToken === "") || props.teams.detail ==="Token has expired"){
+          localStorage.setItem('navBar', 'Installation');
+          router.push("/signin");
+        };
       } catch (error) {
         const data = props.teams.detail;
         setMessage(data);
@@ -77,16 +82,16 @@ const Teams = () => {
     }
   };
 
-// Accept Team Member invite
-const onAcceptTeamInvite = async (inviteToken: any) => {
-  setShowMessage(true);
-  setLoading(true);
-  const {props} = await acceptTeamInvite(inviteToken)
-  try{
-        const data = props.acceptInvite.detail;
-        setMessage(data);
-        setMessageColor(Constants.SUCCESS);
-        location.reload();
+  // Accept Team Member invite
+  const onAcceptTeamInvite = async (inviteToken: any) => {
+    setShowMessage(true);
+    setLoading(true);
+    const { props } = await acceptTeamInvite(inviteToken)
+    try {
+      const data = props.acceptInvite.detail;
+      setMessage(data);
+      setMessageColor(Constants.SUCCESS);
+      location.reload();
       setLoading(false);
     } catch (error) {
       const data = props.acceptInvite.detail;
@@ -94,18 +99,18 @@ const onAcceptTeamInvite = async (inviteToken: any) => {
       setMessageColor(Constants.ERROR);
       console.error('Error fetching data:', error);
     }
-};
+  };
 
-// Decline Team Invite
-const onDeclineTeamInvite = async (inviteToken: any) => {
-  setShowMessage(true);
-  setLoading(true);
-  const {props} = await declineTeamInvite(inviteToken)
-  try{
-        const data = props.declineInvite.detail;
-        setMessage(data);
-        setMessageColor(Constants.SUCCESS);
-        location.reload();
+  // Decline Team Invite
+  const onDeclineTeamInvite = async (inviteToken: any) => {
+    setShowMessage(true);
+    setLoading(true);
+    const { props } = await declineTeamInvite(inviteToken)
+    try {
+      const data = props.declineInvite.detail;
+      setMessage(data);
+      setMessageColor(Constants.SUCCESS);
+      location.reload();
       setLoading(false);
     } catch (error) {
       const data = props.declineInvite.detail;
@@ -113,7 +118,7 @@ const onDeclineTeamInvite = async (inviteToken: any) => {
       setMessageColor(Constants.ERROR);
       console.error('Error fetching data:', error);
     }
-};
+  };
 
 
   return (

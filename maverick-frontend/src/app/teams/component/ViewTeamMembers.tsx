@@ -34,11 +34,11 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const [inviteLoading, setInviteLoading] = React.useState(false);
     const [showMessage, setShowMessage] = React.useState(false);
     const [message, setMessage] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState(null);
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("");
     const [actionButtons, setActionButtons] = React.useState("");
     const [upgradeButton, setUpgradeButton] = React.useState("");
-    // const [teamId, setTeamId] = React.useState("");
     const [teamMembers, setTeamMembers] = React.useState([]);
     const [plans, setPlans] = React.useState([]);
     const [selectedTeamMemberIdForDelete, setSelectedTeamMemberIdForDelete] = React.useState('');
@@ -49,16 +49,23 @@ const ViewTeamAndTeamMembers = (props: any) => {
     useEffect(() => {
         async function fetchData() {
             const { props } = await getTeamAndTeamMembers(id);
-            console.log("Teams and members: ", props)
             try {
-                const teamNameValue = props.teamMembers.team["team_name"];
-                const teamMembers = props.teamMembers.team_members;
-                const actionButtons = props.teamMembers.is_action;
-                const upgradeButton = props.teamMembers.subscription_detail['subscription_status']
-                setTeamName(teamNameValue);
-                setTeamMembers(teamMembers);
-                setActionButtons(actionButtons);
-                setUpgradeButton(upgradeButton)
+                if (props.teamMembers.detail === "accept the invitaion") {
+                    console.log("If GetteamMembers: ", props.teamMembers.detail)
+                    const data = props.teamMembers.detail;
+                    setErrorMessage(data);
+                    setMessageColor(Constants.ERROR);
+                }
+                else {
+                    const teamNameValue = props.teamMembers.team["team_name"];
+                    const teamMembers = props.teamMembers.team_members;
+                    const actionButtons = props.teamMembers.is_action;
+                    const upgradeButton = props.teamMembers.subscription_detail['subscription_status']
+                    setTeamName(teamNameValue);
+                    setTeamMembers(teamMembers);
+                    setActionButtons(actionButtons);
+                    setUpgradeButton(upgradeButton)
+                }
             } catch (error) {
                 const data = props.teamMembers.detail;
                 setMessage(data);
@@ -215,6 +222,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
             setMessage(data);
             setMessageColor(Constants.SUCCESS);
             location.reload();
+            setLoading(false);
         } catch (error) {
             const data = props.updateMember.detail;
             setMessage(data);
@@ -275,8 +283,15 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                 key={teamMember['team_member_id']}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell className="pl-8 font-Inter font-normal leading-6 text-sm text-black" component="th" scope="row">
-                                    {teamMember['email']}
+                                <TableCell>
+                                    <div className="flex flex-row">
+                                        <Typography className="pl-8 mr-2 font-Inter font-normal leading-6 text-sm text-black">
+                                            {teamMember['email']}
+                                        </Typography>
+                                        <Typography className="bg-grey font-Inter font-normal leading-6 text-xs text-greyplus">
+                                        {teamMember['is_activated'] ? null: "Awaiting response"}
+                                        </Typography>
+                                    </div>
                                 </TableCell>
                                 <TableCell className="font-Inter font-normal leading-6 text-sm text-greyplus" align="right">
                                     {getTeamMemberRoles(teamMember['roles'])}
@@ -299,9 +314,14 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                             Delete
                                         </Button>
                                     </TableCell>
-                                    : null }
+                                    : null}
                             </TableRow>
                         ))}
+                        {errorMessage && (
+                            <div className="font-Inter font-normal leading-6 text-sm text-black flex justify-center item-center">
+                                <p><strong>Caution </strong>{errorMessage} !</p>
+                            </div>
+                        )}
                     </TableBody>
                 </Table>
                 <Dialog className='rounded-md' open={openDeleteConfirmationDialog} onClose={handleCloseDelete}>
