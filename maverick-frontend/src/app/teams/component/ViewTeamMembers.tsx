@@ -38,6 +38,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     const [messageColor, setMessageColor] = React.useState(Constants.INFO);
     const [teamName, setTeamName] = React.useState("");
     const [actionButtons, setActionButtons] = React.useState("");
+    const [upgradeButton, setUpgradeButton] = React.useState("");
     const [teamId, setTeamId] = React.useState("");
     const [teamMembers, setTeamMembers] = React.useState([]);
     const [plans, setPlans] = React.useState([]);
@@ -54,10 +55,14 @@ const ViewTeamAndTeamMembers = (props: any) => {
                 const teamNameValue = props.teamMembers.team["team_name"];
                 const teamMembers = props.teamMembers.team_members;
                 const actionButtons = props.teamMembers.is_action;
-                console.log("team members: ", props.teamMembers.is_action)
+                const upgradeButton = props.teamMembers.subscription_detail['subscription_status']
+                console.log("action: ", actionButtons)
+                console.log("team member list: ", teamMembers)
+                // console.log("subscription: ", props.teamMembers.subscription_detail['subscription_status'])
                 setTeamName(teamNameValue);
                 setTeamMembers(teamMembers);
                 setActionButtons(actionButtons);
+                setUpgradeButton(upgradeButton)
             } catch (error) {
                 const data = props.teamMembers.detail;
                 setMessage(data);
@@ -282,7 +287,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                 </TableCell>
                                 <TableCell className="flex">
                                     {teamMember['is_action'] ? "True" : teamMember['is_action']}
-                                    {actionButtons ?
+                                    {/* {actionButtons ? */}
                                         <div className="flex flex-row ml-auto">
                                             <Button
                                                 size="small"
@@ -300,8 +305,8 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                                 Delete
                                             </Button>
                                         </div>
-                                        :
-                                        <div className="mt-8"> </div>}
+                                        {/* : */}
+                                        {/* <div className="mt-8"> </div>} */}
                                 </TableCell>
                             </TableRow>
                         ))}
