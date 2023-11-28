@@ -56,9 +56,6 @@ const ViewTeamAndTeamMembers = (props: any) => {
                 const teamMembers = props.teamMembers.team_members;
                 const actionButtons = props.teamMembers.is_action;
                 const upgradeButton = props.teamMembers.subscription_detail['subscription_status']
-                console.log("action: ", actionButtons)
-                console.log("team member list: ", teamMembers)
-                // console.log("subscription: ", props.teamMembers.subscription_detail['subscription_status'])
                 setTeamName(teamNameValue);
                 setTeamMembers(teamMembers);
                 setActionButtons(actionButtons);
@@ -253,7 +250,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
     return (
         <Box className="flex flex-col">
             <Paper className="w-auto shadow-none">
-                {actionButtons ?
+                {actionButtons && upgradeButton !== "active" ?
                     <Box className=" rounded-md flex w-auto h-16 mt-2 bg-beige">
                         <Typography className="pt-5 ml-8 font-Inter font-normal leading-6 text-sm text-black">
                             You are in FREE Plan, for more feature
@@ -285,13 +282,11 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                 <TableCell className="font-Inter font-normal leading-6 text-sm text-greyplus" align="right">
                                     {getTeamMemberRoles(teamMember['roles'])}
                                 </TableCell>
-                                <TableCell className="flex">
-                                    {teamMember['is_action'] ? "True" : teamMember['is_action']}
-                                    {/* {actionButtons ? */}
-                                        <div className="flex flex-row ml-auto">
+                                {actionButtons ?
+                                <TableCell className="flex flex-wrap">
                                             <Button
                                                 size="small"
-                                                className="font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
+                                                className="ml-auto font-Inter font-normal leading-6 text-sm text-black normal-case hover:text-green hover:bg-white "
                                                 onClick={() => handleClickOpenUpdateMember(id, teamMember['team_member_id'], teamMember['email'])}
                                             >
                                                 Edit
@@ -304,10 +299,8 @@ const ViewTeamAndTeamMembers = (props: any) => {
                                             >
                                                 Delete
                                             </Button>
-                                        </div>
-                                        {/* : */}
-                                        {/* <div className="mt-8"> </div>} */}
                                 </TableCell>
+                                : <div className="mt-8"> </div>}
                             </TableRow>
                         ))}
                     </TableBody>
