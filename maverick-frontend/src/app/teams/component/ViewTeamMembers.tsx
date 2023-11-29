@@ -92,7 +92,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
                 setMessage(data);
                 setMessageColor(Constants.ERROR);
             }
-            setLoading(false);
+            setDataLoading(false);
         } catch (error) {
             const data = props.update.detail;
             setMessage(data);
