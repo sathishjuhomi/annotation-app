@@ -42,6 +42,7 @@ const SignIn = () => {
           setAccessToken(response);
           setMessage(responseData);
           setMessageColor(Constants.SUCCESS);
+          localStorage.setItem('navBar', 'Installation');
           router.push("/docs/installation");
         } else {
           setMessage(responseData);

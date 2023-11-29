@@ -50,8 +50,7 @@ const ViewTeamAndTeamMembers = (props: any) => {
         async function fetchData() {
             const { props } = await getTeamAndTeamMembers(id);
             try {
-                if (props.teamMembers.detail === "accept the invitaion") {
-                    console.log("If GetteamMembers: ", props.teamMembers.detail)
+                if (props.teamMembers.detail === "accept the invitation") {
                     const data = props.teamMembers.detail;
                     setErrorMessage(data);
                     setMessageColor(Constants.ERROR);

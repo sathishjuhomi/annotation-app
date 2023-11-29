@@ -57,6 +57,7 @@ export default function TeamList(
         <Button
           size="small"
           variant="contained"
+          color='inherit'
           className="w-28 h-11 normal-case font-Inter font-normal font-bold text-sm text-white bg-button hover:bg-lightgreen"
           onClick={handleClickOpen}
         >
