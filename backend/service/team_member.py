@@ -42,6 +42,7 @@ class TeamMemberService():
         filters = {
             'team_id': id,
             'email': loggedin_email,
+            'is_activated': True,
             'is_deleted': False,
             'is_declined': False
         }
@@ -50,7 +51,7 @@ class TeamMemberService():
         if not team_member:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"{loggedin_email} doesn't exist"
+                detail="accept the invitation"
             )
         is_action = (team_member[0].roles.get('owner')
                      or team_member[0].roles.get('admin'))
