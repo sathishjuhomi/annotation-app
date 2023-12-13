@@ -62,21 +62,20 @@ class TeamService():
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail="Team not found"
                 )
-            if name and team.team_name == name:
+            if (name) and (team.team_name == name):
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
                     detail="Team name already exists"
                 )
+            if name:
+                team_by_name = team_db_handler.load_by_column(
+                    db=db, column_name="team_name", value=name)
+                if team_by_name:
+                    raise HTTPException(
+                        status_code=status.HTTP_409_CONFLICT,
+                        detail="Team name already exist"
+                    )
             return team
-        if name:
-            team = team_db_handler.load_by_column(
-                db=db, column_name="team_name", value=name)
-            if team:
-                raise HTTPException(
-                    status_code=status.HTTP_409_CONFLICT,
-                    detail="Team name already exist"
-                )
-        return None
 
     @staticmethod
     def create_team(decoded_token, request_payload: TeamSchema, db: Session):

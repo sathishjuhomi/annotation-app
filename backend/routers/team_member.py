@@ -24,11 +24,16 @@ bearer = HTTPBearer()
 
 @team_member_router.post("/teams/{team_id}/team-members/invite")
 async def invite_team_member(team_id: UUID4,
-                             request_payload: TeamMemberSchema,
+                             request_payload: TeamMemberSchema | DetailSchema,
                              db: Session = Depends(get_db),
                              authorization: str = Depends(bearer)) -> Any:
     token = authorization.credentials
     decoded_token = decode_token(token=token)
+    if decoded_token["email"] == request_payload.email:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can't invite yourself",
+        )
     response = await team_member_service.email_invitation(team_id, decoded_token, request_payload=request_payload, db=db)
     return response
 
