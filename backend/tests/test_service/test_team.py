@@ -1,6 +1,6 @@
-from backend.service.team import TeamService
-from backend.schemas.request.team import TeamSchema
-from backend.models.team import Teams
+from annotation.backend.service.team import TeamService
+from annotation.backend.schemas.request.team import TeamSchema
+from annotation.backend.models.team import Teams
 from unittest.mock import Mock, patch
 import unittest
 
@@ -13,10 +13,10 @@ class TestTeamService(unittest.TestCase):
     def setUp(self):
         self.db = Mock()
 
-    @patch("backend.service.team.get_user_detail", return_value=Mock(email="sathishk@juhomi.com", id=USER_ID))
+    @patch("annotation.backend.service.team.get_user_detail", return_value=Mock(email="sathishk@juhomi.com", id=USER_ID))
     @patch("uuid.uuid4", return_value=TEAM_ID)
-    @patch("backend.db_handler.team_handler.team_db_handler.create", return_value=Teams(id=TEAM_ID))
-    @patch("backend.db_handler.team_member_handler.team_member_db_handler.load_all_by_column", return_value=None)
+    @patch("annotation.backend.db_handler.team_handler.team_db_handler.create", return_value=Teams(id=TEAM_ID))
+    @patch("annotation.backend.db_handler.team_member_handler.team_member_db_handler.load_all_by_column", return_value=None)
     def test_create_team(self, *args):
         request_payload = TeamSchema(team_name="Test Team")
         mock_token = TOKEN
@@ -29,8 +29,8 @@ class TestTeamService(unittest.TestCase):
         self.assertEqual(creator_email, "sathishk@juhomi.com")
         self.assertEqual(created_team.id, TEAM_ID)
 
-    @patch("backend.service.team.get_user_detail", return_value=Mock(email="sathishk@juhomi.com", id=USER_ID))
-    @patch("backend.db_handler.team_handler.team_db_handler.update", return_value=Teams(id=TEAM_ID, team_name="Updated Team"))
+    @patch("annotation.backend.service.team.get_user_detail", return_value=Mock(email="sathishk@juhomi.com", id=USER_ID))
+    @patch("annotation.backend.db_handler.team_handler.team_db_handler.update", return_value=Teams(id=TEAM_ID, team_name="Updated Team"))
     def test_update_team(self, *args):
         request_payload = TeamSchema(team_name="Updated Team")
         mock_team = Teams(id=TEAM_ID, team_name="Original Team")

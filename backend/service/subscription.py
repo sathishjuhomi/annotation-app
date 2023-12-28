@@ -1,10 +1,10 @@
-from backend.db_handler.plan_handler import plan_db_handler
-from backend.db_handler.subscription_handler import subscription_db_handler
-from backend.utils.utils import admin_role_validataion
+from annotation.backend.db_handler.plan_handler import plan_db_handler
+from annotation.backend.db_handler.subscription_handler import subscription_db_handler
+from annotation.backend.utils.utils import admin_role_validataion
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 import stripe
-from backend.config import get_settings
+from annotation.backend.config import get_settings
 from datetime import datetime
 from pydantic import UUID4
 

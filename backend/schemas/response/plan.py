@@ -1,4 +1,4 @@
-from backend.schemas.request.plan import PlanRequestSchema
+from annotation.backend.schemas.request.plan import PlanRequestSchema
 from pydantic import BaseModel, UUID4
 
 

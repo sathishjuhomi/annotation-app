@@ -1,11 +1,11 @@
-from backend.config import get_settings
+from annotation.backend.config import get_settings
 import stripe
 import uuid
-from backend.db_handler.subscription_handler import subscription_db_handler
-from backend.utils.email_receipt import send_receipt_email
+from annotation.backend.db_handler.subscription_handler import subscription_db_handler
+from annotation.backend.utils.email_receipt import send_receipt_email
 
 from sqlalchemy.orm import Session
-from backend.db_handler.user_handler import user_db_handler
+from annotation.backend.db_handler.user_handler import user_db_handler
 from fastapi import HTTPException, status
 
 

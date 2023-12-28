@@ -1,14 +1,14 @@
-from backend.db_handler.subscription_handler import subscription_db_handler
-from backend.schemas.request.plan import CheckoutSessionRequestSchema
-from backend.service.team_member import team_member_service
-from backend.utils.utils import decode_token
+from annotation.backend.db_handler.subscription_handler import subscription_db_handler
+from annotation.backend.schemas.request.plan import CheckoutSessionRequestSchema
+from annotation.backend.service.team_member import team_member_service
+from annotation.backend.utils.utils import decode_token
 from pydantic import UUID4
 from fastapi.security import HTTPBearer
 from fastapi import HTTPException, APIRouter, status, Depends
 import stripe
 from starlette.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from backend.models.database import get_db
+from annotation.backend.models.database import get_db
 
 stripe_router = APIRouter(prefix="/api/v1", tags=["Stripe"])
 

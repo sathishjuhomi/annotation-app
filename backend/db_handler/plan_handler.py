@@ -1,5 +1,5 @@
-from backend.db_handler.base_handler import BaseDBHandler
-from backend.models.plan import Plan
+from annotation.backend.db_handler.base_handler import BaseDBHandler
+from annotation.backend.models.plan import Plan
 
 
 class PlanDBHandler(BaseDBHandler):

@@ -1,6 +1,6 @@
-from backend.service.team_member import team_member_service
-from backend.schemas.request.team_member import TeamMemberSchema
-from backend.models.team_member import TeamsMembers
+from annotation.backend.service.team_member import team_member_service
+from annotation.backend.schemas.request.team_member import TeamMemberSchema
+from annotation.backend.models.team_member import TeamsMembers
 from unittest.mock import MagicMock, patch
 import unittest
 import uuid
@@ -14,10 +14,10 @@ class TestTeamMemberService(unittest.TestCase):
     def setUp(self):
         self.db = MagicMock()
     
-    @patch('backend.services.team_member.create_access_token')
-    @patch('backend.services.team_member.send_invitation_email')
-    @patch('backend.services.team_member.team_member_db_handler')
-    @patch('backend.services.team_member.get_user_detail')
+    @patch('annotation.backend.services.team_member.create_access_token')
+    @patch('annotation.backend.services.team_member.send_invitation_email')
+    @patch('annotation.backend.services.team_member.team_member_db_handler')
+    @patch('annotation.backend.services.team_member.get_user_detail')
     def test_email_invitation(self, mock_get_user_detail, mock_team_member_db_handler,
                               mock_send_invitation_email, mock_create_access_token):
         db_mock = MagicMock(spec=Session)

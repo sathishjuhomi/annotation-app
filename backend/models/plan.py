@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Integer, Float, Enum, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 
-from backend.models.database import Base
-from backend.models.timestamp_mixin import TimestampMixIn
+from annotation.backend.models.database import Base
+from annotation.backend.models.timestamp_mixin import TimestampMixIn
 
 
 class Plan(Base, TimestampMixIn):

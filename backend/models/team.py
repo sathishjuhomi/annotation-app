@@ -2,8 +2,8 @@ from sqlalchemy import Column, String, Boolean, ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from backend.models.database import Base
-from backend.models.timestamp_mixin import TimestampMixIn
+from annotation.backend.models.database import Base
+from annotation.backend.models.timestamp_mixin import TimestampMixIn
 
 
 class Teams(Base, TimestampMixIn):

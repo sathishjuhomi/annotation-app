@@ -3,10 +3,10 @@ import uuid
 from pydantic import UUID4
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from backend.schemas.request.plan import PlanRequestSchema, PriceStateRequestSchema, UpdatePlanSchema, UpdatePriceSchema
-from backend.schemas.response.plan import PlanResponseSchema
-from backend.db_handler.plan_handler import plan_db_handler
-from backend.config import get_settings
+from annotation.backend.schemas.request.plan import PlanRequestSchema, PriceStateRequestSchema, UpdatePlanSchema, UpdatePriceSchema
+from annotation.backend.schemas.response.plan import PlanResponseSchema
+from annotation.backend.db_handler.plan_handler import plan_db_handler
+from annotation.backend.config import get_settings
 
 settings = get_settings()
 

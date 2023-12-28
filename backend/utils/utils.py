@@ -1,12 +1,12 @@
 import secrets
 from datetime import datetime, timedelta
 from typing import Final
-from backend.db_handler.user_handler import user_db_handler
+from annotation.backend.db_handler.user_handler import user_db_handler
 from jose import jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 
-from backend.config import get_settings
+from annotation.backend.config import get_settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 EMAIL_RESET_TOKEN_EXPIRE_HOURS: Final[int] = 1

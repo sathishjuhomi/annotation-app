@@ -1,7 +1,7 @@
 from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
 
-from backend.config import get_settings
+from annotation.backend.config import get_settings
 
 settings = get_settings()
 

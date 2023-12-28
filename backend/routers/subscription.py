@@ -1,13 +1,13 @@
 
 from typing import List
-from backend.schemas.response.subscription import SubscriptionResponseSchema
-from backend.schemas.response.user import DetailSchema
-from backend.utils.utils import decode_token
+from annotation.backend.schemas.response.subscription import SubscriptionResponseSchema
+from annotation.backend.schemas.response.user import DetailSchema
+from annotation.backend.utils.utils import decode_token
 from fastapi.security import HTTPBearer
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from backend.models.database import get_db
-from backend.service.subscription import subscription_service
+from annotation.backend.models.database import get_db
+from annotation.backend.service.subscription import subscription_service
 
 
 subscription_router = APIRouter(prefix="/api/v1", tags=["Subscription"])

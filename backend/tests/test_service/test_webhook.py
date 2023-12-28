@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch, Mock
 import unittest
-from backend.service.webhook import webhook_service
+from annotation.backend.service.webhook import webhook_service
 from fastapi import HTTPException
 
 email = "test@maverick.com"
@@ -12,7 +12,7 @@ class WebhookServiceTest(unittest.TestCase):
         self.db = MagicMock()
 
     # @patch("")
-    # @patch("backend.db_handler.user_db_handler.load_by_column")
+    # @patch("annotation.backend.db_handler.user_db_handler.load_by_column")
     def test_create_subscription_missing_email(self,
         #   mock_user_load_by_column,
     ):

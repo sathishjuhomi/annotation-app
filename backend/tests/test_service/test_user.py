@@ -1,18 +1,18 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from backend.models.user import Users
-from backend.schemas.request.user import UserSchema, ResetPasswordSchema
-from backend.service.user import UserService
+from annotation.backend.models.user import Users
+from annotation.backend.schemas.request.user import UserSchema, ResetPasswordSchema
+from annotation.backend.service.user import UserService
 
 
 class TestUserService(unittest.TestCase):
     def setUp(self):
         self.db = Mock()
 
-    @patch("backend.service.user.generate_salt", return_value="mock_salt")
-    @patch("backend.service.user.hash_password", return_value="mock_hash")
-    @patch("backend.service.user.user_db_handler.create",
+    @patch("annotation.backend.service.user.generate_salt", return_value="mock_salt")
+    @patch("annotation.backend.service.user.hash_password", return_value="mock_hash")
+    @patch("annotation.backend.service.user.user_db_handler.create",
            return_value=Users(id="123e4567-e89b-12d3-a456-426655440000"))
     def test_create_user(self, *args):
         request_payload = UserSchema(
@@ -23,7 +23,7 @@ class TestUserService(unittest.TestCase):
         self.assertIsInstance(result, Users)
         self.assertEqual(result.id, "123e4567-e89b-12d3-a456-426655440000")
 
-    @patch("backend.service.user.verify_password", return_value=True)
+    @patch("annotation.backend.service.user.verify_password", return_value=True)
     def test_validate_password_success(self, *args):
         request_payload = UserSchema(
             email="test@example.com",
@@ -36,7 +36,7 @@ class TestUserService(unittest.TestCase):
         result = UserService.validate_password(request_payload, mock_user)
         self.assertTrue(result)
 
-    @patch("backend.service.user.verify_password", return_value=False)
+    @patch("annotation.backend.service.user.verify_password", return_value=False)
     def test_validate_password_error(self, *args):
         request_payload = UserSchema(
             email="test@example.com",
@@ -49,8 +49,8 @@ class TestUserService(unittest.TestCase):
         result = UserService.validate_password(request_payload, mock_user)
         self.assertFalse(result)
 
-    @patch("backend.service.user.hash_password", return_value="mock_new_hash")
-    @patch("backend.service.user.user_db_handler.update", return_value=None)
+    @patch("annotation.backend.service.user.hash_password", return_value="mock_new_hash")
+    @patch("annotation.backend.service.user.user_db_handler.update", return_value=None)
     def test_update_password(self, *args):
         request_payload = ResetPasswordSchema(
             new_password="new_password123"
@@ -63,7 +63,7 @@ class TestUserService(unittest.TestCase):
             UserService.update_password(request_payload, mock_user, self.db)
         )
 
-    @patch("backend.service.user.create_access_token", return_value="mock_token")
+    @patch("annotation.backend.service.user.create_access_token", return_value="mock_token")
     def test_generate_access_token(self, *args):
         mock_user = Users(
             email="test@example.com",

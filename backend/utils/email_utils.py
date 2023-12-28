@@ -1,8 +1,8 @@
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader
 
-from backend.config import get_settings
-from backend.utils.utils import PASSWORD_REST_TOKEN_EXPIRY
+from annotation.backend.config import get_settings
+from annotation.backend.utils.utils import PASSWORD_REST_TOKEN_EXPIRY
 
 settings = get_settings()
 

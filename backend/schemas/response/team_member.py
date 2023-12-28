@@ -1,4 +1,4 @@
-from backend.schemas.response.user import DetailSchema
+from annotation.backend.schemas.response.user import DetailSchema
 from pydantic import BaseModel, UUID4, Field, EmailStr
 
 

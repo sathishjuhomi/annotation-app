@@ -1,6 +1,6 @@
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader
-from backend.utils.email_utils import conf, FRONTEND_SERVER_HOST, EMAIL_TEMPLATES_DIR
+from annotation.backend.utils.email_utils import conf, FRONTEND_SERVER_HOST, EMAIL_TEMPLATES_DIR
 
 
 async def send_invitation_email(email_to: str, invite_token: str) -> None:

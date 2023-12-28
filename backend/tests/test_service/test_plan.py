@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock, Mock, patch
 
-from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema, UpdatePriceSchema
-from backend.schemas.response.plan import PlanResponseSchema
-from backend.service.plan import PlanService
+from annotation.backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema, UpdatePriceSchema
+from annotation.backend.schemas.response.plan import PlanResponseSchema
+from annotation.backend.service.plan import PlanService
 
 product_id = '1dee9072-bacf-4e98-b1c0-479e34450717'
 amount_id = 'price_1O8L6PSEc6wEphSVt7U09UMz'
@@ -13,7 +13,7 @@ class TestPlanService(unittest.TestCase):
     def setUp(self):
         self.db = Mock()
 
-    @patch("backend.service.plan.stripe.Product.create", return_value=Mock(return_value=dict()))
+    @patch("annotation.backend.service.plan.stripe.Product.create", return_value=Mock(return_value=dict()))
     def test_create_product(self, mock_stripe_product_create):
         plan_data = {
             "id": product_id,
@@ -27,7 +27,7 @@ class TestPlanService(unittest.TestCase):
 
         self.assertEqual(result, {"id": product_id})
 
-    @patch("backend.service.plan.stripe.Product.modify", return_value=Mock(return_value=dict()))
+    @patch("annotation.backend.service.plan.stripe.Product.modify", return_value=Mock(return_value=dict()))
     def test_update_product(self, mock_stripe_product_modify):
         prod_id = product_id
         plan = {
@@ -43,7 +43,7 @@ class TestPlanService(unittest.TestCase):
 
         self.assertEqual(result, {"id": prod_id})
 
-    @patch("backend.service.plan.stripe.Price.modify", return_value=Mock(return_value=dict()))
+    @patch("annotation.backend.service.plan.stripe.Price.modify", return_value=Mock(return_value=dict()))
     def test_update_price(self, mock_strip_price_modify):
         price_id = amount_id
         price_state = "False"
@@ -54,7 +54,7 @@ class TestPlanService(unittest.TestCase):
 
         self.assertEqual(result, {"id": price_id})
 
-    @patch("backend.service.plan.stripe.Price.create", return_value=Mock(return_value=dict()))
+    @patch("annotation.backend.service.plan.stripe.Price.create", return_value=Mock(return_value=dict()))
     def test_create_price(self, mock_stripe_price_create):
         price_params = {
             "price": 50,
@@ -71,8 +71,8 @@ class TestPlanService(unittest.TestCase):
 
         self.assertEqual(result, {"price_id": amount_id})
 
-    @patch("backend.db_handler.plan_handler.plan_db_handler.load_all_by_column")
-    @patch("backend.service.plan.PlanService.map_db_responses_to_schemas")
+    @patch("annotation.backend.db_handler.plan_handler.plan_db_handler.load_all_by_column")
+    @patch("annotation.backend.service.plan.PlanService.map_db_responses_to_schemas")
     def test_get_all_plans(self, mock_map_db_responses_to_schemas, mock_load_all_by_column):
 
         plan1 = Mock(id=product_id, price_id=amount_id, is_active=True,
@@ -107,8 +107,8 @@ class TestPlanService(unittest.TestCase):
         self.assertEqual(result[0].price_id, amount_id)
         self.assertTrue(result[0].is_active)
 
-    @patch("backend.service.plan.PlanService.create_price")
-    @patch("backend.service.plan.PlanService.create_product")
+    @patch("annotation.backend.service.plan.PlanService.create_price")
+    @patch("annotation.backend.service.plan.PlanService.create_product")
     def test_create_plan(self, mock_create_product, mock_create_price):
         mock_plan_data = PlanRequestSchema(
             plan={
@@ -138,8 +138,8 @@ class TestPlanService(unittest.TestCase):
 
         self.assertEqual(result, {"detail": "Plan created successfully"})
 
-    @patch("backend.db_handler.plan_handler.plan_db_handler.load_by_id")
-    @patch("backend.service.plan.PlanService.update_product")
+    @patch("annotation.backend.db_handler.plan_handler.plan_db_handler.load_by_id")
+    @patch("annotation.backend.service.plan.PlanService.update_product")
     def test_update_plan(self, mock_update_product, mock_load_by_id):
         mock_plan = UpdatePlanSchema(
             plan_name="Test Plan", description="Test Description")
@@ -164,8 +164,8 @@ class TestPlanService(unittest.TestCase):
 
         self.assertEqual(result, {"detail": "Plan updated successfully"})
 
-    @patch("backend.db_handler.plan_handler.plan_db_handler.load_by_column")
-    @patch("backend.service.plan.PlanService.update_price")
+    @patch("annotation.backend.db_handler.plan_handler.plan_db_handler.load_by_column")
+    @patch("annotation.backend.service.plan.PlanService.update_price")
     def test_update_price_state(self, mock_update_price, mock_load_by_column):
         is_active = False
 

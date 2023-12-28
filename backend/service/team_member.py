@@ -3,10 +3,10 @@ import uuid
 from datetime import datetime
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from backend.utils.utils import create_access_token
-from backend.utils.email_team_member import send_invitation_email
-from backend.db_handler.team_member_handler import team_member_db_handler
-from backend.models.team_member import TeamMembers
+from annotation.backend.utils.utils import create_access_token
+from annotation.backend.utils.email_team_member import send_invitation_email
+from annotation.backend.db_handler.team_member_handler import team_member_db_handler
+from annotation.backend.models.team_member import TeamMembers
 
 
 class TeamMemberService():
