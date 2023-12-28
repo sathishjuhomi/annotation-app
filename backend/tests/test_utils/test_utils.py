@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from jose import jwt
 
-from annotation.backend.utils.utils import (
+from backend.utils.utils import (
     hash_password,
     verify_password,
     generate_salt,
@@ -41,26 +41,26 @@ class TestUtils(unittest.TestCase):
         password = generate_random_oauth_password(custom_length)
         self.assertEqual(len(password), custom_length)
 
-    @patch("annotation.backend.utils.utils.jwt.encode", return_value="mock_token")
+    @patch("backend.utils.utils.jwt.encode", return_value="mock_token")
     def test_create_access_token(self, *args):
         data = {"user_id": 123}
         expires_delta = timedelta(minutes=15)
         token = create_access_token(data, expires_delta)
         self.assertEqual(token, "mock_token")
 
-    @patch("annotation.backend.utils.utils.create_access_token", return_value="mock_reset_token")
+    @patch("backend.utils.utils.create_access_token", return_value="mock_reset_token")
     def test_generate_password_reset_token(self, *args):
         email = "test@example.com"
         token = generate_password_reset_token(email)
         self.assertEqual(token, "mock_reset_token")
 
-    @patch("annotation.backend.utils.utils.jwt.decode", return_value={"email": "test@example.com"})
+    @patch("backend.utils.utils.jwt.decode", return_value={"email": "test@example.com"})
     def test_verify_password_reset_token_valid(self, *args):
         token = "valid_reset_token"
         email = verify_password_reset_token(token)
         self.assertEqual(email, "test@example.com")
 
-    @patch("annotation.backend.utils.utils.jwt.decode", side_effect=jwt.JWTError("Invalid token"))
+    @patch("backend.utils.utils.jwt.decode", side_effect=jwt.JWTError("Invalid token"))
     def test_verify_password_reset_token_invalid(self, *args):
         token = "invalid_reset_token"
         email = verify_password_reset_token(token)

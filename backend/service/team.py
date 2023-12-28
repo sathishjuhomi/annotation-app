@@ -4,11 +4,11 @@ from typing import Optional
 from pydantic import UUID4
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from annotation.backend.db_handler.team_handler import team_db_handler
-from annotation.backend.db_handler.team_member_handler import team_member_db_handler
-from annotation.backend.utils.utils import get_user_detail
-from annotation.backend.schemas.request.team import TeamSchema
-from annotation.backend.models.team import Teams
+from backend.db_handler.team_handler import team_db_handler
+from backend.db_handler.team_member_handler import team_member_db_handler
+from backend.utils.utils import get_user_detail
+from backend.schemas.request.team import TeamSchema
+from backend.models.team import Teams
 
 
 class TeamService():

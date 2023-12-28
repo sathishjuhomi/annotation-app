@@ -1,4 +1,4 @@
-from annotation.backend.schemas.response.subscription import SubscriptionValidationResponseSchema
+from backend.schemas.response.subscription import SubscriptionValidationResponseSchema
 from pydantic import BaseModel, UUID4, EmailStr
 from typing import List
 

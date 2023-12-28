@@ -1,9 +1,9 @@
-from annotation.backend.db_handler.project_handler import project_db_handler
-from annotation.backend.schemas.request.project import ProjectRequestSchema
-from annotation.backend.service.team import team_service
-from annotation.backend.service.team_member import team_member_service
+from backend.db_handler.project_handler import project_db_handler
+from backend.schemas.request.project import ProjectRequestSchema
+from backend.service.team import team_service
+from backend.service.team_member import team_member_service
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import HTTPException, status
 from pydantic import UUID4
 import uuid
 
@@ -34,19 +34,18 @@ class ProjectService():
         project_details["id"] = uuid.uuid4()
         project_details["team_id"] = team_id
         project_details["created_by_id"] = decoded_token["id"]
-        print(project_details)
 
         try:
-            project_db_handler.create(db=db, input_object=project_details)
-            detail = {"detail": "Project Created Successfully"}
+            response = project_db_handler.create(
+                db=db, input_object=project_details)
         except Exception as e:
-            detail = {"detail": "Error Creating Project"}
+            detail = "Error Creating Project"
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=detail
             )
 
-        return detail
+        return response
 
 
 project_service = ProjectService()

@@ -5,17 +5,17 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import PlainTextResponse
 from starlette.requests import Request
 
-from annotation.backend.models.database import get_db
-from annotation.backend.schemas.request.user import (
+from backend.models.database import get_db
+from backend.schemas.request.user import (
     UserSchema
 )
-from annotation.backend.schemas.response.user import (
+from backend.schemas.response.user import (
     SignInResponseSchema
 )
-from annotation.backend.service.user import user_service
+from backend.service.user import user_service
 from .user import check_existing_user
 from ..oauth_config import oauth
-from annotation.backend.utils.utils import generate_random_oauth_password
+from backend.utils.utils import generate_random_oauth_password
 
 logger = logging.getLogger(__name__)
 oauth_router = APIRouter(prefix="/api/v1/user", tags=["Oauth"])

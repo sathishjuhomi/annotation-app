@@ -23,6 +23,7 @@ class BaseDBHandler:
         obj_in_data = jsonable_encoder(input_object)
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
+        db.commit()
         return db_obj
 
     def update(self, db: Session, *, db_obj, input_object):

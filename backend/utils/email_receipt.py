@@ -1,7 +1,7 @@
-from annotation.backend.utils.email_utils import EMAIL_TEMPLATES_DIR
+from backend.utils.email_utils import EMAIL_TEMPLATES_DIR
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader
-from annotation.backend.utils.email_utils import conf
+from backend.utils.email_utils import conf
 
 async def send_receipt_email(email_to: str, receipt_url: str) -> None:
     # valid_hours = PASSWORD_REST_TOKEN_EXPIRY / 60

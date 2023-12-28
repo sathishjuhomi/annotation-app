@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Boolean, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from annotation.backend.models.database import Base
-from annotation.backend.models.timestamp_mixin import TimestampMixIn
+from backend.models.database import Base
+from backend.models.timestamp_mixin import TimestampMixIn
 
 
 class Subscription(Base, TimestampMixIn):
