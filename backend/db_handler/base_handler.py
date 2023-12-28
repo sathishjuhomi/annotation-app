@@ -23,6 +23,7 @@ class BaseDBHandler:
         obj_in_data = jsonable_encoder(input_object)
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
+        db.commit()
         return db_obj
 
     def update(self, db: Session, *, db_obj, input_object):
@@ -35,6 +36,7 @@ class BaseDBHandler:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
         db.add(db_obj)
+        db.commit()
         return db_obj
 
     def delete(self, db: Session, *, id: int):

@@ -1,14 +1,14 @@
 from typing import Any, List
-from annotation.backend.utils.utils import admin_role_validataion, decode_token
+from backend.utils.utils import admin_role_validataion, decode_token
 from pydantic import UUID4
-from annotation.backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema
-from annotation.backend.schemas.response.plan import PlanResponseSchema
-from annotation.backend.schemas.response.user import DetailSchema
-from annotation.backend.service.plan import plan_service
+from backend.schemas.request.plan import PlanRequestSchema, UpdatePlanSchema
+from backend.schemas.response.plan import PlanResponseSchema
+from backend.schemas.response.user import DetailSchema
+from backend.service.plan import plan_service
 from fastapi.security import HTTPBearer
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from annotation.backend.models.database import get_db
+from backend.models.database import get_db
 
 
 plan_router = APIRouter(prefix="/api/v1", tags=["Plans"])

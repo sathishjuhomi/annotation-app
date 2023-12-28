@@ -1,10 +1,11 @@
 from typing import List
 import logging
-from annotation.backend.models.database import get_db
-from annotation.backend.schemas.request.project import ProjectRequestSchema, RenameProjectRequestSchema
-from annotation.backend.schemas.response.user import DetailSchema
-from annotation.backend.service.project import project_service
-from annotation.backend.utils.utils import decode_token
+from backend.models.database import get_db
+from backend.schemas.request.project import ProjectRequestSchema, RenameProjectRequestSchema
+from backend.schemas.response.project import ProjectResponseSchema
+from backend.schemas.response.user import DetailSchema
+from backend.service.project import project_service
+from backend.utils.utils import decode_token
 from pydantic import UUID4
 import uuid
 from fastapi.security import HTTPBearer
@@ -21,7 +22,7 @@ bearer = HTTPBearer()
     "/teams/{team_id}/projects",
     description="This API endpoint allows owner or admin to create Project",
     status_code=status.HTTP_201_CREATED,
-    response_model=DetailSchema,
+    response_model=ProjectResponseSchema|DetailSchema,
     responses={
         status.HTTP_500_INTERNAL_SERVER_ERROR: {
             "description": "Internal Server Error"
@@ -36,7 +37,6 @@ def create_project(
 ):
     token = authorization.credentials
     decoded_token = decode_token(token=token)
-    print('decoded_token', decoded_token)
     response = project_service.create_project(decoded_token,
                                               request_payload,
                                               team_id,
@@ -47,7 +47,7 @@ def create_project(
 @project_router.patch(
     "projects/{project_id}",
     description="This API endpoint will allow user to update the project name",
-    response_model=DetailSchema
+    response_model=ProjectResponseSchema|DetailSchema
 )
 def update_project(
     project_id: UUID4,

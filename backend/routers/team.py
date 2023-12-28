@@ -1,22 +1,22 @@
 from typing import List
 import logging
-from annotation.backend.db_handler.team_member_handler import team_member_db_handler
-from annotation.backend.service.subscription import subscription_service
+from backend.db_handler.team_member_handler import team_member_db_handler
+from backend.service.subscription import subscription_service
 from pydantic import UUID4
 import uuid
 from fastapi.security import HTTPBearer
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from annotation.backend.schemas.request.team import TeamSchema
-from annotation.backend.schemas.response.user import (
+from backend.schemas.request.team import TeamSchema
+from backend.schemas.response.user import (
     DetailSchema)
-from annotation.backend.schemas.response.team import (TeamResponseSchema,
+from backend.schemas.response.team import (TeamResponseSchema,
                                            GetTeamsResponseSchema,
                                            GetTeamMembersByTeamIdResponseSchema)
-from annotation.backend.models.database import get_db
-from annotation.backend.service.team import team_service
-from annotation.backend.service.team_member import team_member_service
-from annotation.backend.utils.utils import decode_token
+from backend.models.database import get_db
+from backend.service.team import team_service
+from backend.service.team_member import team_member_service
+from backend.utils.utils import decode_token
 
 logger = logging.getLogger(__name__)
 team_router = APIRouter(prefix="/api/v1", tags=["Teams"])

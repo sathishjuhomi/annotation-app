@@ -1,5 +1,5 @@
-from annotation.backend.db_handler.base_handler import BaseDBHandler
-from annotation.backend.models.team import Teams
+from backend.db_handler.base_handler import BaseDBHandler
+from backend.models.team import Teams
 
 
 class TeamDBHandler(BaseDBHandler):

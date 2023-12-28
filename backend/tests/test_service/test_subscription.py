@@ -2,9 +2,9 @@ import unittest
 from unittest import mock
 from unittest.mock import MagicMock, patch
 
-from annotation.backend.db_handler.subscription_handler import subscription_db_handler
-from annotation.backend.models.user import Users
-from annotation.backend.service.subscription import SubscriptionService
+from backend.db_handler.subscription_handler import subscription_db_handler
+from backend.models.user import Users
+from backend.service.subscription import SubscriptionService
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -13,9 +13,9 @@ class TestStripeService(unittest.TestCase):
     def setUp(self):
         self.db = MagicMock()
 
-    @patch("annotation.backend.service.stripe.stripe.Subscription.delete")
-    @patch("annotation.backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
-    @patch("annotation.backend.db_handler.subscription_handler.subscription_db_handler.update")
+    @patch("backend.service.stripe.stripe.Subscription.delete")
+    @patch("backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
+    @patch("backend.db_handler.subscription_handler.subscription_db_handler.update")
     def test_cancel_subscription_success(self, mock_update, mock_load_by_column, mock_subscription_delete):
         # Mocking data
         subscription_id = "test_subscription_id"
@@ -47,7 +47,7 @@ class TestStripeService(unittest.TestCase):
         self.assertEqual(
             result, {"detail": "Your subscription has been successfully cancelled"})
 
-    @patch("annotation.backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
+    @patch("backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
     def test_cancel_subscription_invalid_user(self, mock_load_by_column):
         # Mocking data
         subscription_id = "test_subscription_id"
@@ -76,7 +76,7 @@ class TestStripeService(unittest.TestCase):
         self.assertEqual(str(context.exception.detail),
                          "Only subscriber can cancel the subscription")
 
-    @patch("annotation.backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
+    @patch("backend.db_handler.subscription_handler.subscription_db_handler.load_by_column")
     def test_cancel_subscription_inactive_subscription(self, mock_load_by_column):
         # Mocking data
         subscription_id = "test_subscription_id"

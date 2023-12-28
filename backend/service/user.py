@@ -3,10 +3,10 @@ from datetime import timedelta
 
 from sqlalchemy.orm import Session
 
-from annotation.backend.db_handler.user_handler import user_db_handler
-from annotation.backend.models.user import Users
-from annotation.backend.schemas.request.user import ResetPasswordSchema, UserSchema
-from annotation.backend.utils.utils import (
+from backend.db_handler.user_handler import user_db_handler
+from backend.models.user import Users
+from backend.schemas.request.user import ResetPasswordSchema, UserSchema
+from backend.utils.utils import (
     create_access_token,
     generate_salt,
     hash_password,

@@ -3,20 +3,20 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from annotation.backend.db_handler.user_handler import user_db_handler
-from annotation.backend.models.database import get_db
-from annotation.backend.schemas.request.user import (
+from backend.db_handler.user_handler import user_db_handler
+from backend.models.database import get_db
+from backend.schemas.request.user import (
     ResetPasswordSchema,
     UserSchema
 )
-from annotation.backend.schemas.response.user import (
+from backend.schemas.response.user import (
     DetailSchema,
     SignInResponseSchema,
     SignUpResponseSchema
 )
-from annotation.backend.service.user import user_service
-from annotation.backend.utils.email_utils import send_reset_password_email
-from annotation.backend.utils.utils import (
+from backend.service.user import user_service
+from backend.utils.email_utils import send_reset_password_email
+from backend.utils.utils import (
     generate_password_reset_token,
     decode_token
 )

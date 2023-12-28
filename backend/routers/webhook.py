@@ -1,10 +1,10 @@
-from annotation.backend.service.webhook import webhook_service
+from backend.service.webhook import webhook_service
 from fastapi import HTTPException, APIRouter, Depends
 from starlette.responses import JSONResponse
 from starlette.requests import Request
 import stripe
-from annotation.backend.config import get_settings
-from annotation.backend.models.database import get_db
+from backend.config import get_settings
+from backend.models.database import get_db
 from sqlalchemy.orm import Session
 
 webhook_router = APIRouter(prefix="/api/v1", tags=["Webhook"])

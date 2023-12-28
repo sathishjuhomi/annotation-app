@@ -1,5 +1,5 @@
-from annotation.backend.db_handler.base_handler import BaseDBHandler
-from annotation.backend.models.project import Project
+from backend.db_handler.base_handler import BaseDBHandler
+from backend.models.project import Project
 
 
 class ProjectDBHandler(BaseDBHandler):
