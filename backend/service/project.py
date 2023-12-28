@@ -39,13 +39,39 @@ class ProjectService():
         try:
             project_db_handler.create(db=db, input_object=project_details)
             detail = {"detail": "Project Created Successfully"}
-        except Exception as e:
+        except:
             detail = {"detail": "Error Creating Project"}
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=detail
             )
 
+        return detail
+
+    @staticmethod
+    def rename_project(project_id: UUID4,
+                       request_payload,
+                       decoded_token: dict,
+                       db: Session):
+        project_details = request_payload.model_dump()
+        project = project_db_handler.load_by_id(db=db, id=project_id)
+        if not project:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Project not found"
+            )
+        project_details["updated_by_id"] = decoded_token["id"]
+        try:
+            project_db_handler.update(db=db,
+                                      db_obj=project,
+                                      input_object=project_details)
+            detail = {"detail": "Project renamed successfully"}
+        except:
+            detail = {"detail": "Error renaming project"}
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=detail
+            )
         return detail
 
 

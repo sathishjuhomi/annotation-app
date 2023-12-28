@@ -26,6 +26,7 @@ def upgrade():
         sa.Column('label', sa.ARRAY(sa.String()), nullable=True),
         sa.Column('team_id', sa.dialects.postgresql.UUID(as_uuid=True), sa.ForeignKey('teams.id'), nullable=False),
         sa.Column('created_by_id', sa.dialects.postgresql.UUID(as_uuid=True), sa.ForeignKey('users.id'), nullable=False),
+        sa.Column('updated_by_id', sa.dialects.postgresql.UUID(as_uuid=True), nullable=True),
         sa.Column('t_create', sa.TIMESTAMP(timezone=True), nullable=False, server_default=sa.text("now()")),
         sa.Column('t_update', sa.TIMESTAMP(timezone=True), nullable=False, server_default=sa.text("now()"), onupdate=sa.text("now()")),
         sa.Column('t_delete', sa.TIMESTAMP(timezone=True), nullable=True),

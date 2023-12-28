@@ -19,7 +19,7 @@ class Project(Base, TimestampMixIn):
         "teams.id", ondelete="CASCADE"), nullable=False)
     created_by_id = Column(UUID(as_uuid=True), ForeignKey(
         "users.id", ondelete="CASCADE"), nullable=False)
-    
+    updated_by_id = Column(UUID(as_uuid=True), nullable=True)
     user = relationship("Users")
     team = relationship("Teams", foreign_keys=[team_id])
 
