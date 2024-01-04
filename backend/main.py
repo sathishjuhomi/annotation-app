@@ -12,6 +12,7 @@ from backend.routers.stripe import stripe_router
 from backend.routers.webhook import webhook_router
 from backend.routers.subscription import subscription_router
 from backend.routers.project import project_router
+from backend.routers.image import image_router
 
 logger = logging.getLogger(__name__)
 fileHandler = logging.FileHandler("logs.txt")
@@ -47,3 +48,4 @@ app.include_router(stripe_router)
 app.include_router(webhook_router)
 app.include_router(subscription_router)
 app.include_router(project_router)
+app.include_router(image_router)
